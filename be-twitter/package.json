@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development npx nodemon",
     "build": "rimraf ./dist && tsc && tsc-alias",
