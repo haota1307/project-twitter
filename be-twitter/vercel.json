@@ -1,11 +1,16 @@
 {
   "version": 2,
-  "framework": "express",
   "builds": [
     {
       "src": "dist/index.js",
-      "use": "@now/node",
-      "ignore": ["**/*.spec.ts"]
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["dist/**"] }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dist/index.js"
     }
   ]
 }
