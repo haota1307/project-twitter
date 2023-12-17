@@ -1,11 +1,13 @@
 {
+  "version": 2,
   "framework": "express",
-  "target": "serverless",
-  "build": {
-    "ignore": [
-      "**/*.spec.ts"
-    ]
-  },
+  "builds": [
+    {
+      "src": "dist/index.js",
+      "use": "@now/node",
+      "ignore": ["**/*.spec.ts"]
+    }
+  ],
   "functions": {
     "api": ["src/api/**/*.ts"]
   }
