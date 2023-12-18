@@ -92,6 +92,7 @@ class UsersService {
     })
   }
 
+  // Check tồn tại email
   async checkEmailExist(email: string) {
     const user = await databaseService.users.findOne({ email })
     return Boolean(user)
@@ -150,7 +151,6 @@ class UsersService {
       refresh_token
     }
   }
-
   // Refresh token
   async refreshToken({
     user_id,
@@ -184,7 +184,6 @@ class UsersService {
       refresh_token: new_refresh_token
     }
   }
-
   // Logout - Xoá refresh token trong database
   async logout(refresh_token: string) {
     await databaseService.refreshTokens.deleteOne({ token: refresh_token })
@@ -192,7 +191,6 @@ class UsersService {
       message: USERS_MESSAGES.LOGOUT_SUCCESS
     }
   }
-
   // forgot password
   async forgotPassword({ user_id, email, verify }: { user_id: string; email: string; verify: UserVerifyStatus }) {
     // tạo forgot password token
@@ -214,6 +212,24 @@ class UsersService {
 
     return {
       message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD
+    }
+  }
+  // Reset password
+  async resetPassword(user_id: string, password: string) {
+    databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: {
+          forgot_password_token: '',
+          password: hashPassword(password)
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      }
+    )
+    return {
+      message: USERS_MESSAGES.RESET_PASSWORD_SUCCESS
     }
   }
 }

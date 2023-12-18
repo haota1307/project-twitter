@@ -5,6 +5,7 @@ import {
   logoutController,
   refreshTokenController,
   registerController,
+  resetPasswordController,
   verifyForgotPasswordController
 } from '~/controllers/users.controllers'
 import {
@@ -13,6 +14,7 @@ import {
   loginValidator,
   refreshTokenValidator,
   registerValidator,
+  resetPasswordValidatior,
   verifyForgotPasswordTokenValidatior
 } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -74,4 +76,13 @@ usersRouter.post(
   verifyForgotPasswordTokenValidatior,
   wrapRequestHandler(verifyForgotPasswordController)
 )
+
+/**
+ * Description: reset password befor after verify link in email to reset password
+ * Path: /reset-password
+ * Method: POST
+ * Body: { forgot_password_token: string, password: string, confirm_password: string }
+ *
+ */
+usersRouter.post('/reset-password', resetPasswordValidatior, wrapRequestHandler(resetPasswordController))
 export default usersRouter
