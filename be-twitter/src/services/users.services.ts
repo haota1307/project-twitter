@@ -8,6 +8,7 @@ import { RegisterReqBody } from '~/models/requests/User.requests'
 import User from '~/models/schemas/User.schema'
 import { hashPassword } from '~/utils/crypto'
 import { sendVerifyRegisterEmail } from '~/utils/email'
+import { USERS_MESSAGES } from '~/constants/messages'
 
 class UsersService {
   // Tạo access token
@@ -132,6 +133,14 @@ class UsersService {
     return {
       access_token,
       refresh_token
+    }
+  }
+
+  // Logout - Xoá refresh token trong database
+  async logout(refresh_token: string) {
+    await databaseService.refreshTokens.deleteOne({ token: refresh_token })
+    return {
+      message: USERS_MESSAGES.LOGOUT_SUCCESS
     }
   }
 }
