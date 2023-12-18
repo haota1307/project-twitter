@@ -4,6 +4,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import { ParamsDictionary } from 'express-serve-static-core'
 import User from '~/models/schemas/User.schema'
 import {
+  ForgotPasswordReqBody,
   LoginReqBody,
   LogoutReqBody,
   RefreshTokenReqBody,
@@ -47,5 +48,18 @@ export const logoutController = async (req: Request<ParamsDictionary, any, Logou
   // Xóa refresh token
   const { refresh_token } = req.body
   const result = await usersService.logout(refresh_token)
+  return res.json(result)
+}
+
+export const forgotPasswordController = async (
+  req: Request<ParamsDictionary, any, ForgotPasswordReqBody>,
+  res: Response
+) => {
+  const { _id, verify, email } = req.user as User
+  const result = await usersService.forgotPassword({
+    user_id: (_id as ObjectId).toString(),
+    email,
+    verify
+  })
   return res.json(result)
 }

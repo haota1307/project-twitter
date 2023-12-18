@@ -204,3 +204,29 @@ export const refreshTokenValidator = validate(
     ['body']
   )
 )
+
+// forgot password
+export const forgotPasswordValidator = validate(
+  checkSchema(
+    {
+      email: {
+        isEmail: { errorMessage: USERS_MESSAGES.EMAIL_IS_INVALID },
+        trim: true,
+        custom: {
+          options: async (value, { req }) => {
+            // =>> Check Email có tồn tại trong db hay không =>> nếu có tạo access token và refresh token
+            const user = await databaseService.users.findOne({
+              email: value
+            })
+            if (user === null) {
+              throw new Error(USERS_MESSAGES.USER_NOT_FOUND)
+            }
+            req.user = user
+            return true
+          }
+        }
+      }
+    },
+    ['body']
+  )
+)
