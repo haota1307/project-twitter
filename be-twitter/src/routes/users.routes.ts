@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  changePasswordController,
   forgotPasswordController,
   loginController,
   logoutController,
@@ -10,11 +11,13 @@ import {
 } from '~/controllers/users.controllers'
 import {
   accessTokenValidator,
+  changePasswordValidatior,
   forgotPasswordValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidatior,
+  verifiedUserValidator,
   verifyForgotPasswordTokenValidatior
 } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -85,4 +88,54 @@ usersRouter.post(
  *
  */
 usersRouter.post('/reset-password', resetPasswordValidatior, wrapRequestHandler(resetPasswordController))
+
+/**
+ * Description: Change password
+ * Path: /change-password
+ * Method: PUT
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: { old_password: string, password: string, confirm_password: string }
+ *
+ */
+usersRouter.put(
+  '/change-password',
+  accessTokenValidator,
+  verifiedUserValidator,
+  changePasswordValidatior,
+  wrapRequestHandler(changePasswordController)
+)
+
+/**
+ * Description:  get my profile
+ * Path: /me
+ * Method: GET
+ * Header: {Authorization: Bearer <access token>}
+ */
+//usersRouter.get('/me', accessTokenValidator, wrapRequestHandler(getMeController))
+
+/**
+ * Description:  Update my profile
+ * Path: /me
+ * Method: PATCH
+ * Header: {Authorization: Bearer <access token>}
+ * Body: UserSchema
+ */
+// usersRouter.patch(
+//   '/me',
+//   accessTokenValidator,
+//   verifiedUserValidator,
+//   updateMeValidator,
+//   // Lọc ra những key cần lấy
+//   filterMiddlewares<UpdateMeReqBody>([
+//     'name',
+//     'date_of_birth',
+//     'bio',
+//     'location',
+//     'website',
+//     'avatar',
+//     'username',
+//     'cover_photo'
+//   ]),
+//   wrapRequestHandler(updateMeController)
+// )
 export default usersRouter
