@@ -8,8 +8,10 @@ import {
   refreshTokenController,
   registerController,
   resetPasswordController,
+  updateProfileController,
   verifyForgotPasswordController
 } from '~/controllers/users.controllers'
+import { filterMiddlewares } from '~/middlewares/common.middlewares'
 import {
   accessTokenValidator,
   changePasswordValidatior,
@@ -18,9 +20,11 @@ import {
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidatior,
+  updateMeValidator,
   verifiedUserValidator,
   verifyForgotPasswordTokenValidatior
 } from '~/middlewares/users.middlewares'
+import { UpdateProfileReqBody } from '~/models/requests/User.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const usersRouter = Router()
@@ -121,22 +125,22 @@ usersRouter.get('/profile', accessTokenValidator, wrapRequestHandler(getProfileC
  * Header: {Authorization: Bearer <access token>}
  * Body: UserSchema
  */
-// usersRouter.patch(
-//   '/me',
-//   accessTokenValidator,
-//   verifiedUserValidator,
-//   updateMeValidator,
-//   // Lọc ra những key cần lấy
-//   filterMiddlewares<UpdateMeReqBody>([
-//     'name',
-//     'date_of_birth',
-//     'bio',
-//     'location',
-//     'website',
-//     'avatar',
-//     'username',
-//     'cover_photo'
-//   ]),
-//   wrapRequestHandler(updateMeController)
-// )
+usersRouter.patch(
+  '/profile',
+  accessTokenValidator,
+  verifiedUserValidator,
+  updateMeValidator,
+  // Lọc ra những key cần lấy
+  filterMiddlewares<UpdateProfileReqBody>([
+    'name',
+    'date_of_birth',
+    'bio',
+    'location',
+    'website',
+    'avatar',
+    'username',
+    'cover_photo'
+  ]),
+  wrapRequestHandler(updateProfileController)
+)
 export default usersRouter

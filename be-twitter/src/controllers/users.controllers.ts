@@ -12,6 +12,7 @@ import {
   RegisterReqBody,
   ResetPasswordReqBody,
   TokenPayload,
+  UpdateProfileReqBody,
   VerifyForgotPasswordReqBody
 } from '~/models/requests/User.requests'
 import usersService from '~/services/users.services'
@@ -107,6 +108,22 @@ export const getProfileController = async (req: Request<ParamsDictionary, any, a
   const user = await usersService.getProfile(user_id)
   return res.json({
     message: USERS_MESSAGES.GET_ME_SUCCESS,
+    result: user
+  })
+}
+
+export const updateProfileController = async (
+  req: Request<ParamsDictionary, any, UpdateProfileReqBody>,
+  res: Response
+) => {
+  // Lấy user ra
+  const { user_id } = req.decoded_authorization as TokenPayload
+  // Lấy body để có thể biết được cần cập nhật fiel nào
+  const { body } = req
+  // Cập nhật
+  const user = await usersService.updateProfile(user_id, body)
+  return res.json({
+    message: USERS_MESSAGES.UPDATE_ME_SUCCESS,
     result: user
   })
 }

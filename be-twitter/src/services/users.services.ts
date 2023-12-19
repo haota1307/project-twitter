@@ -3,8 +3,8 @@ import { TokenType, UserVerifyStatus } from '~/constants/enums'
 import { signToken, verifyToken } from '~/utils/jwt'
 import databaseService from './database.services'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
-import { ObjectId } from 'mongodb'
-import { RegisterReqBody } from '~/models/requests/User.requests'
+import { ModifyResult, ObjectId } from 'mongodb'
+import { RegisterReqBody, UpdateProfileReqBody } from '~/models/requests/User.requests'
 import User from '~/models/schemas/User.schema'
 import { hashPassword } from '~/utils/crypto'
 import { sendForgotPasswordEmail, sendVerifyRegisterEmail } from '~/utils/email'
@@ -25,6 +25,7 @@ class UsersService {
       }
     })
   }
+
   // tạo refresh token
   private signRefreshToken({ user_id, verify, exp }: { user_id: string; verify: UserVerifyStatus; exp?: number }) {
     if (exp) {
@@ -51,11 +52,13 @@ class UsersService {
       }
     })
   }
+
   // Tạo access token và refresh token
   private signAccessAndRefreshToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     // chạy song song 2 func =>> tối ưu performance
     return Promise.all([this.signAccessToken({ user_id, verify }), this.signRefreshToken({ user_id, verify })])
   }
+
   // Tạo email verify token
   private signEmailVerifyToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return signToken({
@@ -70,6 +73,7 @@ class UsersService {
       }
     })
   }
+
   // Giải mã Refresh Token
   private decodeRefreshToken(refresh_token: string) {
     return verifyToken({
@@ -77,6 +81,7 @@ class UsersService {
       secretOrPublicKey: envConfig.jwtSecretRefreshToken as string
     })
   }
+
   // Tạo forgot password token
   private signForgotPasswordToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     return signToken({
@@ -97,6 +102,7 @@ class UsersService {
     const user = await databaseService.users.findOne({ email })
     return Boolean(user)
   }
+
   // Đăng kí
   async register(payload: RegisterReqBody) {
     const user_id = new ObjectId() // Tạo user_id
@@ -134,6 +140,7 @@ class UsersService {
       refresh_token
     }
   }
+
   // Login - tạo access token và refresh token
   async login({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     const [access_token, refresh_token] = await this.signAccessAndRefreshToken({ user_id, verify })
@@ -151,6 +158,7 @@ class UsersService {
       refresh_token
     }
   }
+
   // Refresh token
   async refreshToken({
     user_id,
@@ -184,6 +192,7 @@ class UsersService {
       refresh_token: new_refresh_token
     }
   }
+
   // Logout - Xoá refresh token trong database
   async logout(refresh_token: string) {
     await databaseService.refreshTokens.deleteOne({ token: refresh_token })
@@ -191,6 +200,7 @@ class UsersService {
       message: USERS_MESSAGES.LOGOUT_SUCCESS
     }
   }
+
   // forgot password
   async forgotPassword({ user_id, email, verify }: { user_id: string; email: string; verify: UserVerifyStatus }) {
     // tạo forgot password token
@@ -214,6 +224,7 @@ class UsersService {
       message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD
     }
   }
+
   // Reset password
   async resetPassword(user_id: string, password: string) {
     databaseService.users.updateOne(
@@ -232,6 +243,7 @@ class UsersService {
       message: USERS_MESSAGES.RESET_PASSWORD_SUCCESS
     }
   }
+
   // change password
   async changePassword(user_id: string, new_password: string) {
     databaseService.users.updateOne(
@@ -249,6 +261,7 @@ class UsersService {
       message: USERS_MESSAGES.CHANGE_PASSWORD_SUCCESS
     }
   }
+
   // Get profile
   async getProfile(user_id: string) {
     const user = databaseService.users.findOne(
@@ -262,6 +275,37 @@ class UsersService {
         }
       }
     )
+    return user
+  }
+
+  // Update profile
+  async updateProfile(user_id: string, payload: UpdateProfileReqBody) {
+    // Kiểm tra nếu có date of birth thì chuyển nó sang kiểu date - do khác kiểu dữ liệu với $set
+    const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
+    // dùng findOneAndUpdate để sau khi người dùng cập nhật thì ta sẽ trả về luôn thông tin người dùng
+    const user = await databaseService.users.findOneAndUpdate(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: {
+          ...(_payload as UpdateProfileReqBody & { date_of_birth?: Date })
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        returnDocument: 'after', // Trả về document sau khi update
+        projection: {
+          // Không trả về
+          password: 0,
+          email_verify: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    // Trả về Document user
     return user
   }
 }

@@ -84,7 +84,7 @@ import { TokenType, UserVerifyStatus } from '~/constants/enums'
  *       example: 1
  */
 
-export interface UpdateMeReqBody {
+export interface UpdateProfileReqBody {
   name?: string
   date_of_birth?: string
   bio?: string
