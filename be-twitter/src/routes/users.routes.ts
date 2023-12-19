@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   changePasswordController,
   forgotPasswordController,
+  getProfileController,
   loginController,
   logoutController,
   refreshTokenController,
@@ -107,11 +108,11 @@ usersRouter.put(
 
 /**
  * Description:  get my profile
- * Path: /me
+ * Path: /profile
  * Method: GET
  * Header: {Authorization: Bearer <access token>}
  */
-//usersRouter.get('/me', accessTokenValidator, wrapRequestHandler(getMeController))
+usersRouter.get('/profile', accessTokenValidator, wrapRequestHandler(getProfileController))
 
 /**
  * Description:  Update my profile

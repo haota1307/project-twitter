@@ -101,3 +101,12 @@ export const changePasswordController = async (
   const result = await usersService.changePassword(user_id, password)
   return res.json(result)
 }
+
+export const getProfileController = async (req: Request<ParamsDictionary, any, any>, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const user = await usersService.getProfile(user_id)
+  return res.json({
+    message: USERS_MESSAGES.GET_ME_SUCCESS,
+    result: user
+  })
+}
