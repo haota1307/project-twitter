@@ -3,6 +3,7 @@ import {
   changePasswordController,
   forgotPasswordController,
   getProfileController,
+  getUserProfileController,
   loginController,
   logoutController,
   refreshTokenController,
@@ -143,4 +144,66 @@ usersRouter.patch(
   ]),
   wrapRequestHandler(updateProfileController)
 )
+
+/**
+ * Description:  get user profile
+ * Path: /:username
+ * Method: GET
+ */
+usersRouter.get('/:username', wrapRequestHandler(getUserProfileController))
+
+/**
+ * Description: Follow someone
+ * Path: /follow
+ * Method: POST
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: { followed_user_id: string }
+ */
+// usersRouter.post(
+//   '/follow',
+//   accessTokenValidator,
+//   verifiedUserValidator,
+//   followValidator,
+//   wrapRequestHandler(followController)
+// )
+
+/**
+ * Description: Follow someone
+ * Path: /follow/user_id
+ * Method: DELETE
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: { followed_user_id: string }
+ */
+// usersRouter.delete(
+//   '/follow/:user_id',
+//   accessTokenValidator,
+//   verifiedUserValidator,
+//   unfollowValidator,
+//   wrapRequestHandler(unfollowController)
+// )
+
+/**
+ * Description: verify email when user click on the link in email
+ * Path: /verify-email
+ * Method: POST
+ * Body: { email_verify_token: string }
+ *
+ */
+//usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(verifyEmailController))
+/**
+ * Description: resend verify email when user click on the link in email
+ * Path: /resend-verify-email
+ * Method: POST
+ * Header: {Authorization: Bearer <access token>}
+ * Body: {  }
+ *
+ */
+//usersRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendverifyEmailController))
+/**
+ * Description: OAuth with google
+ * Path: /oauth/google
+ * Method: GET
+ * Query: { code: string }
+ */
+//usersRouter.get('/oauth/google', wrapRequestHandler(oauthController))
 export default usersRouter
