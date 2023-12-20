@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   changePasswordController,
+  followController,
   forgotPasswordController,
   getProfileController,
   getUserProfileController,
@@ -16,6 +17,7 @@ import { filterMiddlewares } from '~/middlewares/common.middlewares'
 import {
   accessTokenValidator,
   changePasswordValidatior,
+  followValidator,
   forgotPasswordValidator,
   loginValidator,
   refreshTokenValidator,
@@ -159,12 +161,27 @@ usersRouter.get('/:username', wrapRequestHandler(getUserProfileController))
  * Header: { Authorization: Bearer <access_token> }
  * Body: { followed_user_id: string }
  */
-// usersRouter.post(
-//   '/follow',
+usersRouter.post(
+  '/follow',
+  accessTokenValidator,
+  verifiedUserValidator,
+  followValidator,
+  wrapRequestHandler(followController)
+)
+
+/**
+ * Description: Follow someone
+ * Path: /follow
+ * Method: POST
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: { followed_user_id: string }
+ */
+// usersRouter.get(
+//   '/following',
 //   accessTokenValidator,
 //   verifiedUserValidator,
 //   followValidator,
-//   wrapRequestHandler(followController)
+//   wrapRequestHandler(followingController)
 // )
 
 /**
