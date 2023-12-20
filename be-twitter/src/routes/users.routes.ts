@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   changePasswordController,
   followController,
+  followingController,
   forgotPasswordController,
   getProfileController,
   getUserProfileController,
@@ -152,7 +153,7 @@ usersRouter.patch(
  * Path: /:username
  * Method: GET
  */
-usersRouter.get('/:username', wrapRequestHandler(getUserProfileController))
+usersRouter.get('/user/:username', wrapRequestHandler(getUserProfileController))
 
 /**
  * Description: Follow someone
@@ -171,18 +172,11 @@ usersRouter.post(
 
 /**
  * Description: Follow someone
- * Path: /follow
- * Method: POST
+ * Path: /following
+ * Method: Get
  * Header: { Authorization: Bearer <access_token> }
- * Body: { followed_user_id: string }
  */
-// usersRouter.get(
-//   '/following',
-//   accessTokenValidator,
-//   verifiedUserValidator,
-//   followValidator,
-//   wrapRequestHandler(followingController)
-// )
+usersRouter.get('/following', accessTokenValidator, verifiedUserValidator, wrapRequestHandler(followingController))
 
 /**
  * Description: Follow someone

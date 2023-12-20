@@ -156,6 +156,10 @@ export interface FollowReqBody {
   followed_user_id: string
 }
 
+export interface FollowingReqBody {
+  user_id: string
+}
+
 export interface UnFollowReqBody extends ParamsDictionary {
   user_id: string
 }

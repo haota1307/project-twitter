@@ -6,6 +6,7 @@ import User from '~/models/schemas/User.schema'
 import {
   ChangePasswordReqBody,
   FollowReqBody,
+  FollowingReqBody,
   ForgotPasswordReqBody,
   GetProfileReqParams,
   LoginReqBody,
@@ -144,4 +145,27 @@ export const followController = async (req: Request<ParamsDictionary, any, Follo
   const { followed_user_id } = req.body
   const result = await usersService.follow(user_id, followed_user_id)
   return res.json(result)
+}
+
+export const followingController = async (req: Request<ParamsDictionary, any, FollowingReqBody>, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const listFollowing = await usersService.following({
+    user_id,
+    limit,
+    page
+  })
+  if (listFollowing.total === 0) {
+    return res.json({ message: USERS_MESSAGES.NOT_YET_FOLLOWED_SOMEONE })
+  }
+  return res.json({
+    message: USERS_MESSAGES.GET_FOLLOWING_SUCCESS,
+    result: {
+      limit,
+      page,
+      total_page: Math.ceil((listFollowing.total as number) / limit),
+      list_following: listFollowing.isFollower
+    }
+  })
 }

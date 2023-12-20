@@ -356,6 +356,19 @@ class UsersService {
       message: USERS_MESSAGES.FOLLOWED
     }
   }
+
+  async following({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+    const isFollower = await databaseService.followers
+      .find({
+        user_id: new ObjectId(user_id)
+      })
+      .sort({ created_at: -1 })
+      .skip(limit * (page - 1))
+      .limit(limit)
+      .toArray()
+    const total = await databaseService.followers.countDocuments({ user_id: new ObjectId(user_id) })
+    return { isFollower, total }
+  }
 }
 
 const usersService = new UsersService()
