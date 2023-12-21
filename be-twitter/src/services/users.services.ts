@@ -224,6 +224,33 @@ class UsersService {
     }
   }
 
+  // resend email
+  async resendVerifyEmail(user_id: string, email: string) {
+    // Test gửi email
+    const email_verify_token = await this.signEmailVerifyToken({
+      user_id,
+      verify: UserVerifyStatus.Unverified
+    })
+    await sendVerifyRegisterEmail(email, email_verify_token)
+
+    // Cập nhật lại giá trị email verify token trong document user
+    await databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: {
+          email_verify_token
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      }
+    )
+
+    return {
+      message: USERS_MESSAGES.RESEND_VERIFY_EMAIL_SUCCESS
+    }
+  }
+
   // Logout - Xoá refresh token trong database
   async logout(refresh_token: string) {
     await databaseService.refreshTokens.deleteOne({ token: refresh_token })

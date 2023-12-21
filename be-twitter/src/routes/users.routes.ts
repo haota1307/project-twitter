@@ -10,6 +10,7 @@ import {
   logoutController,
   refreshTokenController,
   registerController,
+  resendverifyEmailController,
   resetPasswordController,
   unfollowController,
   updateProfileController,
