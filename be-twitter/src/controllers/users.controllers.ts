@@ -17,10 +17,12 @@ import {
   TokenPayload,
   UnFollowReqBody,
   UpdateProfileReqBody,
-  VerifyForgotPasswordReqBody
+  VerifyForgotPasswordReqBody,
+  verifyEmailReqBody
 } from '~/models/requests/User.requests'
 import usersService from '~/services/users.services'
 import databaseService from '~/services/database.services'
+import HTTP_STATUS from '~/constants/httpStatus'
 
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {
   const result = await usersService.register(req.body)
@@ -79,6 +81,34 @@ export const verifyForgotPasswordController = async (
 ) => {
   return res.json({
     message: USERS_MESSAGES.VERIFY_FORGOT_PASSWORD_SUCCESS
+  })
+}
+
+export const verifyEmailController = async (req: Request<ParamsDictionary, any, verifyEmailReqBody>, res: Response) => {
+  const { user_id } = req.decoded_email_verify_token as TokenPayload
+  const user = await databaseService.users.findOne({
+    _id: new ObjectId(user_id)
+  })
+
+  // nếu không tìm thấy user sẽ báo lỗi
+  if (!user) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({
+      message: USERS_MESSAGES.USER_NOT_FOUND
+    })
+  }
+
+  // Đã verify rồi =>> không báo lỗi =>> trả về status: OK và message: đã verify
+  if (user.email_verify_token === '') {
+    return res.json({
+      message: USERS_MESSAGES.EMAIL_ALREADY_VERIFIED_BEFORE
+    })
+  }
+
+  // nếu chưa verify
+  const result = await usersService.verifyEmail(user_id)
+  return res.json({
+    message: USERS_MESSAGES.EMAIL_VERIFY_SUCCESS,
+    result
   })
 }
 

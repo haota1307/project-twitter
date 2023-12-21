@@ -196,6 +196,34 @@ class UsersService {
     }
   }
 
+  // verify email
+  async verifyEmail(user_id: string) {
+    // Tạo giá trị cập nhật
+    // MongoDB cập nhật giá trị
+    const [token] = await Promise.all([
+      this.signAccessAndRefreshToken({ user_id, verify: UserVerifyStatus.Verified }),
+      databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
+        {
+          $set: {
+            email_verify_token: '',
+            verify: UserVerifyStatus.Verified,
+            updated_at: '$$NOW'
+          }
+        }
+      ])
+    ])
+    const [access_token, refresh_token] = token
+    const { iat, exp } = await this.decodeRefreshToken(refresh_token)
+
+    await databaseService.refreshTokens.insertOne(
+      new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
+    )
+    return {
+      access_token,
+      refresh_token
+    }
+  }
+
   // Logout - Xoá refresh token trong database
   async logout(refresh_token: string) {
     await databaseService.refreshTokens.deleteOne({ token: refresh_token })

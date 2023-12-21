@@ -13,12 +13,14 @@ import {
   resetPasswordController,
   unfollowController,
   updateProfileController,
+  verifyEmailController,
   verifyForgotPasswordController
 } from '~/controllers/users.controllers'
 import { filterMiddlewares } from '~/middlewares/common.middlewares'
 import {
   accessTokenValidator,
   changePasswordValidatior,
+  emailVerifyTokenValidator,
   followValidator,
   forgotPasswordValidator,
   loginValidator,
@@ -41,6 +43,25 @@ const usersRouter = Router()
  * Body: { name: string, email: string, password: string, confirm_password, date_of_birth: ISO8601 }
  */
 usersRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
+
+/**
+ * Description: verify email when user click on the link in email => Verify account
+ * Path: /verify-email
+ * Method: POST
+ * Body: { email_verify_token: string }
+ *
+ */
+usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(verifyEmailController))
+
+/**
+ * Description: resend verify email when user click on the link in email
+ * Path: /resend-verify-email
+ * Method: POST
+ * Header: {Authorization: Bearer <access token>}
+ * Body: {  }
+ *
+ */
+usersRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendverifyEmailController))
 
 /**
  * Description: Login account
@@ -195,23 +216,6 @@ usersRouter.delete(
   wrapRequestHandler(unfollowController)
 )
 
-/**
- * Description: verify email when user click on the link in email
- * Path: /verify-email
- * Method: POST
- * Body: { email_verify_token: string }
- *
- */
-//usersRouter.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(verifyEmailController))
-/**
- * Description: resend verify email when user click on the link in email
- * Path: /resend-verify-email
- * Method: POST
- * Header: {Authorization: Bearer <access token>}
- * Body: {  }
- *
- */
-//usersRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendverifyEmailController))
 /**
  * Description: OAuth with google
  * Path: /oauth/google
