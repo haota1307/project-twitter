@@ -478,8 +478,6 @@ export const followValidator = validate(
           options: async (value: string, { req }) => {
             const { user_id } = (req as Request).decoded_authorization as TokenPayload
             const { followed_user_id } = req.body as FollowReqBody
-            console.log('userId: ', user_id)
-            console.log('followed_user_id: ', followed_user_id)
             if (user_id === followed_user_id) {
               throw Error('Không thể follow bản thân')
             }
