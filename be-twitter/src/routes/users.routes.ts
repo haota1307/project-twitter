@@ -11,6 +11,7 @@ import {
   refreshTokenController,
   registerController,
   resetPasswordController,
+  unfollowController,
   updateProfileController,
   verifyForgotPasswordController
 } from '~/controllers/users.controllers'
@@ -24,6 +25,7 @@ import {
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidatior,
+  unfollowValidator,
   updateMeValidator,
   verifiedUserValidator,
   verifyForgotPasswordTokenValidatior
@@ -176,22 +178,22 @@ usersRouter.post(
  * Method: Get
  * Header: { Authorization: Bearer <access_token> }
  */
-usersRouter.get('/following', accessTokenValidator, verifiedUserValidator, wrapRequestHandler(followingController))
+usersRouter.get('/following', accessTokenValidator, wrapRequestHandler(followingController))
 
 /**
- * Description: Follow someone
+ * Description:  unFollow someone
  * Path: /follow/user_id
  * Method: DELETE
  * Header: { Authorization: Bearer <access_token> }
  * Body: { followed_user_id: string }
  */
-// usersRouter.delete(
-//   '/follow/:user_id',
-//   accessTokenValidator,
-//   verifiedUserValidator,
-//   unfollowValidator,
-//   wrapRequestHandler(unfollowController)
-// )
+usersRouter.delete(
+  '/follow/:user_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  unfollowValidator,
+  wrapRequestHandler(unfollowController)
+)
 
 /**
  * Description: verify email when user click on the link in email

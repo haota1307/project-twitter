@@ -15,10 +15,12 @@ import {
   RegisterReqBody,
   ResetPasswordReqBody,
   TokenPayload,
+  UnFollowReqBody,
   UpdateProfileReqBody,
   VerifyForgotPasswordReqBody
 } from '~/models/requests/User.requests'
 import usersService from '~/services/users.services'
+import databaseService from '~/services/database.services'
 
 export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {
   const result = await usersService.register(req.body)
@@ -168,4 +170,11 @@ export const followingController = async (req: Request<ParamsDictionary, any, Fo
       list_following: listFollowing.isFollower
     }
   })
+}
+
+export const unfollowController = async (req: Request<UnFollowReqBody>, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { user_id: followed_user_id } = req.params
+  const result = await usersService.unFollow(user_id, followed_user_id)
+  return res.json(result)
 }

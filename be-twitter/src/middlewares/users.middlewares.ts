@@ -9,7 +9,7 @@ import HTTP_STATUS from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/messages'
 import { REGEX_USERNAME } from '~/constants/regex'
 import { ErrorWithStatus } from '~/models/Errors'
-import { TokenPayload } from '~/models/requests/User.requests'
+import { FollowReqBody, TokenPayload } from '~/models/requests/User.requests'
 import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
 import { validate } from '~/utils/Validation'
@@ -468,12 +468,36 @@ export const updateMeValidator = validate(
   )
 )
 
+// check id người được follow
 export const followValidator = validate(
   checkSchema(
     {
-      followed_user_id: userIdSchema
+      followed_user_id: {
+        ...userIdSchema,
+        custom: {
+          options: async (value: string, { req }) => {
+            const { user_id } = (req as Request).decoded_authorization as TokenPayload
+            const { followed_user_id } = req.body as FollowReqBody
+            console.log('userId: ', user_id)
+            console.log('followed_user_id: ', followed_user_id)
+            if (user_id === followed_user_id) {
+              throw Error('Không thể follow bản thân')
+            }
+          }
+        }
+      }
     },
     ['body']
+  )
+)
+
+// check id người bị hủy follow
+export const unfollowValidator = validate(
+  checkSchema(
+    {
+      user_id: userIdSchema
+    },
+    ['params']
   )
 )
 

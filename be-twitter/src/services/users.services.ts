@@ -336,6 +336,7 @@ class UsersService {
     return user
   }
 
+  // Follow some one
   async follow(user_id: string, followed_user_id: string) {
     const follower = await databaseService.followers.findOne({
       user_id: new ObjectId(user_id),
@@ -357,6 +358,7 @@ class UsersService {
     }
   }
 
+  // Get list following
   async following({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
     const isFollower = await databaseService.followers
       .find({
@@ -368,6 +370,29 @@ class UsersService {
       .toArray()
     const total = await databaseService.followers.countDocuments({ user_id: new ObjectId(user_id) })
     return { isFollower, total }
+  }
+
+  // un follow
+  async unFollow(user_id: string, followed_user_id: string) {
+    // Check đã follow hay chưa
+    const followed = await databaseService.followers.findOne({
+      user_id: new ObjectId(user_id),
+      followed_user_id: new ObjectId(followed_user_id)
+    })
+    // Chưa follow
+    if (followed === null) {
+      return {
+        message: USERS_MESSAGES.ALREADY_UNFOLLOWED
+      }
+    }
+    // Đã follow
+    await databaseService.followers.deleteOne({
+      user_id: new ObjectId(user_id),
+      followed_user_id: new ObjectId(followed_user_id)
+    })
+    return {
+      message: USERS_MESSAGES.UNFOLLOW_SUCCESS
+    }
   }
 }
 
