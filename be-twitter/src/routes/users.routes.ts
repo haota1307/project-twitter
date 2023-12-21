@@ -8,6 +8,7 @@ import {
   getUserProfileController,
   loginController,
   logoutController,
+  oauthController,
   refreshTokenController,
   registerController,
   resendverifyEmailController,
@@ -71,6 +72,14 @@ usersRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandle
  * Body: { email: string, password: string }
  */
 usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
+
+/**
+ * Description: OAuth with google
+ * Path: /oauth/google
+ * Method: GET
+ * Query: { code: string }
+ */
+usersRouter.get('/oauth/google', wrapRequestHandler(oauthController))
 
 /**
  * Description: Refresh token
@@ -216,12 +225,4 @@ usersRouter.delete(
   unfollowValidator,
   wrapRequestHandler(unfollowController)
 )
-
-/**
- * Description: OAuth with google
- * Path: /oauth/google
- * Method: GET
- * Query: { code: string }
- */
-//usersRouter.get('/oauth/google', wrapRequestHandler(oauthController))
 export default usersRouter

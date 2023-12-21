@@ -1,13 +1,20 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import { envConfig } from './constants/config'
+import { envConfig, isProduction } from './constants/config'
 import usersRouter from './routes/users.routes'
 import databaseService from './services/database.services'
 import { defaultErrorHandler } from './middlewares/error.middlewares'
+import cors, { CorsOptions } from 'cors'
+
 dotenv.config()
 
 const port = envConfig.port
 const app = express()
+const corsOptions: CorsOptions = {
+  // origin: isProduction ? envConfig.clientUrl : '*'
+  origin: '*'
+}
+app.use(cors(corsOptions)) // Cho phép các host nào được truy cập vào
 
 // Kết nối tới database
 databaseService.connect()
