@@ -4,6 +4,7 @@ import { envConfig } from '~/constants/config'
 import User from '~/models/schemas/User.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import Follower from '~/models/schemas/Follower.schema'
+import VideoStatus from '~/models/schemas/VideoStatus.schema'
 dotenv.config()
 
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@twiiter.autqtc5.mongodb.net/`
@@ -37,6 +38,11 @@ class DatabaseService {
   // Collection follow
   get followers(): Collection<Follower> {
     return this.db.collection(envConfig.dbFollowersCollection)
+  }
+
+  // Collection VideoStatus
+  get videoStatus(): Collection<VideoStatus> {
+    return this.db.collection(envConfig.dbVideoStatusCollection)
   }
 }
 
