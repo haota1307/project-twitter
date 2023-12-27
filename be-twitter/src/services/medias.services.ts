@@ -192,6 +192,12 @@ class MediasService {
     )
     return result
   }
+
+  // Get Status video
+  async getVideoStatus(id: string) {
+    const data = await databaseService.videoStatus.findOne({ name: id })
+    return data
+  }
 }
 
 const mediasService = new MediasService()
