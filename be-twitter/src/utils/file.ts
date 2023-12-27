@@ -69,8 +69,6 @@ export const handleUploadImage = async (req: Request) => {
 }
 
 export const handleUploadVideo = async (req: Request) => {
-  // fix esmodule được dùng trong commonjs, tsconfig "moduleResolution": "NodeNext",
-  const formidable = (await import('formidable')).default
   const nanoId = (await import('nanoid')).nanoid
   const idName = nanoId()
   // Tạo folder

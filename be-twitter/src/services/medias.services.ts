@@ -175,7 +175,6 @@ class MediasService {
     return result
   }
 
-  // Upload video hls
   // Upload video HLS
   async uploadVideoHLS(req: Request) {
     const files = await handleUploadVideo(req)
