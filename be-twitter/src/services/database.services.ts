@@ -5,6 +5,8 @@ import User from '~/models/schemas/User.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import Follower from '~/models/schemas/Follower.schema'
 import VideoStatus from '~/models/schemas/VideoStatus.schema'
+import Tweet from '~/models/schemas/Tweet.schema'
+import Hashtag from '~/models/schemas/Hashtag.schema'
 dotenv.config()
 
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@twiiter.autqtc5.mongodb.net/`
@@ -43,6 +45,16 @@ class DatabaseService {
   // Collection VideoStatus
   get videoStatus(): Collection<VideoStatus> {
     return this.db.collection(envConfig.dbVideoStatusCollection)
+  }
+
+  // Collection Tweet
+  get tweets(): Collection<Tweet> {
+    return this.db.collection(envConfig.dbTweetsCollection)
+  }
+
+  // Collection hashtags
+  get hashtags(): Collection<Hashtag> {
+    return this.db.collection(envConfig.dbHashtagsCollection)
   }
 }
 

@@ -8,6 +8,7 @@ import cors, { CorsOptions } from 'cors'
 import mediasRouter from './routes/medias.routes'
 import { initFolder } from './utils/file'
 import staticRouter from './routes/static.routes'
+import tweetsRouter from './routes/tweets.routes'
 
 dotenv.config()
 
@@ -29,6 +30,7 @@ app.use(express.json())
 app.use('/users', usersRouter)
 app.use('/medias', mediasRouter)
 app.use('/static', staticRouter)
+app.use('/tweets', tweetsRouter)
 
 // Dùng middlewares để xử lý lỗi - Khi app lỗi sẽ nhãy vào đây  <<Default handler>>
 app.use(defaultErrorHandler)
