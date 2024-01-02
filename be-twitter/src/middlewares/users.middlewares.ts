@@ -535,6 +535,20 @@ export const unfollowValidator = validate(
   )
 )
 
+// check người dùng có đăng nhập hay không để lấy ra tweet(chức năng tweet Everyone hoặc circle)
+export const isUserLoggedInValidator = (middlewares: (req: Request, res: Response, next: NextFunction) => void) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    // req.header => header chung do người dùng gửi lên, không phân biệt chữ hoa chữ thường
+    // req.headers => header của Express lấy ra từ req.header, quy định chữ hoa và chữ thường
+
+    // Có access token thì check không có thì không check
+    if (req.headers.authorization) {
+      return middlewares(req, res, next)
+    }
+    next()
+  }
+}
+
 /**
  * Note: 'trim: true' nên để dưới isString để tránh bị lỗi không thể check isString
  */
