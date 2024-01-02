@@ -24,7 +24,14 @@ const corsOptions: CorsOptions = {
 app.use(cors(corsOptions)) // Cho phép các host nào được truy cập vào
 
 // Kết nối tới database
-databaseService.connect()
+databaseService.connect().then(() => {
+  // Khi connect xong thực hiện thêm index
+  databaseService.indexUsers()
+  databaseService.indexRefreshToken()
+  databaseService.indexVideoStatus()
+  databaseService.indexFollowers()
+  databaseService.indexTweets()
+})
 
 app.use(express.json())
 app.use('/users', usersRouter)

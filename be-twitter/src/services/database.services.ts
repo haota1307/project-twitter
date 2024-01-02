@@ -28,6 +28,46 @@ class DatabaseService {
     }
   }
 
+  // Tạo index tối ưu hiệu xuất tìm kiếm
+  async indexUsers() {
+    const exists = await this.users.indexExists(['email_1_password_1', 'username_1', 'email_1']) // Nếu không có bất kì 1 trong 3 sẽ return vể false
+    if (!exists) {
+      this.users.createIndex({ email: 1, password: 1 })
+      this.users.createIndex({ email: 1 }, { unique: true }) // Không được trùng email
+      this.users.createIndex({ username: 1 }, { unique: true }) // Không được trùng username
+    }
+  }
+
+  async indexRefreshToken() {
+    const exists = await this.refreshTokens.indexExists(['exp_1', 'token_1'])
+    if (!exists) {
+      this.refreshTokens.createIndex({ token: 1 })
+      this.refreshTokens.createIndex({ exp: 1 }, { expireAfterSeconds: 0 }) //=> Dựa vào móc thời gian exp để xóa token
+    }
+  }
+
+  async indexVideoStatus() {
+    const exists = await this.videoStatus.indexExists(['name_1'])
+    if (!exists) {
+      this.videoStatus.createIndex({ name: 1 })
+    }
+  }
+
+  async indexFollowers() {
+    const exists = await this.followers.indexExists(['user_id_1_followed_user_id_1'])
+    if (!exists) {
+      this.followers.createIndex({ user_id: 1, followed_user_id: 1 })
+    }
+  }
+
+  async indexTweets() {
+    const exists = await this.tweets.indexExists(['content_text'])
+    if (!exists) {
+      // Cho phép tìm các từ "Stop Word" như who, the, is, and...
+      this.tweets.createIndex({ content: 'text' }, { default_language: 'none' })
+    }
+  }
+
   // Truy xuất dữ liệu đến collection users nêu chưa có thì tự tạo
   get users(): Collection<User> {
     return this.db.collection(envConfig.dbUsersCollection)
