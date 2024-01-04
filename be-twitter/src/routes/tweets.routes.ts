@@ -1,6 +1,12 @@
 import { Router } from 'express'
-import { createTweetController, getTweetController } from '~/controllers/tweets.controller'
-import { audiencevalidator, createTweetValidate, tweetIdValidator } from '~/middlewares/tweets.middlewares'
+import { createTweetController, getTweetChildrenController, getTweetController } from '~/controllers/tweets.controller'
+import {
+  audiencevalidator,
+  createTweetValidate,
+  getTweetChildrenValidator,
+  paginationValidator,
+  tweetIdValidator
+} from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, isUserLoggedInValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -38,4 +44,22 @@ tweetsRouter.get(
   wrapRequestHandler(getTweetController)
 )
 
+/**
+ * Description: Get tweet children - pagination
+ * Path: /:tweet_id/children
+ * Method: GET
+ * Header: {Authorization?: Bear <access_token>}
+ * Query: {limit: number, page: number, tweet_type: TweetType}
+ */
+
+tweetsRouter.get(
+  '/:tweet_id/children',
+  tweetIdValidator,
+  getTweetChildrenValidator,
+  paginationValidator,
+  isUserLoggedInValidator(accessTokenValidator), // Cần trả về 1 validate
+  isUserLoggedInValidator(verifiedUserValidator),
+  audiencevalidator,
+  wrapRequestHandler(getTweetChildrenController)
+)
 export default tweetsRouter

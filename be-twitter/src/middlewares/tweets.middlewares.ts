@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash'
 import { ObjectId } from 'mongodb'
 import { MediaType, TweetAudience, TweetType, UserVerifyStatus } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
-import { TWEETS_MESSAGES, USERS_MESSAGES } from '~/constants/messages'
+import { QUERY_MESSAGES, TWEETS_MESSAGES, USERS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Errors'
 import Tweet from '~/models/schemas/Tweet.schema'
 import databaseService from '~/services/database.services'
@@ -293,3 +293,49 @@ export const audiencevalidator = wrapRequestHandler(async (req: Request, res: Re
   }
   next() // Nếu trạng thái tweet là everyone => next
 })
+
+export const getTweetChildrenValidator = validate(
+  checkSchema(
+    {
+      tweet_type: {
+        isIn: {
+          options: [tweetTypes],
+          errorMessage: TWEETS_MESSAGES.INVALID_TYPE
+        }
+      }
+    },
+    ['query']
+  )
+)
+
+export const paginationValidator = validate(
+  checkSchema(
+    {
+      limit: {
+        isNumeric: true,
+        custom: {
+          options: async (value, { req }) => {
+            const num = Number(value)
+            if (num > 100 || num < 1) {
+              throw new Error(QUERY_MESSAGES.LIMIT_ERROR)
+            }
+            return true
+          }
+        }
+      },
+      page: {
+        isNumeric: true,
+        custom: {
+          options: async (value, { req }) => {
+            const num = Number(value)
+            if (num < 1) {
+              throw new Error(QUERY_MESSAGES.PAGE_ERROR)
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['query']
+  )
+)

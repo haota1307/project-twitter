@@ -81,15 +81,21 @@ export const TWEETS_MESSAGES = {
   MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Medias must be an array of media object',
   INVALID_TWEET_ID: 'Invalid tweet id',
   TWEET_NOT_FOUND: 'Tweet not found',
-  TWEET_IS_NOT_PUBLIC: 'Tweet is not public'
+  TWEET_IS_NOT_PUBLIC: 'Tweet is not public',
+  GET_TWEET_CHILDREN_SUCCESSFULLY: 'Get Tweet Children Successfully'
+} as const
+
+export const QUERY_MESSAGES = {
+  LIMIT_ERROR: '1 <= Limit <= 100',
+  PAGE_ERROR: 'Page >= 1'
 } as const
 
 export const BOOKMARK_MESSAGES = {
   BOOKMARK_SUCCESSFULLY: 'Bookmark successfully',
   UNBOOKMARK_SUCCESSFULLY: 'Unbookmark successfully'
-}
+} as const
 
 export const LIKE_MESSAGES = {
   LIKE_SUCCESSFULLY: 'Like successfully',
   UNLIKE_SUCCESSFULLY: 'Unlike successfully'
-}
+} as const
