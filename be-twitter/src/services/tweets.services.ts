@@ -206,7 +206,7 @@ class TweetsService {
         }
       ])
       .toArray()
-    const ids = tweets.map((tweet) => tweet._id as ObjectId)
+    const ids: ObjectId[] = tweets.map((tweet) => tweet._id as ObjectId)
     const inc = user_id ? { user_views: 1 } : { guest_views: 1 }
     const date = new Date()
     // Không return nên phải dùng $set và chạy forEach đễ trả về giá trị
