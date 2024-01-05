@@ -1,5 +1,10 @@
 import { Router } from 'express'
-import { createTweetController, getTweetChildrenController, getTweetController } from '~/controllers/tweets.controller'
+import {
+  createTweetController,
+  getNewFeedsController,
+  getTweetChildrenController,
+  getTweetController
+} from '~/controllers/tweets.controller'
 import {
   audiencevalidator,
   createTweetValidate,
@@ -61,5 +66,21 @@ tweetsRouter.get(
   isUserLoggedInValidator(verifiedUserValidator),
   audiencevalidator,
   wrapRequestHandler(getTweetChildrenController)
+)
+
+/**
+ * Description: Get new feeds
+ * Path: /
+ * Method: GET
+ * Header: {Authorization?: Bear <access_token>}
+ * Query: {limit: number, page: number}
+ */
+
+tweetsRouter.get(
+  '/',
+  paginationValidator,
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(getNewFeedsController)
 )
 export default tweetsRouter
