@@ -186,7 +186,7 @@ usersRouter.patch(
  * Path: /:username
  * Method: GET
  */
-usersRouter.get('/user/:username', wrapRequestHandler(getUserProfileController))
+usersRouter.get('/:username', wrapRequestHandler(getUserProfileController))
 
 /**
  * Description: Follow someone

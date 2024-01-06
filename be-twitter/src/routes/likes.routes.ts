@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { likeTweetController } from '~/controllers/likes.controller'
+import { likeTweetController, unlikeTweetController } from '~/controllers/likes.controller'
 import { tweetIdValidator } from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -19,6 +19,20 @@ likeRouter.post(
   verifiedUserValidator,
   tweetIdValidator,
   wrapRequestHandler(likeTweetController)
+)
+
+/**
+ * Description: Unlike tweet
+ * Path: /tweets/:tweet_id
+ * Method: DELETE
+ * Header: {Authorization: Bear <access_token>}
+ */
+likeRouter.delete(
+  '/tweets/:tweet_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  tweetIdValidator,
+  wrapRequestHandler(unlikeTweetController)
 )
 
 export default likeRouter
