@@ -8,6 +8,7 @@ import VideoStatus from '~/models/schemas/VideoStatus.schema'
 import Tweet from '~/models/schemas/Tweet.schema'
 import Hashtag from '~/models/schemas/Hashtag.schema'
 import { Bookmark } from '~/models/schemas/Bookmark.schema'
+import { Like } from '~/models/schemas/Like.schema'
 dotenv.config()
 
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@twiiter.autqtc5.mongodb.net/`
@@ -101,6 +102,11 @@ class DatabaseService {
   // Collection bookmark
   get bookmarks(): Collection<Bookmark> {
     return this.db.collection(envConfig.dbBookmarksCollection)
+  }
+
+  // Collection like
+  get likes(): Collection<Like> {
+    return this.db.collection(envConfig.dbLikesCollection)
   }
 }
 
