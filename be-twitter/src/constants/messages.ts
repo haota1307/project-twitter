@@ -93,6 +93,7 @@ export const QUERY_MESSAGES = {
 
 export const BOOKMARK_MESSAGES = {
   BOOKMARK_SUCCESSFULLY: 'Bookmark successfully',
+  GET_MY_BOOKMARK_SUCCESSFULLY: 'Get my bookmark successfully',
   UNBOOKMARK_SUCCESSFULLY: 'Unbookmark successfully'
 } as const
 

@@ -204,7 +204,7 @@ usersRouter.post(
 )
 
 /**
- * Description: Follow someone
+ * Description: list follow
  * Path: /following
  * Method: Get
  * Header: { Authorization: Bearer <access_token> }

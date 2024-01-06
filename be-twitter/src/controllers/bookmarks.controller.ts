@@ -17,6 +17,22 @@ export const bookmarkTweetController = async (
   })
 }
 
+export const MyBookmarksController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const result = await bookmarkService.myBookmarkTweet({ user_id, limit, page })
+  return res.json({
+    message: BOOKMARK_MESSAGES.GET_MY_BOOKMARK_SUCCESSFULLY,
+    result: {
+      limit,
+      page,
+      total_page: Math.ceil((result.total as number) / limit),
+      list_following: result.isMyBookmarks
+    }
+  })
+}
+
 export const unbookmarkTweetController = async (req: Request, res: Response) => {
   const { user_id } = req.decoded_authorization as TokenPayload
   const result = await bookmarkService.unbookmarkTweet(user_id, req.params.tweet_id)
