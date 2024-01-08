@@ -71,6 +71,20 @@ class DatabaseService {
     }
   }
 
+  async indexBookmark() {
+    const exists = await this.bookmarks.indexExists(['user_id_1_tweet_id_1'])
+    if (!exists) {
+      this.bookmarks.createIndex({ user_id: 1, tweet_id: 1 })
+    }
+  }
+
+  async indexLikes() {
+    const exists = await this.likes.indexExists(['tweet_id_1_user_id_1'])
+    if (!exists) {
+      this.likes.createIndex({ user_id: 1, tweet_id: 1 })
+    }
+  }
+
   // Truy xuất dữ liệu đến collection users nêu chưa có thì tự tạo
   get users(): Collection<User> {
     return this.db.collection(envConfig.dbUsersCollection)

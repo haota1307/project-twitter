@@ -34,6 +34,8 @@ databaseService.connect().then(() => {
   databaseService.indexVideoStatus()
   databaseService.indexFollowers()
   databaseService.indexTweets()
+  databaseService.indexBookmark()
+  databaseService.indexLikes()
 })
 
 app.use(express.json())
