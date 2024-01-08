@@ -549,6 +549,16 @@ export const isUserLoggedInValidator = (middlewares: (req: Request, res: Respons
   }
 }
 
+// Check conversations
+export const getConversationsValidator = validate(
+  checkSchema(
+    {
+      receiver_id: userIdSchema
+    },
+    ['params']
+  )
+)
+
 /**
  * Note: 'trim: true' nên để dưới isString để tránh bị lỗi không thể check isString
  */

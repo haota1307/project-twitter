@@ -11,6 +11,7 @@ import staticRouter from './routes/static.routes'
 import tweetsRouter from './routes/tweets.routes'
 import bookmarksRouter from './routes/bookmarks.routes'
 import likeRouter from './routes/likes.routes'
+import conversationsRouter from './routes/conversations.routes'
 
 dotenv.config()
 
@@ -42,6 +43,7 @@ app.use('/static', staticRouter)
 app.use('/tweets', tweetsRouter)
 app.use('/bookmarks', bookmarksRouter)
 app.use('/likes', likeRouter)
+app.use('/conversations', conversationsRouter)
 
 // Dùng middlewares để xử lý lỗi - Khi app lỗi sẽ nhãy vào đây  <<Default handler>>
 app.use(defaultErrorHandler)

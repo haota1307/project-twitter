@@ -9,6 +9,7 @@ import Tweet from '~/models/schemas/Tweet.schema'
 import Hashtag from '~/models/schemas/Hashtag.schema'
 import { Bookmark } from '~/models/schemas/Bookmark.schema'
 import { Like } from '~/models/schemas/Like.schema'
+import Conversation from '~/models/schemas/Conversation.schema'
 dotenv.config()
 
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@twiiter.autqtc5.mongodb.net/`
@@ -107,6 +108,11 @@ class DatabaseService {
   // Collection like
   get likes(): Collection<Like> {
     return this.db.collection(envConfig.dbLikesCollection)
+  }
+
+  // Collection conversations
+  get conversations(): Collection<Conversation> {
+    return this.db.collection(envConfig.dbConversationCollection)
   }
 }
 
