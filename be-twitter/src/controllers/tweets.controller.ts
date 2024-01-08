@@ -24,7 +24,7 @@ export const getTweetController = async (req: Request, res: Response) => {
     updated_at: result.updated_at
   }
   return res.json({
-    message: 'Get Tweet Successfully',
+    message: TWEETS_MESSAGES.GET_TWEET_SUCCESSFULLY,
     result: tweet
   })
 }

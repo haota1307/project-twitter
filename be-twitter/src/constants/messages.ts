@@ -83,7 +83,8 @@ export const TWEETS_MESSAGES = {
   TWEET_NOT_FOUND: 'Tweet not found',
   TWEET_IS_NOT_PUBLIC: 'Tweet is not public',
   GET_TWEET_CHILDREN_SUCCESSFULLY: 'Get Tweet Children Successfully',
-  GET_NEW_FEEDS_SUCCESSFULLY: 'Get new feeds Successfully'
+  GET_NEW_FEEDS_SUCCESSFULLY: 'Get new feeds Successfully',
+  GET_TWEET_SUCCESSFULLY: 'Get Tweet Successfully'
 } as const
 
 export const QUERY_MESSAGES = {
