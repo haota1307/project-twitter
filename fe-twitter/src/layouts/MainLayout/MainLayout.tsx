@@ -10,7 +10,7 @@ export default function MainLayout({ children }: Props) {
     <>
       <div className='h-screen bg-white'>
         <div className='container h-full'>
-          <div className='grid grid-cols-4 h-full'>
+          <div className='grid grid-cols-4'>
             <Sidebar />
             <div className='col-span-3 lg:col-span-2 border-x-[1px]'>
               {children}

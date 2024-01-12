@@ -11,3 +11,8 @@ body {
   font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
   font-weight: 400;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
