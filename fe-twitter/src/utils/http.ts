@@ -51,12 +51,12 @@ export class Http {
         const { url } = response.config
         if (url === URL_LOGIN || url === URL_REGISTER) {
           const data = response.data as AuthResponse
-          this.accessToken = data.data.access_token
-          this.refreshToken = data.data.refresh_token
+          this.accessToken = data.result.access_token
+          this.refreshToken = data.result.refresh_token
           // Lưu access token & refresh token & profile đăng nhập
           setAccessTokenToLS(this.accessToken)
           setRefreshTokenToLS(this.refreshToken)
-          setProfileToLS(data.data.user)
+          // setProfileToLS(data.result?.user)
         } else if (url === URL_LOGOUT) {
           // Xóa access token && refresh token khi đăng xuất
           this.accessToken = ''
@@ -113,7 +113,7 @@ export class Http {
         refresh_token: this.refreshToken
       })
       .then((res) => {
-        const { access_token } = res.data.data
+        const { access_token } = res.data.result
         setAccessTokenToLS(access_token)
         this.accessToken = access_token
         return access_token

@@ -8,12 +8,13 @@ import {
   IoSearchOutline
 } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
-import { useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 
 import SidebarLogo from './SidebarLogo'
 import SidebarItem from './SidebarItem'
 import SidebarTweetButton from './SidebarTweetButton'
+import useLoginModal from 'src/hooks/useLoginModal'
 
 export default function Sidebar() {
   const { isAuthenticated } = useContext(AppContext)
@@ -44,6 +45,12 @@ export default function Sidebar() {
       icon: IoBookmarkOutline
     }
   ]
+
+  const loginModal = useLoginModal()
+  const isToggle = useCallback(() => {
+    loginModal.onOpen()
+  }, [loginModal])
+
   return (
     <>
       <div className='col-span-1 h-screen pr-4 md:pr-6 top-0 sticky overflow-y-scroll lg:overflow-hidden'>
@@ -51,8 +58,8 @@ export default function Sidebar() {
           <div className='space-y-2 lg:w-[230px]'>
             <SidebarLogo />
             {items.map((item) => (
-              <Link to={item.href}>
-                <SidebarItem key={item.label} label={item.label} href={item.href} icon={item.icon} />
+              <Link to={item.href} key={item.label}>
+                <SidebarItem label={item.label} href={item.href} icon={item.icon} />
               </Link>
             ))}
             {isAuthenticated ? (
@@ -60,9 +67,7 @@ export default function Sidebar() {
                 <SidebarItem label={'logout'} icon={IoLogOutOutline} />
               </Link>
             ) : (
-              <Link to={'/login'}>
-                <SidebarItem label={'login'} icon={IoLogInOutline} />
-              </Link>
+              <SidebarItem label={'login'} icon={IoLogInOutline} onClick={isToggle} />
             )}
             <SidebarTweetButton />
           </div>

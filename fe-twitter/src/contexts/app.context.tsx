@@ -1,5 +1,6 @@
 import { createContext, useState } from 'react'
 import { User } from 'src/types/user.type'
+import { getAccessTokenFromLs } from 'src/utils/auth'
 
 interface AppContextInterface {
   isAuthenticated: boolean
@@ -10,7 +11,7 @@ interface AppContextInterface {
 }
 
 export const getInitialAppContext: () => AppContextInterface = () => ({
-  isAuthenticated: false,
+  isAuthenticated: Boolean(getAccessTokenFromLs()),
   setIsAuthenticated: () => null,
   profile: null,
   setProfile: () => null,

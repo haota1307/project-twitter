@@ -1,10 +1,10 @@
 export interface SuccessResponseApi<Data> {
   message: string
-  data: Data
+  result: Data
 }
 export interface ErrorResponseApi<Data> {
   message: string
-  data?: Data
+  errors?: Data
 }
 
 // cú pháp `-?` sẽ loại bỏ undefiend của key optional(handle?:)
