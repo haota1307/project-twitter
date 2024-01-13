@@ -3,18 +3,19 @@ import { useCallback, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { toast } from 'react-toastify'
 
 import authApi from 'src/apis/auth.api'
 import Input from 'src/components/Input'
 import Modal from 'src/components/Modal'
 import { AppContext } from 'src/contexts/app.context'
-import useLoginModal from 'src/hooks/useLoginModal'
 import { ErrorResponseApi } from 'src/types/utils.type'
 import { Schema, schema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
-import { toast } from 'react-toastify'
 import useRegisterModal from 'src/hooks/useRegisterModal'
-type FormData = Pick<Schema, 'email' | 'password'>
+import useLoginModal from 'src/hooks/useLoginModal'
+
+type FormData = Schema
 
 type DataError = {
   location: string
@@ -29,17 +30,17 @@ type FormDataError = {
   password: DataError
 }
 
-const loginSchema = schema.pick(['email', 'password'])
+const RegisterSchema = schema
 
-export default function LoginModal() {
-  const loginModal = useLoginModal()
+export default function RegisterModal() {
   const registerModal = useRegisterModal()
-
+  const loginModal = useLoginModal()
   const { setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   const {
     register,
@@ -47,32 +48,32 @@ export default function LoginModal() {
     setError,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(loginSchema)
+    resolver: yupResolver(RegisterSchema)
   })
 
-  const loginMutation = useMutation({
-    mutationFn: (body: FormData) => authApi.login(body)
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: Pick<FormData, 'email' | 'password'>) => authApi.registerAccount(body)
   })
 
-  const isLoading = loginMutation.isPending
+  const isLoading = registerAccountMutation.isPending
 
   const toggleLogin = useCallback(() => {
     if (isLoading) {
       return
     }
-    registerModal.onOpen()
-    loginModal.onClose()
+    registerModal.onClose()
+    loginModal.onOpen()
   }, [registerModal, loginModal, isLoading])
 
   const onSubmit = handleSubmit((data) => {
-    loginMutation.mutate(data, {
+    registerAccountMutation.mutate(data, {
       onSuccess: (data) => {
         setIsAuthenticated(true)
         toast.success(data.data.message, {
           position: 'top-center',
           autoClose: 1000
         })
-        loginModal.onClose()
+        registerModal.onClose()
         navigate('/')
       },
       // Show error
@@ -107,7 +108,7 @@ export default function LoginModal() {
         placeholder='Email'
         onChange={(e) => setEmail(e.target.value)}
         value={email}
-        disabled={loginMutation.isPending}
+        disabled={registerAccountMutation.isPending}
         errorMessage={errors.email?.message}
       />
       <Input
@@ -116,28 +117,37 @@ export default function LoginModal() {
         placeholder='Password'
         onChange={(e) => setPassword(e.target.value)}
         value={password}
-        disabled={loginMutation.isPending}
+        disabled={registerAccountMutation.isPending}
         errorMessage={errors.password?.message}
+      />
+      <Input
+        name='confirm_password'
+        register={register}
+        placeholder='Confirm password'
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        value={confirmPassword}
+        disabled={registerAccountMutation.isPending}
+        errorMessage={errors.confirm_password?.message}
       />
     </div>
   )
 
   const footerContent = (
     <div className='text-neutral-400 text-center mt-4 flex justify-center'>
-      <p>You don't have an account?</p>
+      <p>Already have an account?</p>
       <span onClick={toggleLogin} className='text-blue-600 cursor-pointer hover:underline ml-1'>
-        Create account
+        Sign in
       </span>
     </div>
   )
 
   return (
     <Modal
-      disable={loginMutation.isPending}
-      isOpen={loginModal.isOpen}
-      title='Login your an account'
-      actionLabel='Sign in'
-      onClose={loginModal.onClose}
+      disable={registerAccountMutation.isPending}
+      isOpen={registerModal.isOpen}
+      title='Create an account'
+      actionLabel='Register'
+      onClose={registerModal.onClose}
       onSubmit={onSubmit}
       body={bodyContent}
       footer={footerContent}

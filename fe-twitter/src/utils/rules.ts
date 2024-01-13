@@ -3,28 +3,28 @@ import * as yup from 'yup'
 const handleConfirmPasswordYup = (refString: string) => {
   return yup
     .string()
-    .required('Password required')
-    .min(5, 'Độ dài Password từ 5 - 160 ký tự')
-    .max(160, 'Độ dài Password từ 5 - 160 ký tự')
+    .required('Confirm password required')
+    .min(6, 'Confirm password length from 6 - 50 characters')
+    .max(50, 'Confirm password length from 6 - 50 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
       'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.'
     )
-    .oneOf([yup.ref(refString)], 'Password nhập lại không khớp')
+    .oneOf([yup.ref(refString)], 'Confirm password incorrect')
 }
 
 export const schema = yup.object({
   email: yup
     .string()
     .required('Email is required')
-    .email('Email không đúng định dạng')
-    .min(5, 'Độ dài Email từ 5 - 160 ký tự')
-    .max(160, 'Độ dài Email từ 5 - 160 ký tự'),
+    .email('Email invalidate')
+    .min(6, 'Email length from 6 - 150 characters')
+    .max(150, 'Email length from 6 - 150 characters'),
   password: yup
     .string()
     .required('Password required')
-    .min(5, 'Độ dài Password từ 5 - 160 ký tự')
-    .max(160, 'Độ dài Password từ 5 - 160 ký tự')
+    .min(6, 'Password length from 6 - 50 characters')
+    .max(50, 'Password length from 6 - 50 characters')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
       'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.'

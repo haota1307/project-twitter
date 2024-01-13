@@ -32,10 +32,10 @@ export default function Modal({ isOpen, onClose, onSubmit, title, body, footer, 
 
   return (
     <>
-      <div className='flex justify-center items-center overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 outline-none focus:outline-none bg-neutral-800 bg-opacity-70'>
-        <div className=' relative w-full lg:w-3/6 h-full lg:h-auto'>
+      <div className='flex justify-center items-center overflow-x-hidden overflow-y-scroll fixed inset-0 z-50 outline-none focus:outline-none bg-neutral-800 bg-opacity-70'>
+        <div className='relative w-full lg:w-3/6 h-auto'>
           {/* content */}
-          <div className='h-full lg:h-auto border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
+          <div className='h-full lg:h-auto border rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
             {/* header */}
             <div className='flex items-center justify-center p-10 rounded-t'>
               <h3 className='text-3xl font-semibold text-black'>{title}</h3>
@@ -47,9 +47,9 @@ export default function Modal({ isOpen, onClose, onSubmit, title, body, footer, 
               </button>
             </div>
             {/* body */}
-            <div className='relative p-10 flex-auto'>{body}</div>
+            <div className='relative px-10 flex-auto'>{body}</div>
             {/* footer */}
-            <div className='flex flex-col gap-2 p-10'>
+            <div className='flex flex-col gap-2 lg:p-10 px-10 py-4'>
               <Button disabled={disable} label={actionLabel} secondary fullWidth large onClick={handleSubmit} />
               {footer}
             </div>

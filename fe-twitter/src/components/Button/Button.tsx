@@ -25,11 +25,11 @@ export default function Button({
     <button
       disabled={disabled}
       onClick={onClick}
-      className={`disabled:opacity-70 disabled:cursor-not-allowed rounded-full font-semibold hover:opacity-80 transition border-2 
+      className={`disabled:opacity-70 disabled:cursor-not-allowed rounded-full font-semibold hover:opacity-80 transition border-1 
       ${fullWidth ? 'w-full' : 'w-fit'}
-      ${secondary ? 'bg-black' : 'bg-sky-500'}
+      ${secondary ? 'bg-sky-500' : 'bg-black'}
       ${secondary ? 'text-white' : 'text-white'}
-      ${secondary ? 'border-black' : 'border-sky-500'}
+      ${secondary ? 'border-sky-500' : 'border-black'}
       ${large ? 'text-xl' : 'text-lg'}
       ${large ? 'px-5' : 'px-4'}
       ${large ? 'py-3' : 'py-2'}
@@ -56,7 +56,7 @@ export default function Button({
           />
         </svg>
       )}
-      {label}
+      <span>{label}</span>
     </button>
   )
 }

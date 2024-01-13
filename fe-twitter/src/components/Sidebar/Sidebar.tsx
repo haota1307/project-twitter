@@ -53,23 +53,25 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className='col-span-1 h-screen pr-4 md:pr-6 top-0 sticky overflow-y-scroll lg:overflow-hidden'>
-        <div className='flex flex-col items-end'>
-          <div className='space-y-2 lg:w-[230px]'>
-            <SidebarLogo />
-            {items.map((item) => (
-              <Link to={item.href} key={item.label}>
-                <SidebarItem label={item.label} href={item.href} icon={item.icon} />
-              </Link>
-            ))}
-            {isAuthenticated ? (
-              <Link to={'/logout'}>
-                <SidebarItem label={'logout'} icon={IoLogOutOutline} />
-              </Link>
-            ) : (
-              <SidebarItem label={'login'} icon={IoLogInOutline} onClick={isToggle} />
-            )}
-            <SidebarTweetButton />
+      <div className='col-span-1 h-screen pr-4 md:pr-6 top-0 sticky'>
+        <div className='top-0 sticky'>
+          <div className='flex flex-col items-end'>
+            <div className='space-y-2 lg:w-[230px] pt-4'>
+              <SidebarLogo />
+              {items.map((item) => (
+                <Link to={item.href} key={item.label}>
+                  <SidebarItem label={item.label} href={item.href} icon={item.icon} />
+                </Link>
+              ))}
+              {isAuthenticated ? (
+                <Link to={'/logout'}>
+                  <SidebarItem label={'logout'} icon={IoLogOutOutline} />
+                </Link>
+              ) : (
+                <SidebarItem label={'login'} icon={IoLogInOutline} onClick={isToggle} />
+              )}
+              <SidebarTweetButton />
+            </div>
           </div>
         </div>
       </div>
