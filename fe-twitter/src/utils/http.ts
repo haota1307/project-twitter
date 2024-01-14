@@ -6,6 +6,7 @@ import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis
 import {
   clearLS,
   getAccessTokenFromLs,
+  getProfileFromLS,
   getRefreshTokenFromLs,
   setAccessTokenToLS,
   setProfileToLS,
@@ -14,23 +15,28 @@ import {
 import config from 'src/constants/config'
 import { isAxiosExpiredTokenError, isAxiosUnauthorizedError } from './utils'
 
+const controller = new AbortController()
+
 export class Http {
   instance: AxiosInstance
   private accessToken: string
   private refreshToken: string
+  private profile: string
   private refreshTokenRequest: Promise<string> | null
   constructor() {
     this.accessToken = getAccessTokenFromLs()
     this.refreshToken = getRefreshTokenFromLs()
+    this.profile = getProfileFromLS()
     this.refreshTokenRequest = null
     this.instance = axios.create({
       baseURL: config.baseUrl,
-      timeout: 10000,
       headers: {
         'Content-Type': 'application/json',
-        'expire-access-token': 60 * 60, //1h
-        'expire-refresh-token': 60 * 60 * 2 //2h
-      }
+        Authorization: 'Bearer ' + this.accessToken,
+        'expire-access-token': 60 * 60 * 24, //1 ngay
+        'expire-refresh-token': 60 * 60 * 24 * 100 //100 ngay
+      },
+      signal: controller.signal
     })
     // Header token
     this.instance.interceptors.request.use(
@@ -56,11 +62,12 @@ export class Http {
           // Lưu access token & refresh token & profile đăng nhập
           setAccessTokenToLS(this.accessToken)
           setRefreshTokenToLS(this.refreshToken)
-          // setProfileToLS(data.result?.user)
+          setProfileToLS(data.result?.user)
         } else if (url === URL_LOGOUT) {
           // Xóa access token && refresh token khi đăng xuất
           this.accessToken = ''
           this.refreshToken = ''
+          this.profile = ''
           clearLS()
         }
         return response
@@ -101,6 +108,7 @@ export class Http {
           clearLS()
           this.accessToken = ''
           this.refreshToken = ''
+          this.profile = ''
         }
         return Promise.reject(error)
       }
@@ -122,6 +130,7 @@ export class Http {
         clearLS()
         this.accessToken = ''
         this.refreshToken = ''
+        this.profile = ''
         throw error
       })
   }

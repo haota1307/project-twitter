@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query'
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import authApi from 'src/apis/auth.api'
+import authApi, { URL_GET_PROFILE } from 'src/apis/auth.api'
 import Input from 'src/components/Input'
 import Modal from 'src/components/Modal'
 import { AppContext } from 'src/contexts/app.context'
@@ -14,6 +14,8 @@ import { Schema, schema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { toast } from 'react-toastify'
 import useRegisterModal from 'src/hooks/useRegisterModal'
+import axios from 'axios'
+import config from 'src/constants/config'
 type FormData = Pick<Schema, 'email' | 'password'>
 
 type DataError = {
@@ -35,7 +37,7 @@ export default function LoginModal() {
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
 
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, isAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
@@ -64,16 +66,36 @@ export default function LoginModal() {
     loginModal.onClose()
   }, [registerModal, loginModal, isLoading])
 
+  useEffect(() => {
+    const controller = new AbortController()
+    axios
+      .get(URL_GET_PROFILE, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        },
+        baseURL: config.baseUrl,
+        signal: controller.signal
+      })
+      .then((res) => {
+        localStorage.setItem('profile', JSON.stringify(res.data.result))
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    return () => {
+      controller.abort()
+    }
+  }, [isAuthenticated])
+
   const onSubmit = handleSubmit((data) => {
-    loginMutation.mutate(data, {
+    loginMutation.mutateAsync(data, {
       onSuccess: (data) => {
         setIsAuthenticated(true)
         toast.success(data.data.message, {
           position: 'top-center',
-          autoClose: 1000
+          autoClose: 1500
         })
         loginModal.onClose()
-        navigate('/')
       },
       // Show error
       onError: (error) => {

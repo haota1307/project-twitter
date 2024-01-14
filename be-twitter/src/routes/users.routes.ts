@@ -98,7 +98,7 @@ usersRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(ref
  * Body: { refresh_token: string }
  *
  */
-usersRouter.post('/loguot', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
+usersRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
 
 /**
  * Description: submit email to reset password, send email to user

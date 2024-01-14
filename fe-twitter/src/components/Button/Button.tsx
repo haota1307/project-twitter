@@ -27,7 +27,7 @@ export default function Button({
       onClick={onClick}
       className={`disabled:opacity-70 disabled:cursor-not-allowed rounded-full font-semibold hover:opacity-80 transition border-1 
       ${fullWidth ? 'w-full' : 'w-fit'}
-      ${secondary ? 'bg-sky-500' : 'bg-black'}
+      ${secondary ? 'bg-sky-500' : 'bg-slate-400'}
       ${secondary ? 'text-white' : 'text-white'}
       ${secondary ? 'border-sky-500' : 'border-black'}
       ${large ? 'text-xl' : 'text-lg'}

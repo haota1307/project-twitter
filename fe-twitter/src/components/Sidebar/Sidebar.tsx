@@ -15,6 +15,7 @@ import SidebarLogo from './SidebarLogo'
 import SidebarItem from './SidebarItem'
 import SidebarTweetButton from './SidebarTweetButton'
 import useLoginModal from 'src/hooks/useLoginModal'
+import useLogoutModal from 'src/hooks/useLogoutModal'
 
 export default function Sidebar() {
   const { isAuthenticated } = useContext(AppContext)
@@ -47,9 +48,14 @@ export default function Sidebar() {
   ]
 
   const loginModal = useLoginModal()
+  const logoutModal = useLogoutModal()
   const isToggle = useCallback(() => {
-    loginModal.onOpen()
-  }, [loginModal])
+    if (!isAuthenticated) {
+      loginModal.onOpen()
+      return
+    }
+    logoutModal.onOpen()
+  }, [isAuthenticated, loginModal, logoutModal])
 
   return (
     <>
@@ -64,9 +70,7 @@ export default function Sidebar() {
                 </Link>
               ))}
               {isAuthenticated ? (
-                <Link to={'/logout'}>
-                  <SidebarItem label={'logout'} icon={IoLogOutOutline} />
-                </Link>
+                <SidebarItem label={'logout'} icon={IoLogOutOutline} onClick={isToggle} />
               ) : (
                 <SidebarItem label={'login'} icon={IoLogInOutline} onClick={isToggle} />
               )}
