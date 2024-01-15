@@ -36,9 +36,9 @@ export default function Input<TFieldValues extends FieldValues>({
         value={value}
         placeholder={placeholder}
         type={type}
-        className='w-full h-auto p-4 text-lg bg-white border-2 border-neutral-500 rounded-sm outline-none text-black focus:border-sky-500 transition disabled:bg-neutral-900 disabled:opacity-70 disabled:cursor-not-allowed'
+        className='w-full h-auto lg:p-2.5 p-1.5 text-lg bg-white border-2 border-neutral-400 rounded-sm outline-none text-black focus:border-sky-500 transition disabled:bg-neutral-900 disabled:opacity-70 disabled:cursor-not-allowed'
       ></input>
-      <div className='ml-2 text-red-600 min-h-[1.25rem] text-sm text-left'>{errorMessage}</div>
+      <div className='ml-2 text-red-600 min-h-1 text-sm text-left'>{errorMessage}</div>
     </>
   )
 }

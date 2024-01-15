@@ -14,6 +14,7 @@ import { Schema, schema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import useRegisterModal from 'src/hooks/useRegisterModal'
 import useLoginModal from 'src/hooks/useLoginModal'
+import ButtonWithGG from 'src/components/ButtonWithGG'
 
 type FormData = Schema
 
@@ -133,12 +134,15 @@ export default function RegisterModal() {
   )
 
   const footerContent = (
-    <div className='text-neutral-400 text-center mt-4 flex justify-center'>
-      <p>Already have an account?</p>
-      <span onClick={toggleLogin} className='text-blue-600 cursor-pointer hover:underline ml-1'>
-        Sign in
-      </span>
-    </div>
+    <>
+      <ButtonWithGG />
+      <div className='text-neutral-400 text-center mt-4 flex justify-center'>
+        <p>Already have an account?</p>
+        <span onClick={toggleLogin} className='text-blue-600 cursor-pointer hover:underline ml-1'>
+          Sign in
+        </span>
+      </div>
+    </>
   )
 
   return (

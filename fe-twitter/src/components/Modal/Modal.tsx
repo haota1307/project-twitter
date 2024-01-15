@@ -67,7 +67,7 @@ export default function Modal({
             {/* body */}
             <div className='relative px-10 flex-auto'>{body}</div>
             {/* footer */}
-            <div className='flex flex-col gap-2 lg:p-10 px-10 py-4'>
+            <div className='flex flex-col gap-2 lg:px-10 px-10 py-6'>
               <Button disabled={disable} label={actionLabel} secondary fullWidth large onClick={handleSubmit} />
               {cancelButton && <Button disabled={disable} label={'Cancel'} fullWidth large onClick={handleCancel} />}
               {footer}

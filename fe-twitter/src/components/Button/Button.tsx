@@ -25,14 +25,14 @@ export default function Button({
     <button
       disabled={disabled}
       onClick={onClick}
-      className={`disabled:opacity-70 disabled:cursor-not-allowed rounded-full font-semibold hover:opacity-80 transition border-1 
+      className={`disabled:opacity-70 disabled:cursor-not-allowed rounded-full font-semibold hover:opacity-80 border-1 
       ${fullWidth ? 'w-full' : 'w-fit'}
-      ${secondary ? 'bg-sky-500' : 'bg-slate-400'}
+      ${secondary ? 'bg-blue-600' : 'bg-slate-400'}
       ${secondary ? 'text-white' : 'text-white'}
-      ${secondary ? 'border-sky-500' : 'border-black'}
+      ${secondary ? 'bg-blue-600' : 'border-black'}
       ${large ? 'text-xl' : 'text-lg'}
       ${large ? 'px-5' : 'px-4'}
-      ${large ? 'py-3' : 'py-2'}
+      ${large ? 'py-2.5' : 'py-2'}
       ${outline ? 'bg-transparent' : ''}
       ${outline ? 'border-white' : ''}
       ${outline ? 'text-white' : ''}

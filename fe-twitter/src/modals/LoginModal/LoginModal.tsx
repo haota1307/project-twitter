@@ -16,6 +16,7 @@ import { toast } from 'react-toastify'
 import useRegisterModal from 'src/hooks/useRegisterModal'
 import axios from 'axios'
 import config from 'src/constants/config'
+import ButtonWithGG from 'src/components/ButtonWithGG'
 type FormData = Pick<Schema, 'email' | 'password'>
 
 type DataError = {
@@ -145,12 +146,15 @@ export default function LoginModal() {
   )
 
   const footerContent = (
-    <div className='text-neutral-400 text-center mt-4 flex justify-center'>
-      <p>You don't have an account?</p>
-      <span onClick={toggleLogin} className='text-blue-600 cursor-pointer hover:underline ml-1'>
-        Create account
-      </span>
-    </div>
+    <>
+      <ButtonWithGG />
+      <div className='text-neutral-400 text-center mt-4 flex justify-center'>
+        <p>You don't have an account?</p>
+        <span onClick={toggleLogin} className='text-blue-600 cursor-pointer hover:underline ml-1'>
+          Create account
+        </span>
+      </div>
+    </>
   )
 
   return (
