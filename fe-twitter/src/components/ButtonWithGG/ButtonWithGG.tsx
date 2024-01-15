@@ -1,3 +1,24 @@
+import { Link } from 'react-router-dom'
+import { googleApi } from 'src/apis/auth.api'
+
+const getGoogleAuthURL = () => {
+  const url = `https://accounts.google.com/o/oauth2/v2/auth`
+  const query = {
+    client_id: '748812675450-ouolfjf59ohvis3m4inkug0jn3rg7lmn.apps.googleusercontent.com',
+    redirect_uri: 'http://localhost:4000/users/oauth/google',
+    response_type: 'code',
+    scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'].join(
+      ' '
+    ),
+    prompt: 'consent', // Nhắc người dùng đồng ý
+    access_type: 'offline' // Lấy refresh token
+  }
+  const queryString = new URLSearchParams(query).toString()
+  return `${url}?${queryString}`
+}
+
+const googleOAuthUrl = getGoogleAuthURL()
+
 export default function ButtonWithGG() {
   return (
     <>
@@ -9,7 +30,10 @@ export default function ButtonWithGG() {
           <span className='px-2 bg-white text-gray-500'>Or continue with</span>
         </div>
       </div>
-      <button className='w-full font-semibold mt-3 shadow-sm rounded-full py-2.5 bg-indigo-100 text-gray-800 flex items-center justify-center hover:opacity-85'>
+      <Link
+        to={googleOAuthUrl}
+        className='w-full font-semibold mt-3 shadow-sm rounded-full py-2.5 bg-indigo-100 text-gray-800 flex items-center justify-center hover:opacity-85'
+      >
         <div className='bg-white p-2 rounded-full'>
           <svg className='w-4' viewBox='0 0 533.5 544.3'>
             <path
@@ -31,7 +55,7 @@ export default function ButtonWithGG() {
           </svg>
         </div>
         <span className='ml-4'>Sign in with Google</span>
-      </button>
+      </Link>
     </>
   )
 }

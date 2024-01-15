@@ -36,7 +36,7 @@ export default function useRouteElement() {
       ]
     },
     {
-      path: '/login',
+      path: '/login/oauth',
       element: (
         <Suspense fallback={<div>Loading</div>}>
           <Login />
