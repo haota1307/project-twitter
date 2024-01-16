@@ -27,22 +27,22 @@ export default function Sidebar() {
     },
     {
       label: 'Explore',
-      href: '/',
+      href: '/explore',
       icon: IoSearchOutline
     },
     {
       label: 'Messages',
-      href: '/',
+      href: '/messages',
       icon: IoChatboxOutline
     },
     {
       label: 'Profile',
-      href: '/',
+      href: '/profile',
       icon: IoPersonOutline
     },
     {
       label: 'Bookmark',
-      href: '/',
+      href: '/bookmark',
       icon: IoBookmarkOutline
     }
   ]
@@ -65,12 +65,10 @@ export default function Sidebar() {
             <div className='space-y-2 lg:w-[230px] pt-4'>
               <SidebarLogo />
               {items.map((item) => (
-                <Link to={item.href} key={item.label}>
-                  <SidebarItem label={item.label} href={item.href} icon={item.icon} />
-                </Link>
+                <SidebarItem key={item.href} label={item.label} href={item.href} icon={item.icon} onClick={isToggle} />
               ))}
               {isAuthenticated ? (
-                <SidebarItem label={'logout'} icon={IoLogOutOutline} onClick={isToggle} />
+                <SidebarItem label={'logout'} icon={IoLogOutOutline} onClick={isToggle} href='logout' />
               ) : (
                 <SidebarItem label={'login'} icon={IoLogInOutline} onClick={isToggle} />
               )}
