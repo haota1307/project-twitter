@@ -5,6 +5,7 @@ import {
   followingController,
   forgotPasswordController,
   getProfileController,
+  getProfilev2Controller,
   getUserProfileController,
   loginController,
   logoutController,
@@ -154,6 +155,14 @@ usersRouter.put(
  * Header: {Authorization: Bearer <access token>}
  */
 usersRouter.get('/profile', accessTokenValidator, wrapRequestHandler(getProfileController))
+
+/**
+ * Description:  get my profile
+ * Path: /profile
+ * Method: GET
+ * Header: {Authorization: Bearer <access token>}
+ */
+usersRouter.get('/profilev2', accessTokenValidator, wrapRequestHandler(getProfilev2Controller))
 
 /**
  * Description:  Update my profile

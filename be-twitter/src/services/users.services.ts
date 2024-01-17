@@ -425,6 +425,66 @@ class UsersService {
     return user
   }
 
+  async getProfilev2(user_id: string) {
+    const user = await databaseService.users
+      .aggregate<User>([
+        {
+          $match: {
+            _id: new ObjectId(user_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'tweets',
+            localField: '_id',
+            foreignField: 'user_id',
+            as: 'all_tweet'
+          }
+        },
+        {
+          $lookup: {
+            from: 'followers',
+            localField: '_id',
+            foreignField: 'user_id',
+            as: 'following'
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'following.followed_user_id',
+            foreignField: '_id',
+            as: 'following'
+          }
+        },
+        {
+          $lookup: {
+            from: 'followers',
+            localField: '_id',
+            foreignField: 'followed_user_id',
+            as: 'followed'
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'followed.user_id',
+            foreignField: '_id',
+            as: 'followed'
+          }
+        },
+        {
+          $project: {
+            password: 0,
+            email_verify_token: 0,
+            forgot_password_token: 0
+          }
+        }
+      ])
+      .toArray()
+    return user
+  }
+
   // Update profile
   async updateProfile(user_id: string, payload: UpdateProfileReqBody) {
     // Kiểm tra nếu có date of birth thì chuyển nó sang kiểu date - do khác kiểu dữ liệu với $set
