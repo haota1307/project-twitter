@@ -10,7 +10,7 @@ export function isAxiosUnauthorizedError<UnauthorizedError>(error: unknown): err
 export function isAxiosExpiredTokenError<UnauthorizedError>(error: unknown): error is AxiosError<UnauthorizedError> {
   return (
     isAxiosUnauthorizedError<ErrorResponseApi<{ name: string; message: string }>>(error) &&
-    error.response?.data.data?.name === 'EXPIRED_TOKEN'
+    error.response?.data.message === 'EXPIRED_TOKEN'
   )
 }
 
