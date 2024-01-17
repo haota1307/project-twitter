@@ -176,15 +176,6 @@ export const getProfileController = async (req: Request<ParamsDictionary, any, a
   })
 }
 
-export const getProfilev2Controller = async (req: Request<ParamsDictionary, any, any>, res: Response) => {
-  const { user_id } = req.decoded_authorization as TokenPayload
-  const user = await usersService.getProfilev2(user_id)
-  return res.json({
-    message: USERS_MESSAGES.GET_ME_SUCCESS,
-    result: user
-  })
-}
-
 export const updateProfileController = async (
   req: Request<ParamsDictionary, any, UpdateProfileReqBody>,
   res: Response

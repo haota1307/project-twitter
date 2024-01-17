@@ -425,12 +425,44 @@ class UsersService {
     return user
   }
 
-  async getProfilev2(user_id: string) {
+  // Update profile
+  async updateProfile(user_id: string, payload: UpdateProfileReqBody) {
+    // Kiểm tra nếu có date of birth thì chuyển nó sang kiểu date - do khác kiểu dữ liệu với $set
+    const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
+    // dùng findOneAndUpdate để sau khi người dùng cập nhật thì ta sẽ trả về luôn thông tin người dùng
+    const user = await databaseService.users.findOneAndUpdate(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: {
+          ...(_payload as UpdateProfileReqBody & { date_of_birth?: Date })
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        returnDocument: 'after', // Trả về document sau khi update
+        projection: {
+          // Không trả về
+          password: 0,
+          email_verify: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    // Trả về Document user
+    return user
+  }
+
+  // Get user profile
+  async getUserProfile(username: string) {
     const user = await databaseService.users
       .aggregate<User>([
         {
           $match: {
-            _id: new ObjectId(user_id)
+            username: username
           }
         },
         {
@@ -482,62 +514,13 @@ class UsersService {
         }
       ])
       .toArray()
-    return user
-  }
-
-  // Update profile
-  async updateProfile(user_id: string, payload: UpdateProfileReqBody) {
-    // Kiểm tra nếu có date of birth thì chuyển nó sang kiểu date - do khác kiểu dữ liệu với $set
-    const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
-    // dùng findOneAndUpdate để sau khi người dùng cập nhật thì ta sẽ trả về luôn thông tin người dùng
-    const user = await databaseService.users.findOneAndUpdate(
-      {
-        _id: new ObjectId(user_id)
-      },
-      {
-        $set: {
-          ...(_payload as UpdateProfileReqBody & { date_of_birth?: Date })
-        },
-        $currentDate: {
-          updated_at: true
-        }
-      },
-      {
-        returnDocument: 'after', // Trả về document sau khi update
-        projection: {
-          // Không trả về
-          password: 0,
-          email_verify: 0,
-          forgot_password_token: 0
-        }
-      }
-    )
-    // Trả về Document user
-    return user
-  }
-
-  // Get user profile
-  async getUserProfile(username: string) {
-    const user = await databaseService.users.findOne(
-      { username },
-      {
-        projection: {
-          password: 0,
-          email_verify_token: 0,
-          forgot_password_token: 0,
-          verify: 0,
-          created_at: 0,
-          updated_at: 0
-        }
-      }
-    )
     if (user === null) {
       throw new ErrorWithStatus({
         message: USERS_MESSAGES.USER_NOT_FOUND,
         status: HTTP_STATUS.NOT_FOUND
       })
     }
-    return user
+    return user[0]
   }
 
   // Follow some one
