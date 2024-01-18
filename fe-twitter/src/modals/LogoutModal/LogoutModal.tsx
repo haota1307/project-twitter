@@ -14,7 +14,6 @@ export default function LogoutModal() {
   const logoutModal = useLogoutModal()
 
   const onSubmitLogout = () => {
-    const controller = new AbortController()
     axios
       .post(
         '/users/logout',

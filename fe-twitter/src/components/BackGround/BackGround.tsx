@@ -1,16 +1,17 @@
+import { useContext } from 'react'
 import Avatar from '../Avatar'
+import { AppContext } from 'src/contexts/app.context'
 
-interface BackGroundProps {
-  userId: string
-  srcBGC: string
-}
-export default function BackGround({ userId, srcBGC }: BackGroundProps) {
+export default function BackGround() {
+  const { profile } = useContext(AppContext)
   return (
     <>
-      <div className='bg-slate-200 h-44 relative'>
-        {srcBGC && <img src='' alt='Back ground cover' className='object-cover' />}
+      <div className='bg-slate-200 h-52 relative'>
+        {profile?.cover_photo && (
+          <img src={profile?.cover_photo} alt='Back ground cover' className='object-cover h-full w-full' />
+        )}
         <div className='absolute -bottom-16 left-4'>
-          <Avatar userId={userId} isLarge hasBorder />
+          <Avatar isLarge hasBorder />
         </div>
       </div>
     </>

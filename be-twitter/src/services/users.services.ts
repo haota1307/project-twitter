@@ -514,7 +514,7 @@ class UsersService {
         }
       ])
       .toArray()
-    if (user === null) {
+    if (user.length === 0) {
       throw new ErrorWithStatus({
         message: USERS_MESSAGES.USER_NOT_FOUND,
         status: HTTP_STATUS.NOT_FOUND
