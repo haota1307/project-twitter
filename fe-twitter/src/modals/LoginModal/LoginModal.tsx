@@ -67,15 +67,13 @@ export default function LoginModal() {
     loginModal.onClose()
   }, [registerModal, loginModal, isLoading])
 
-  useEffect(() => {
-    const controller = new AbortController()
+  const getProfile = () => {
     axios
       .get(URL_GET_PROFILE, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         },
-        baseURL: config.baseUrl,
-        signal: controller.signal
+        baseURL: config.baseUrl
       })
       .then((res) => {
         localStorage.setItem('profile', JSON.stringify(res.data.result))
@@ -83,15 +81,13 @@ export default function LoginModal() {
       .catch((err) => {
         console.log(err)
       })
-    return () => {
-      controller.abort()
-    }
-  }, [isAuthenticated])
+  }
 
   const onSubmit = handleSubmit((data) => {
     loginMutation.mutateAsync(data, {
       onSuccess: (data) => {
         setIsAuthenticated(true)
+        getProfile()
         toast.success(data.data.message, {
           position: 'top-center',
           autoClose: 1500
