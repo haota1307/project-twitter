@@ -244,6 +244,141 @@ class TweetsService {
     }
   }
 
+  async getTweetOfUser({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+    const [tweets, total] = await Promise.all([
+      databaseService.tweets
+        .aggregate([
+          {
+            $match: {
+              user_id: new ObjectId(user_id)
+            }
+          },
+          {
+            $lookup: {
+              from: 'hashtags',
+              localField: 'hashtags',
+              foreignField: '_id',
+              as: 'hashtags'
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'mentions',
+              foreignField: '_id',
+              as: 'mentions'
+            }
+          },
+          {
+            $addFields: {
+              mentions: {
+                $map: {
+                  input: '$mentions',
+                  as: 'mention',
+                  in: {
+                    _id: '$$mention._id',
+                    name: '$$mention.name',
+                    username: '$$mention.username',
+                    email: '$$mention.email'
+                  }
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'bookmarks',
+              localField: '_id',
+              foreignField: 'tweet_id',
+              as: 'bookmarks'
+            }
+          },
+          {
+            $lookup: {
+              from: 'likes',
+              localField: '_id',
+              foreignField: 'tweet_id',
+              as: 'likes'
+            }
+          },
+          {
+            $lookup: {
+              from: 'tweets',
+              localField: '_id',
+              foreignField: 'parent_id',
+              as: 'tweet_children'
+            }
+          },
+          {
+            $addFields: {
+              bookmarks_count: {
+                $size: '$bookmarks'
+              },
+              likes_count: {
+                $size: '$likes'
+              },
+              retweet: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.Retweet]
+                  }
+                }
+              },
+              comment: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.Comment]
+                  }
+                }
+              },
+              quote: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.QuoteTweet]
+                  }
+                }
+              }
+            }
+          },
+          {
+            $project: {
+              tweet_children: 0
+            }
+          },
+          {
+            $skip: limit * (page - 1) // Công thức phân trang
+          },
+          {
+            $limit: limit
+          }
+        ])
+        .toArray(),
+
+      databaseService.tweets
+        .aggregate([
+          {
+            $match: {
+              user_id: new ObjectId(user_id)
+            }
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+    return {
+      tweets,
+      total: total[0]?.total || 0
+    }
+  }
+
   async getNewFeeds({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
     const user_id_obj = new ObjectId(user_id)
     // Tìm id user người dùng follow

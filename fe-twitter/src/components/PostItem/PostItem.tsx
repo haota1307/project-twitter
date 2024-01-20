@@ -6,24 +6,14 @@ import { Media, MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 
 interface PostItemProps {
-  key: any
   data: Tweet
 }
 
-export default function PostItem({ data, key }: PostItemProps) {
+export default function PostItem({ data }: PostItemProps) {
   const { profile } = useContext(AppContext)
 
   return (
-    <div
-      key={key}
-      className='
-    border-b 
-    p-5 
-    cursor-pointer 
-    hover:bg-slate-50 
-    transition
-  '
-    >
+    <div className='border-b p-5 cursor-pointer hover:bg-slate-50 transition'>
       <div className='flex flex-row items-start gap-3'>
         <Avatar />
         <div>

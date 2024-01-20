@@ -1,5 +1,4 @@
 import { AuthResponse } from 'src/types/auth.type'
-import { getAccessTokenFromLs } from 'src/utils/auth'
 import http from 'src/utils/http'
 
 export const URL_LOGIN = 'users/login'
