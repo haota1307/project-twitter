@@ -2,17 +2,11 @@ import { createContext, useState } from 'react'
 import { User } from 'src/types/user.type'
 import { getAccessTokenFromLs, getProfileFromLS } from 'src/utils/auth'
 
-interface ExtendUser extends User {
-  followed?: []
-  following?: []
-  all_tweet?: []
-}
-
 interface AppContextInterface {
   isAuthenticated: boolean
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
-  profile: ExtendUser | null
-  setProfile: React.Dispatch<React.SetStateAction<ExtendUser | null>>
+  profile: User | null
+  setProfile: React.Dispatch<React.SetStateAction<User | null>>
   reset: () => void
 }
 

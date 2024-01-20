@@ -30,6 +30,7 @@ export default function Input<TFieldValues extends FieldValues>({
     <>
       <input
         {...rest}
+        {...registerResult}
         disabled={disabled}
         onChange={onChange}
         value={value}

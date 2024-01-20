@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import authApi, { URL_GET_PROFILE } from 'src/apis/auth.api'
@@ -38,8 +37,7 @@ export default function LoginModal() {
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
 
-  const { setIsAuthenticated, isAuthenticated } = useContext(AppContext)
-  const navigate = useNavigate()
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -76,7 +74,8 @@ export default function LoginModal() {
         baseURL: config.baseUrl
       })
       .then((res) => {
-        localStorage.setItem('profile', JSON.stringify(res.data.result))
+        setProfile(res.data.result[0])
+        localStorage.setItem('profile', JSON.stringify(res.data.result[0]))
       })
       .catch((err) => {
         console.log(err)

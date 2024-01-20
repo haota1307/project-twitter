@@ -22,4 +22,6 @@ export interface User {
   username?: string
   avatar?: string
   cover_photo?: string
+  following_count?: number
+  followed_count?: number
 }

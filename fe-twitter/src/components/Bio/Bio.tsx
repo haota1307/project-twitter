@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from '../Button'
 import { IoCalendarOutline } from 'react-icons/io5'
@@ -31,11 +31,11 @@ export default function Bio() {
         </div>
         <div className='flex flex-row items-center mt-4 gap-6 px-4'>
           <div className='flex flex-row items-center gap-1'>
-            <p className='text-black'>{profile?.following?.length}</p>
+            <p className='text-black'>{profile?.following_count}</p>
             <p className='text-black/50'>Following</p>
           </div>
           <div className='flex flex-row items-center gap-1'>
-            <p className='text-black'>{profile?.followed?.length}</p>
+            <p className='text-black'>{profile?.followed_count}</p>
             <p className='text-black/50'>Followed</p>
           </div>
         </div>
