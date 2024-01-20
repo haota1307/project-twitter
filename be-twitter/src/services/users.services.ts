@@ -411,66 +411,11 @@ class UsersService {
 
   // Get profile
   async getProfile(user_id: string) {
-    const user = databaseService.users.findOne(
-      { _id: new ObjectId(user_id) },
-      {
-        // Quy định những thứ không muốn trả về
-        projection: {
-          password: 0,
-          email_verify_token: 0,
-          forgot_password_token: 0
-        }
-      }
-    )
-    return user
-  }
-
-  // Update profile
-  async updateProfile(user_id: string, payload: UpdateProfileReqBody) {
-    // Kiểm tra nếu có date of birth thì chuyển nó sang kiểu date - do khác kiểu dữ liệu với $set
-    const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
-    // dùng findOneAndUpdate để sau khi người dùng cập nhật thì ta sẽ trả về luôn thông tin người dùng
-    const user = await databaseService.users.findOneAndUpdate(
-      {
-        _id: new ObjectId(user_id)
-      },
-      {
-        $set: {
-          ...(_payload as UpdateProfileReqBody & { date_of_birth?: Date })
-        },
-        $currentDate: {
-          updated_at: true
-        }
-      },
-      {
-        returnDocument: 'after', // Trả về document sau khi update
-        projection: {
-          // Không trả về
-          password: 0,
-          email_verify: 0,
-          forgot_password_token: 0
-        }
-      }
-    )
-    // Trả về Document user
-    return user
-  }
-
-  // Get user profile
-  async getUserProfile(username: string) {
-    const user = await databaseService.users
+    const users = await databaseService.users
       .aggregate<User>([
         {
           $match: {
-            username: username
-          }
-        },
-        {
-          $lookup: {
-            from: 'tweets',
-            localField: '_id',
-            foreignField: 'user_id',
-            as: 'all_tweet'
+            _id: new ObjectId(user_id)
           }
         },
         {
@@ -506,21 +451,139 @@ class UsersService {
           }
         },
         {
+          $addFields: {
+            following_count: {
+              $size: '$following'
+            },
+            followed_count: {
+              $size: '$followed'
+            }
+          }
+        },
+        {
           $project: {
             password: 0,
             email_verify_token: 0,
-            forgot_password_token: 0
+            forgot_password_token: 0,
+            following: 0,
+            followed: 0
           }
         }
       ])
       .toArray()
-    if (user.length === 0) {
+    if (users.length === 0) {
       throw new ErrorWithStatus({
         message: USERS_MESSAGES.USER_NOT_FOUND,
         status: HTTP_STATUS.NOT_FOUND
       })
     }
-    return user[0]
+    return users.map((user) => {
+      return user
+    })
+  }
+
+  // Update profile
+  async updateProfile(user_id: string, payload: UpdateProfileReqBody) {
+    // Kiểm tra nếu có date of birth thì chuyển nó sang kiểu date - do khác kiểu dữ liệu với $set
+    const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
+    // dùng findOneAndUpdate để sau khi người dùng cập nhật thì ta sẽ trả về luôn thông tin người dùng
+    const user = await databaseService.users.findOneAndUpdate(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: {
+          ...(_payload as UpdateProfileReqBody & { date_of_birth?: Date })
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        returnDocument: 'after', // Trả về document sau khi update
+        projection: {
+          // Không trả về
+          password: 0,
+          email_verify: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    // Trả về Document user
+    return user
+  }
+
+  // Get user profile
+  async getUserProfile(username: string) {
+    const users = await databaseService.users
+      .aggregate<User>([
+        {
+          $match: {
+            username: username
+          }
+        },
+        {
+          $lookup: {
+            from: 'followers',
+            localField: '_id',
+            foreignField: 'user_id',
+            as: 'following'
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'following.followed_user_id',
+            foreignField: '_id',
+            as: 'following'
+          }
+        },
+        {
+          $lookup: {
+            from: 'followers',
+            localField: '_id',
+            foreignField: 'followed_user_id',
+            as: 'followed'
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'followed.user_id',
+            foreignField: '_id',
+            as: 'followed'
+          }
+        },
+        {
+          $addFields: {
+            following_count: {
+              $size: '$following'
+            },
+            followed_count: {
+              $size: '$followed'
+            }
+          }
+        },
+        {
+          $project: {
+            password: 0,
+            email_verify_token: 0,
+            forgot_password_token: 0,
+            following: 0,
+            followed: 0
+          }
+        }
+      ])
+      .toArray()
+    if (users.length === 0) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    return users.map((user) => {
+      return user
+    })
   }
 
   // Follow some one
