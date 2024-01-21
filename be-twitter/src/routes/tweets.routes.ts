@@ -3,8 +3,7 @@ import {
   createTweetController,
   getNewFeedsController,
   getTweetChildrenController,
-  getTweetController,
-  getTweetOfUserController
+  getTweetController
 } from '~/controllers/tweets.controller'
 import {
   audiencevalidator,
@@ -67,22 +66,6 @@ tweetsRouter.get(
   isUserLoggedInValidator(verifiedUserValidator),
   audiencevalidator,
   wrapRequestHandler(getTweetChildrenController)
-)
-
-/**
- * Description: Get tweet of user
- * Path: /:tweet_id
- * Method: GET
- * Header: {Authorization?: Bear <access_token>}
- */
-
-tweetsRouter.get(
-  '/list/:user_id',
-  accessTokenValidator,
-  paginationValidator,
-  accessTokenValidator, // Cần trả về 1 validate
-  verifiedUserValidator,
-  wrapRequestHandler(getTweetOfUserController)
 )
 
 /**
