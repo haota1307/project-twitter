@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import useLoginModal from 'src/hooks/useLoginModal'
 import useRegisterModal from 'src/hooks/useRegisterModal'
@@ -8,6 +8,7 @@ import { AppContext } from 'src/contexts/app.context'
 import Avatar from '../Avatar'
 import config from 'src/constants/config'
 import { Media, TweetAudience, TweetType } from 'src/types/tweet.type'
+import InputFile from '../InputFile'
 
 interface FormProps {
   placeholder: string
@@ -27,6 +28,7 @@ interface TweetBody {
 
 export default function Form({ placeholder, isComment, postId }: FormProps) {
   const { isAuthenticated } = useContext(AppContext)
+  const [file, setFile] = useState<File>()
   const [body, setBody] = useState<TweetBody>({
     type: TweetType.Tweet,
     audience: TweetAudience.Everyone,
@@ -37,44 +39,77 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     medias: []
   })
   const [isLoading, setIsLoading] = useState(false)
-
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
+
+  const previewImage = useMemo(() => {
+    return file ? URL.createObjectURL(file) : ''
+  }, [file])
+
+  const handleUploadImg = async () => {
+    if (file) {
+      const fd = new FormData()
+      fd.append('image', file) //key, value
+      axios
+        .post('/medias/upload-image', fd, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          },
+          baseURL: config.baseUrl
+        })
+        .then((res) => {
+          setBody({
+            ...body,
+            medias: [{ type: res.data.result[0].type, url: res.data.result[0].url }]
+          })
+          toast.success('Upload img success')
+        })
+        .catch((err) => console.log(err))
+    }
+  }
+
+  const createTweet = async () =>
+    axios.post(
+      '/tweets',
+      { ...body },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        },
+        baseURL: config.baseUrl
+      }
+    )
 
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true)
-      console.log(body)
-      await axios.post(
-        '/tweets',
-        { ...body },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          },
-          baseURL: config.baseUrl
-        }
-      )
+      await handleUploadImg()
+      await createTweet()
       toast.success('Tweet created')
-      // setBody({
-      //   type: TweetType.Tweet,
-      //   audience: TweetAudience.Everyone,
-      //   content: '',
-      //   parent_id: null,
-      //   hashtags: [],
-      //   mentions: [],
-      //   medias: []
-      // })
+      setBody({
+        type: TweetType.Tweet,
+        audience: TweetAudience.Everyone,
+        content: '',
+        parent_id: null,
+        hashtags: [],
+        mentions: [],
+        medias: []
+      })
     } catch (err) {
-      console.log(err)
       toast.error('Something went wrong')
     } finally {
       setIsLoading(false)
     }
   }, [body])
 
-  // console.log(body)
+  const handleChangeIMGFile = (file?: File) => {
+    setFile(file)
+  }
+
+  console.log(body)
+
   return (
     <div className='border-b px-5 p-2'>
       {isAuthenticated ? (
@@ -88,11 +123,21 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
               onChange={(e) => setBody({ ...body, content: e.target.value })}
               value={body.content}
               placeholder={placeholder}
-              className='disabled:opacity-80 peer mt-3 w-full right-0 resize-none outline-none text-[20px] placeholder-neutral-400 text-black'
+              className='disabled:opacity-80 peer mt-3 w-full right-0 resize-none outline-none text-lg placeholder-neutral-400 text-black'
             ></textarea>
+            {file && <img src={previewImage} className='rounded-2xl my-2 max-h-80 w-auto' />}
             <hr className='opacity-0 peer-focus:opacity-100 h-[1px] w-full border-neutral-500 transition' />
-            <div className='mt-4 flex flex-row justify-end'>
-              <Button disabled={isLoading || !body} onClick={onSubmit} label='Tweet' secondary />
+            <div className='flex justify-start items-center mt-1'>
+              <p className='text-base text-blue-500 font-semibold p-2 hover:bg-blue-50 hover:cursor-pointer rounded-3xl'>
+                Every one??
+              </p>
+            </div>
+            <div className='my-1.5 flex flex-row justify-between'>
+              <div className='flex justify-center items-center'>
+                <InputFile isImageFile onChange={handleChangeIMGFile as any} />
+                <InputFile isVideoFile />
+              </div>
+              <Button disabled={isLoading || body.content === ''} onClick={onSubmit} label='Tweet' secondary />
             </div>
           </div>
         </div>

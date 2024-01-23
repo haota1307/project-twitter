@@ -7,7 +7,6 @@ import {
   IoPersonOutline,
   IoSearchOutline
 } from 'react-icons/io5'
-import { Link } from 'react-router-dom'
 import { useCallback, useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 
