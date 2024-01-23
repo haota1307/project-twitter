@@ -29,7 +29,6 @@ export default function Button({
       ${fullWidth ? 'w-full' : 'w-fit'}
       ${secondary ? 'bg-blue-500' : 'bg-slate-400'}
       ${secondary ? 'text-white' : 'text-white'}
-      ${secondary ? 'bg-blue-500' : 'border-black'}
       ${large ? 'text-xl' : 'text-lg'}
       ${large ? 'px-5' : 'px-4'}
       ${large ? 'py-2.5' : 'py-2'}
