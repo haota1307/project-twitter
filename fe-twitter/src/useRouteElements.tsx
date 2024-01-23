@@ -9,6 +9,7 @@ const Explore = lazy(() => import('./pages/Explore'))
 const Message = lazy(() => import('./pages/Message'))
 const Profile = lazy(() => import('./pages/Profile'))
 const Bookmark = lazy(() => import('./pages/Bookmark'))
+const HomeFollowing = lazy(() => import('./pages/HomeFollowing'))
 
 //redirect
 function RedirectRoute() {
@@ -74,6 +75,16 @@ export default function useRouteElement() {
             <MainLayout>
               <Suspense fallback={<div>Loading</div>}>
                 <Bookmark />
+              </Suspense>
+            </MainLayout>
+          )
+        },
+        {
+          path: '/Following',
+          element: (
+            <MainLayout>
+              <Suspense fallback={<div>Loading</div>}>
+                <HomeFollowing />
               </Suspense>
             </MainLayout>
           )

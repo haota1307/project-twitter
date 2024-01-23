@@ -14,10 +14,14 @@ export default function Header({ isHomePage, showBackArrow, label }: HeaderProps
         <div className='border-b bg-white sticky top-0 bg-opacity-90 cursor-pointer'>
           <div className='flex flex-row'>
             <div className='w-3/6 text-center p-4 hover:bg-slate-100 border-r'>
-              <span className='text-slate-950'>For you</span>
+              <Link to='/'>
+                <span className='text-slate-950'>For you</span>
+              </Link>
             </div>
             <div className='w-3/6 text-center p-4 hover:bg-slate-100'>
-              <span>Following</span>
+              <Link to='/following'>
+                <span>Following</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -25,7 +29,7 @@ export default function Header({ isHomePage, showBackArrow, label }: HeaderProps
         <div className='border-b-[1px] p-3'>
           <div className='flex flex-row items-center gap-2'>
             {showBackArrow && (
-              <Link to={'/'} className='hover:opacity-80 hover:bg-slate-200 p-2 rounded-full'>
+              <Link to='/' className='hover:opacity-80 hover:bg-slate-200 p-2 rounded-full'>
                 <IoArrowBack color='black' size={20} className='cursor-pointer  transition' />
               </Link>
             )}

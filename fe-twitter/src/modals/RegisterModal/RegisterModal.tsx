@@ -40,6 +40,7 @@ export default function RegisterModal() {
   const navigate = useNavigate()
 
   const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -113,23 +114,34 @@ export default function RegisterModal() {
         errorMessage={errors.email?.message}
       />
       <Input
-        name='password'
+        name='name'
         register={register}
-        placeholder='Password'
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
+        placeholder='name'
+        onChange={(e) => setName(e.target.value)}
+        value={name}
         disabled={registerAccountMutation.isPending}
-        errorMessage={errors.password?.message}
+        errorMessage={errors.name?.message}
       />
-      <Input
-        name='confirm_password'
-        register={register}
-        placeholder='Confirm password'
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        value={confirmPassword}
-        disabled={registerAccountMutation.isPending}
-        errorMessage={errors.confirm_password?.message}
-      />
+      <div className={`flex w-full `}>
+        <Input
+          name='password'
+          register={register}
+          placeholder='Password'
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+          disabled={registerAccountMutation.isPending}
+          errorMessage={errors.password?.message}
+        />
+        <Input
+          name='confirm_password'
+          register={register}
+          placeholder='Confirm password'
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={confirmPassword}
+          disabled={registerAccountMutation.isPending}
+          errorMessage={errors.confirm_password?.message}
+        />
+      </div>
     </div>
   )
 

@@ -28,17 +28,22 @@ export default function Input<TFieldValues extends FieldValues>({
 
   return (
     <>
-      <input
-        {...rest}
-        {...registerResult}
-        disabled={disabled}
-        onChange={onChange}
-        value={value}
-        placeholder={placeholder}
-        type={type}
-        className='w-full h-auto lg:p-2.5 p-1.5 text-lg bg-white border-2 border-blue-700 rounded-sm outline-none text-black focus:bg-blue-50 transition disabled:bg-blue-200 disabled:cursor-not-allowed'
-      ></input>
-      <div className='ml-2 text-red-600 min-h-1 text-sm text-left'>{errorMessage}</div>
+      <div className='w-full h-auto px-1'>
+        <input
+          {...rest}
+          {...registerResult}
+          disabled={disabled}
+          onChange={onChange}
+          value={value}
+          placeholder={placeholder}
+          type={type}
+          className={`
+            h-auto lg:p-2 p-1.5 text-lg bg-white border-2 border-blue-700 rounded-sm outline-none text-black focus:bg-blue-50 transition disabled:bg-blue-200 disabled:cursor-not-allowed
+            w-full
+          `}
+        ></input>
+        <div className='ml-2 mt-1 text-red-600 text-sm text-left'>{errorMessage}</div>
+      </div>
     </>
   )
 }

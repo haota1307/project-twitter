@@ -4,8 +4,9 @@ import axios from 'axios'
 import config from 'src/constants/config'
 import { AppContext } from 'src/contexts/app.context'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { Tweet, TweetType } from 'src/types/tweet.type'
 
-const LIMIT = 3
+const LIMIT = 5
 const PAGE = 1
 
 export default function Feed() {
@@ -82,7 +83,9 @@ export default function Feed() {
         dataLength={data.length}
         loader={<h4>Loading...</h4>}
       >
-        {data?.map((post: Record<string, any>, index) => <PostItem key={index} data={post as any} />)}
+        {data?.map((post: Record<string, any>, index) => {
+          if (post.type === TweetType.Tweet) return <PostItem key={index} data={post as any} />
+        })}
       </InfiniteScroll>
     </>
   )

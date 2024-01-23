@@ -20,6 +20,12 @@ export const schema = yup.object({
     .email('Email invalidate')
     .min(6, 'Email length from 6 - 150 characters')
     .max(150, 'Email length from 6 - 150 characters'),
+  name: yup
+    .string()
+    .required('Name is required')
+    .email('Name invalidate')
+    .min(6, 'Name length from 6 - 150 characters')
+    .max(150, 'Name length from 6 - 150 characters'),
   password: yup
     .string()
     .required('Password required')
