@@ -46,27 +46,25 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
 
-  const handleUploadImg = async () => {
-    if (file) {
-      const fd = new FormData()
-      fd.append('image', file) //key, value
-      axios
-        .post('/medias/upload-image', fd, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          },
-          baseURL: config.baseUrl
+  const handleUploadImg = () => {
+    const fd = new FormData()
+    fd.append('image', file as File) //key, value
+    axios
+      .post('/medias/upload-image', fd, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        },
+        baseURL: config.baseUrl
+      })
+      .then((res) => {
+        setBody({
+          ...body,
+          medias: [{ type: res.data.result[0].type, url: res.data.result[0].url }]
         })
-        .then((res) => {
-          setBody({
-            ...body,
-            medias: [{ type: res.data.result[0].type, url: res.data.result[0].url }]
-          })
-          toast.success('Upload img success')
-        })
-        .catch((err) => console.log(err))
-    }
+        toast.success('Upload img success')
+      })
+      .catch((err) => console.log(err))
   }
 
   const createTweet = async () =>
@@ -85,7 +83,9 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true)
-      await handleUploadImg()
+      if (file) {
+        handleUploadImg()
+      }
       await createTweet()
       toast.success('Tweet created')
       setBody({
