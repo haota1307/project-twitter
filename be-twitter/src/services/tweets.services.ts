@@ -250,7 +250,8 @@ class TweetsService {
         .aggregate([
           {
             $match: {
-              user_id: new ObjectId(user_id)
+              user_id: new ObjectId(user_id),
+              type: TweetType.Tweet
             }
           },
           {
@@ -311,12 +312,6 @@ class TweetsService {
           },
           {
             $addFields: {
-              bookmarks_count: {
-                $size: '$bookmarks'
-              },
-              likes_count: {
-                $size: '$likes'
-              },
               retweet: {
                 $filter: {
                   input: '$tweet_children',

@@ -84,6 +84,7 @@ export default function Feed() {
         loader={<h4>Loading...</h4>}
       >
         {data?.map((post: Record<string, any>, index) => {
+          console.log(data)
           if (post.type === TweetType.Tweet) return <PostItem key={index} data={post as any} />
         })}
       </InfiniteScroll>

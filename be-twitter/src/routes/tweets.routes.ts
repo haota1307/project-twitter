@@ -61,7 +61,7 @@ tweetsRouter.get(
   '/list/:user_id',
   accessTokenValidator,
   paginationValidator,
-  accessTokenValidator, // Cần trả về 1 validate
+  accessTokenValidator,
   verifiedUserValidator,
   wrapRequestHandler(getTweetOfUserController)
 )

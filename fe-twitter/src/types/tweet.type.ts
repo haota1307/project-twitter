@@ -29,8 +29,10 @@ export interface Tweet {
   parent_id: null | string //  chỉ null khi tweet gốc
   hashtags: string[]
   mentions: string[]
+  comment?: string[]
+  likes?: string[]
+  bookmark?: string[]
   medias: Media[]
-  guest_views: number
   user_views: number
   created_at: string
   updated_at: string

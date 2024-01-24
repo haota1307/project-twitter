@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import Avatar from '../Avatar'
 import { AppContext } from 'src/contexts/app.context'
-import { IoChatboxOutline, IoLinkOutline } from 'react-icons/io5'
+import { IoBookmarkOutline, IoChatboxOutline, IoEyeOutline, IoHeartOutline, IoLinkOutline } from 'react-icons/io5'
 import { Media, MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 
@@ -30,14 +30,22 @@ export default function PostItem({ data }: PostItemProps) {
           {data?.medias[0]?.type === MediaType.Video && (
             <video className='h-80 w-full rounded-xl' src={data.medias[0]?.url} controls></video>
           )}
-          <div className='flex flex-row items-center mt-3 gap-10'>
+          <div className='flex flex-row justify-between items-center mt-3 gap-10'>
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500'>
               <IoChatboxOutline size={20} />
-              <p>10</p>
+              <p>{data?.comment?.length}</p>
             </div>
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-red-500'>
-              <IoLinkOutline color='red' size={20} />
-              <p>111</p>
+              <IoHeartOutline size={20} />
+              <p>{data?.likes?.length || 0}</p>
+            </div>
+            <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-500'>
+              <IoEyeOutline size={20} />
+              <p>{data.user_views}</p>
+            </div>
+            <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-yellow-500'>
+              <IoBookmarkOutline size={20} />
+              <p>{data?.bookmark?.length}</p>
             </div>
           </div>
         </div>
@@ -45,3 +53,5 @@ export default function PostItem({ data }: PostItemProps) {
     </div>
   )
 }
+
+//cmt like view bookmark
