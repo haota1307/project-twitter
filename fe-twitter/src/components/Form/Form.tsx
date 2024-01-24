@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useCallback, useContext, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import useLoginModal from 'src/hooks/useLoginModal'
 import useRegisterModal from 'src/hooks/useRegisterModal'
@@ -28,7 +28,11 @@ interface TweetBody {
 
 export default function Form({ placeholder, isComment, postId }: FormProps) {
   const { isAuthenticated } = useContext(AppContext)
+
   const [file, setFile] = useState<File>()
+  const [isLoading, setIsLoading] = useState(false)
+  const [media, setMedia] = useState<Media[]>([])
+
   const [body, setBody] = useState<TweetBody>({
     type: TweetType.Tweet,
     audience: TweetAudience.Everyone,
@@ -38,7 +42,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     mentions: [],
     medias: []
   })
-  const [isLoading, setIsLoading] = useState(false)
+
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
 
@@ -46,7 +50,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
 
-  const handleUploadImg = () => {
+  const handleUploadImg = async () => {
     const fd = new FormData()
     fd.append('image', file as File) //key, value
     axios
@@ -55,60 +59,63 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         },
-        baseURL: config.baseUrl
+        baseURL: config.baseUrl,
+        onUploadProgress: (ProgressEvent) => {
+          console.log((ProgressEvent.progress as number) * 100)
+        }
       })
       .then((res) => {
         setBody({
           ...body,
           medias: [{ type: res.data.result[0].type, url: res.data.result[0].url }]
         })
-        toast.success('Upload img success')
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.error('Error uploading image:', err)
+        toast.error('Upload img failed')
+      })
   }
 
   const createTweet = async () =>
-    axios.post(
-      '/tweets',
-      { ...body },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-        },
-        baseURL: config.baseUrl
-      }
-    )
+    axios
+      .post(
+        '/tweets',
+        { ...body },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          },
+          baseURL: config.baseUrl
+        }
+      )
+      .then(() => {
+        toast.success('Tweet created')
+      })
+
+  useEffect(() => {
+    console.log('data', body)
+    if (file) createTweet()
+  }, [body.medias])
 
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true)
       if (file) {
-        handleUploadImg()
+        await handleUploadImg()
       }
-      await createTweet()
-      toast.success('Tweet created')
-      setBody({
-        type: TweetType.Tweet,
-        audience: TweetAudience.Everyone,
-        content: '',
-        parent_id: null,
-        hashtags: [],
-        mentions: [],
-        medias: []
-      })
+      if (!file) createTweet()
     } catch (err) {
+      console.log(err)
       toast.error('Something went wrong')
     } finally {
       setIsLoading(false)
     }
-  }, [body])
+  }, [body, file, media])
 
   const handleChangeIMGFile = (file?: File) => {
     setFile(file)
   }
-
-  console.log(body)
 
   return (
     <div className='border-b px-5 p-2'>
