@@ -23,7 +23,6 @@ export default function LogoutModal() {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`
           },
           baseURL: config.baseUrl
-          // signal: controller.signal
         }
       )
       .then((res) => {
@@ -38,7 +37,7 @@ export default function LogoutModal() {
         localStorage.removeItem('profile')
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err.response?.status)
       })
       .finally(() => {})
   }

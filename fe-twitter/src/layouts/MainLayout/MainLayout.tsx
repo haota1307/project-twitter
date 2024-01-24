@@ -12,7 +12,7 @@ export default function MainLayout({ children }: Props) {
         <div className='container h-full'>
           <div className='grid grid-cols-4'>
             <Sidebar />
-            <div className='col-span-3 lg:col-span-2 lg:border-x border-l'>
+            <div className='col-span-3 lg:col-span-2 border-x'>
               {children}
               <Outlet />
             </div>

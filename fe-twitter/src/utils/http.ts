@@ -121,6 +121,7 @@ export class Http {
         refresh_token: this.refreshToken
       })
       .then((res) => {
+        console.log(res)
         const { access_token } = res.data.result
         setAccessTokenToLS(access_token)
         this.accessToken = access_token

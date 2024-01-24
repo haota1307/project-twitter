@@ -1,11 +1,10 @@
 import { AuthResponse } from 'src/types/auth.type'
-import { getAccessTokenFromLs } from 'src/utils/auth'
 import http from 'src/utils/http'
 
 export const URL_LOGIN = 'users/login'
 export const URL_REGISTER = 'users/register'
 export const URL_LOGOUT = 'users/logout'
-export const URL_REFRESH_TOKEN = 'refresh-token'
+export const URL_REFRESH_TOKEN = 'users/refresh-token'
 export const URL_GET_PROFILE = 'users/profile'
 
 const controller = new AbortController()
