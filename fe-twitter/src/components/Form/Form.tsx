@@ -31,7 +31,6 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
 
   const [file, setFile] = useState<File>()
   const [isLoading, setIsLoading] = useState(false)
-  const [media, setMedia] = useState<Media[]>([])
 
   const [body, setBody] = useState<TweetBody>({
     type: TweetType.Tweet,
@@ -59,10 +58,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         },
-        baseURL: config.baseUrl,
-        onUploadProgress: (ProgressEvent) => {
-          console.log((ProgressEvent.progress as number) * 100)
-        }
+        baseURL: config.baseUrl
       })
       .then((res) => {
         setBody({
@@ -71,7 +67,6 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
         })
       })
       .catch((err) => {
-        console.error('Error uploading image:', err)
         toast.error('Upload img failed')
       })
   }
@@ -94,7 +89,6 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
       })
 
   useEffect(() => {
-    console.log('data', body)
     if (file) createTweet()
   }, [body.medias])
 
@@ -106,12 +100,11 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
       }
       if (!file) createTweet()
     } catch (err) {
-      console.log(err)
       toast.error('Something went wrong')
     } finally {
       setIsLoading(false)
     }
-  }, [body, file, media])
+  }, [body, file])
 
   const handleChangeIMGFile = (file?: File) => {
     setFile(file)
