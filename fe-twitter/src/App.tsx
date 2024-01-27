@@ -12,6 +12,7 @@ import { LocalStorageEventTarget } from './utils/auth'
 function App() {
   const routeElements = useRouteElements()
   const { reset } = useContext(AppContext)
+
   useEffect(() => {
     LocalStorageEventTarget.addEventListener('clearLS', reset)
     return () => {
