@@ -45,7 +45,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
 
-  const previewImage = useMemo(() => {
+  const previewFile = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
 
@@ -67,7 +67,31 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
         })
       })
       .catch((err) => {
+        console.log(err)
         toast.error('Upload img failed')
+      })
+  }
+
+  const handleUploadVideo = async () => {
+    const fd = new FormData()
+    fd.append('video', file as File) //key, value
+    axios
+      .post('/medias/upload-video', fd, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        },
+        baseURL: config.baseUrl
+      })
+      .then((res) => {
+        setBody({
+          ...body,
+          medias: [{ type: res.data.result[0].type, url: res.data.result[0].url }]
+        })
+      })
+      .catch((err) => {
+        toast.error('Upload video failed')
+        console.log(err)
       })
   }
 
@@ -95,8 +119,11 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true)
-      if (file) {
+      if (file?.type.startsWith('image/')) {
         await handleUploadImg()
+      }
+      if (file?.type.startsWith('video/')) {
+        await handleUploadVideo()
       }
       if (!file) createTweet()
     } catch (err) {
@@ -106,9 +133,11 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     }
   }, [body, file])
 
-  const handleChangeIMGFile = (file?: File) => {
+  const handleChangeFile = (file?: File) => {
     setFile(file)
   }
+
+  console.log(file)
 
   return (
     <div className='border-b px-5 p-2'>
@@ -125,7 +154,18 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
               placeholder={placeholder}
               className='disabled:opacity-80 peer mt-3 w-full right-0 resize-none outline-none text-lg placeholder-neutral-400 text-black'
             ></textarea>
-            {file && <img src={previewImage} className='rounded-2xl my-2 max-h-80 w-auto' />}
+            {file?.type.startsWith('image/') && (
+              <div className='w-full pt-[100%] relative'>
+                <img src={previewFile} className='absolute top-0 left-0 bg-white w-full h-full object-cover' />
+              </div>
+            )}
+            {file?.type.startsWith('video/') && (
+              <video
+                src={previewFile}
+                className='h-80 min-w-full max-w-md object-scale-down rounded-xl bg-black'
+                controls
+              />
+            )}
             <hr className='opacity-0 peer-focus:opacity-100 h-[1px] w-full border-neutral-500 transition' />
             <div className='flex justify-start items-center mt-1'>
               <p className='text-base text-blue-500 font-semibold p-2 hover:bg-blue-50 hover:cursor-pointer rounded-3xl'>
@@ -134,8 +174,8 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
             </div>
             <div className='my-1.5 flex flex-row justify-between'>
               <div className='flex justify-center items-center'>
-                <InputFile isImageFile onChange={handleChangeIMGFile as any} />
-                <InputFile isVideoFile />
+                <InputFile isImageFile onChange={handleChangeFile as any} />
+                <InputFile isVideoFile onChange={handleChangeFile as any} />
               </div>
               <Button disabled={isLoading || body.content === ''} onClick={onSubmit} label='Tweet' secondary />
             </div>

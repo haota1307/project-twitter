@@ -15,8 +15,21 @@ export default function InputFile({ onChange, isImageFile, isVideoFile }: Props)
     const fileFromLocal = event.target.files?.[0] // Lấy ảnh
     console.log(fileFromLocal)
 
-    if (fileFromLocal && (fileFromLocal.size >= config.maxSizeUploadImage || !fileFromLocal.type.includes('image'))) {
-      toast.error('File không đúng định dạng quy định', {
+    if (
+      isImageFile &&
+      fileFromLocal &&
+      (fileFromLocal.size >= config.maxSizeUploadImage || !fileFromLocal.type.includes('image'))
+    ) {
+      toast.error('File ảnh không đúng định dạng quy định ', {
+        autoClose: 1000,
+        position: 'top-center'
+      })
+    } else if (
+      isVideoFile &&
+      fileFromLocal &&
+      (fileFromLocal.size >= config.maxSizeUploadVideo || !fileFromLocal.type.includes('video'))
+    ) {
+      toast.error('File video không đúng định dạng quy định ', {
         autoClose: 1000,
         position: 'top-center'
       })
@@ -31,7 +44,7 @@ export default function InputFile({ onChange, isImageFile, isVideoFile }: Props)
     <>
       <input
         type='file'
-        accept='.jpg,.jpeg,.png'
+        accept={isImageFile ? '.jpg,.jpeg,.png' : '.mp4'}
         className='hidden'
         onChange={onFileChange}
         onClick={(e) => ((e.target as any).value = null)}

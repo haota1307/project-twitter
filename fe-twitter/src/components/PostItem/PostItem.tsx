@@ -1,7 +1,7 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import Avatar from '../Avatar'
 import { AppContext } from 'src/contexts/app.context'
-import { IoBookmarkOutline, IoChatboxOutline, IoEyeOutline, IoHeartOutline, IoLinkOutline } from 'react-icons/io5'
+import { IoBookmarkOutline, IoChatboxOutline, IoEyeOutline, IoHeartOutline } from 'react-icons/io5'
 import { Media, MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 
@@ -11,6 +11,13 @@ interface PostItemProps {
 
 export default function PostItem({ data }: PostItemProps) {
   const { profile } = useContext(AppContext)
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    if (videoRef.current) {
+      ;(videoRef.current as any).volume = 0.5
+    }
+  }, [])
 
   return (
     <div className='border-b p-5 cursor-pointer hover:bg-slate-50 transition'>
@@ -24,10 +31,22 @@ export default function PostItem({ data }: PostItemProps) {
           </div>
           <div className='text-black my-2'>{data?.content || ' '}</div>
           {data?.medias[0]?.type === MediaType.Image && (
-            <img className='object-cover h-80 w-full rounded-xl' src={data.medias[0]?.url}></img>
+            <div className='w-full pt-[100%] relative'>
+              <img
+                className='absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
+                src={data.medias[0]?.url}
+              ></img>
+            </div>
           )}
           {data?.medias[0]?.type === MediaType.Video && (
-            <video className='h-80 w-full object-cover rounded-xl' src={data.medias[0]?.url} controls></video>
+            <div className='w-full pt-[100%] relative'>
+              <video
+                className='absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
+                src={data.medias[0]?.url}
+                controls
+                ref={videoRef}
+              ></video>
+            </div>
           )}
           <div className='flex flex-row justify-between items-center mt-3 gap-10'>
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500'>
@@ -52,5 +71,3 @@ export default function PostItem({ data }: PostItemProps) {
     </div>
   )
 }
-
-//cmt like view bookmark
