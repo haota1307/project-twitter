@@ -22,13 +22,12 @@ export default function PostItem({ data }: PostItemProps) {
             <span className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>@{data?.user_id}</span>
             <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
           </div>
-          <div className='text-black my-2 '>{data?.content || ' '}</div>
+          <div className='text-black my-2'>{data?.content || ' '}</div>
           {data?.medias[0]?.type === MediaType.Image && (
             <img className='object-cover h-80 w-full rounded-xl' src={data.medias[0]?.url}></img>
           )}
-
           {data?.medias[0]?.type === MediaType.Video && (
-            <video className='h-80 w-full rounded-xl' src={data.medias[0]?.url} controls></video>
+            <video className='h-80 w-full object-cover rounded-xl' src={data.medias[0]?.url} controls></video>
           )}
           <div className='flex flex-row justify-between items-center mt-3 gap-10'>
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500'>
