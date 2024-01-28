@@ -157,8 +157,10 @@ class MediasService {
           ContentType: mime.getType(file.filepath) as string
         })
 
-        fsPromise.unlink(file.filepath) // Xóa file trong /temp sau khi chuyển đổi
-        fsPromise.rmdir(newPath) // Xóa folder sau khi up lên s3
+        await Promise.all([
+          fsPromise.unlink(file.filepath), // Xóa file trong /temp sau khi chuyển đổi
+          fsPromise.rmdir(newPath) // Xóa file
+        ])
 
         return {
           url: (s3Result as CompleteMultipartUploadCommandOutput).Location as string,
