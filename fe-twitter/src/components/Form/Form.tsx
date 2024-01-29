@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import useLoginModal from 'src/hooks/useLoginModal'
 import useRegisterModal from 'src/hooks/useRegisterModal'
@@ -31,6 +31,8 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
 
   const [file, setFile] = useState<File>()
   const [isLoading, setIsLoading] = useState(false)
+
+  const videoRef = useRef(null)
 
   const [body, setBody] = useState<TweetBody>({
     type: TweetType.Tweet,
@@ -137,7 +139,11 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     setFile(file)
   }
 
-  console.log(file)
+  useEffect(() => {
+    if (videoRef.current) {
+      ;(videoRef.current as any).volume = 0.5
+    }
+  }, [])
 
   return (
     <div className='border-b px-5 p-2'>
@@ -160,11 +166,14 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
               </div>
             )}
             {file?.type.startsWith('video/') && (
-              <video
-                src={previewFile}
-                className='h-80 min-w-full max-w-md object-scale-down rounded-xl bg-black'
-                controls
-              />
+              <div className='w-full max-h-screen pt-[100%] relative bg-black'>
+                <video
+                  ref={videoRef}
+                  src={previewFile}
+                  className='absolute top-0 left-0 bg-white w-full h-full'
+                  controls
+                />
+              </div>
             )}
             <hr className='opacity-0 peer-focus:opacity-100 h-[1px] w-full border-neutral-500 transition' />
             <div className='flex justify-start items-center mt-1'>

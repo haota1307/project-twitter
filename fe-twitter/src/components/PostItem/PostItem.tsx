@@ -1,7 +1,7 @@
-import { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import Avatar from '../Avatar'
 import { AppContext } from 'src/contexts/app.context'
-import { IoBookmarkOutline, IoChatboxOutline, IoEyeOutline, IoHeartOutline } from 'react-icons/io5'
+import { IoBookmarkOutline, IoChatboxOutline, IoEyeOutline, IoHeartOutline, IoHeartSharp } from 'react-icons/io5'
 import { Media, MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 
@@ -11,6 +11,7 @@ interface PostItemProps {
 
 export default function PostItem({ data }: PostItemProps) {
   const { profile } = useContext(AppContext)
+  const [islike, setIsLike] = useState<Boolean>(true)
   const videoRef = useRef(null)
 
   useEffect(() => {
@@ -18,6 +19,14 @@ export default function PostItem({ data }: PostItemProps) {
       ;(videoRef.current as any).volume = 0.5
     }
   }, [])
+
+  const isLikedByUser = data.likes?.some(async (like: any) => {
+    ;(await like.user_id) === profile?._id
+  })
+
+  const handleLikeByUser = () => {
+    setIsLike(!islike)
+  }
 
   return (
     <div className='border-b p-5 cursor-pointer hover:bg-slate-50 transition'>
@@ -41,7 +50,7 @@ export default function PostItem({ data }: PostItemProps) {
           {data?.medias[0]?.type === MediaType.Video && (
             <div className='w-full pt-[100%] relative'>
               <video
-                className='absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
+                className='absolute top-0 left-0 w-full h-full bg-black rounded-2xl'
                 src={data.medias[0]?.url}
                 controls
                 ref={videoRef}
@@ -53,9 +62,18 @@ export default function PostItem({ data }: PostItemProps) {
               <IoChatboxOutline size={20} />
               <p>{data?.comment?.length}</p>
             </div>
-            <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-red-500'>
-              <IoHeartOutline size={20} />
-              <p>{data?.likes?.length || 0}</p>
+            <div className='flex flex-row items-center gap-2 cursor-pointer transition hover:text-red-500'>
+              {!isLikedByUser ? (
+                <>
+                  <IoHeartSharp size={20} color='ff2323' onClick={handleLikeByUser} />
+                  <p className='text-red-500 transition-opacity'>{data?.likes?.length || 0}</p>
+                </>
+              ) : (
+                <>
+                  <IoHeartOutline size={20} onClick={handleLikeByUser} />
+                  <p className='text-neutral-500'>{data?.likes?.length || 0}</p>
+                </>
+              )}
             </div>
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-500'>
               <IoEyeOutline size={20} />
