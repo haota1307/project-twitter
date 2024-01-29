@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import Avatar from '../Avatar'
 import { AppContext } from 'src/contexts/app.context'
 import { IoBookmarkOutline, IoChatboxOutline, IoEyeOutline, IoHeartOutline, IoHeartSharp } from 'react-icons/io5'
@@ -14,6 +14,11 @@ interface PostItemProps {
 
 export default function PostItem({ data }: PostItemProps) {
   const { profile, isAuthenticated } = useContext(AppContext)
+  const [isLikedByUser, setIsLikedByUser] = useState(
+    data.likes?.some(async (like: any) => (await like.user_id) === profile?._id) || false
+  )
+  const [likesCount, setLikesCount] = useState(data?.likes?.length || 0)
+
   const videoRef = useRef(null)
 
   useEffect(() => {
@@ -21,10 +26,6 @@ export default function PostItem({ data }: PostItemProps) {
       ;(videoRef.current as any).volume = 0.5
     }
   }, [])
-
-  const isLikedByUser = data.likes?.some(async (like: any) => {
-    ;(await like.user_id) === profile?._id
-  })
 
   const handleLike = async (tweetId: string) => {
     if (isAuthenticated && tweetId)
@@ -42,7 +43,8 @@ export default function PostItem({ data }: PostItemProps) {
           }
         )
         .then((res) => {
-          toast.success('Like successful', { autoClose: 1000 })
+          setIsLikedByUser(true)
+          setLikesCount((prevCount) => prevCount + 1)
         })
         .catch((err) => {
           console.log(err)
@@ -52,6 +54,30 @@ export default function PostItem({ data }: PostItemProps) {
   const handleLikeByUser = async (data: string) => {
     await handleLike(data)
   }
+
+  const handleUnLike = async (tweetId: string) => {
+    if (isAuthenticated && tweetId)
+      await axios
+        .delete(`likes/tweets/${tweetId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          },
+          baseURL: config.baseUrl
+        })
+        .then((res) => {
+          setIsLikedByUser(false)
+          setLikesCount((prevCount) => prevCount - 1)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+  }
+
+  const handleUnLikeByUser = async (data: string) => {
+    await handleUnLike(data)
+  }
+
+  console.log(data)
 
   return (
     <div className='border-b p-5 cursor-pointer hover:bg-slate-50 transition'>
@@ -87,22 +113,23 @@ export default function PostItem({ data }: PostItemProps) {
               <IoChatboxOutline size={20} />
               <p>{data?.comment?.length}</p>
             </div>
-            <button
-              onClick={() => handleLikeByUser(data._id as string)}
-              className='flex flex-row items-center gap-x-2 cursor-pointer transition hover:text-red-500 hover:bg-red-100 rounded-full p-1'
-            >
-              {isLikedByUser ? (
-                <>
-                  <IoHeartSharp size={20} color='ff2323' />
-                  <p className='text-red-500 transition-opacity'>{data?.likes?.length || 0}</p>
-                </>
-              ) : (
-                <>
-                  <IoHeartOutline size={20} />
-                  <p className='text-neutral-500'>{data?.likes?.length || 0}</p>
-                </>
-              )}
-            </button>
+            {isLikedByUser ? (
+              <div
+                className='flex flex-row items-center gap-2 text-red-500 cursor-pointer hover:bg-red-100 rounded-full p-2 transform active:scale-50 transition-transform'
+                onClick={() => handleUnLikeByUser(data._id as string)}
+              >
+                <IoHeartSharp size={20} color='ff2323' />
+                <p className=' transition-opacity '>{likesCount}</p>
+              </div>
+            ) : (
+              <div
+                className='flex flex-row items-center gap-2 cursor-pointer text-neutral-500 hover:text-red-500 hover:bg-red-100 rounded-full p-2 transform active:scale-50 transition-transform'
+                onClick={() => handleLikeByUser(data._id as string)}
+              >
+                <IoHeartOutline size={20} />
+                <p className=''>{data?.likes?.length || 0}</p>
+              </div>
+            )}
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-500'>
               <IoEyeOutline size={20} />
               <p>{data.user_views}</p>

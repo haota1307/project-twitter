@@ -164,10 +164,6 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     }
   }, [])
 
-  useEffect(() => {
-    console.log(isLoading)
-  }, [isLoading])
-
   return (
     <div className='border-b px-5 p-2'>
       {isAuthenticated ? (
