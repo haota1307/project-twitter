@@ -1,17 +1,19 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import Avatar from '../Avatar'
 import { AppContext } from 'src/contexts/app.context'
 import { IoBookmarkOutline, IoChatboxOutline, IoEyeOutline, IoHeartOutline, IoHeartSharp } from 'react-icons/io5'
-import { Media, MediaType, Tweet } from 'src/types/tweet.type'
+import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
+import axios from 'axios'
+import config from 'src/constants/config'
+import { toast } from 'react-toastify'
 
 interface PostItemProps {
   data: Tweet
 }
 
 export default function PostItem({ data }: PostItemProps) {
-  const { profile } = useContext(AppContext)
-  const [islike, setIsLike] = useState<Boolean>(true)
+  const { profile, isAuthenticated } = useContext(AppContext)
   const videoRef = useRef(null)
 
   useEffect(() => {
@@ -24,8 +26,31 @@ export default function PostItem({ data }: PostItemProps) {
     ;(await like.user_id) === profile?._id
   })
 
-  const handleLikeByUser = () => {
-    setIsLike(!islike)
+  const handleLike = async (tweetId: string) => {
+    if (isAuthenticated && tweetId)
+      await axios
+        .post(
+          'likes',
+          {
+            tweet_id: tweetId
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            },
+            baseURL: config.baseUrl
+          }
+        )
+        .then((res) => {
+          toast.success('Like successful', { autoClose: 1000 })
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+  }
+
+  const handleLikeByUser = async (data: string) => {
+    await handleLike(data)
   }
 
   return (
@@ -54,7 +79,7 @@ export default function PostItem({ data }: PostItemProps) {
                 src={data.medias[0]?.url}
                 controls
                 ref={videoRef}
-              ></video>
+              />
             </div>
           )}
           <div className='flex flex-row justify-between items-center mt-3 gap-10'>
@@ -62,19 +87,22 @@ export default function PostItem({ data }: PostItemProps) {
               <IoChatboxOutline size={20} />
               <p>{data?.comment?.length}</p>
             </div>
-            <div className='flex flex-row items-center gap-2 cursor-pointer transition hover:text-red-500'>
-              {!isLikedByUser ? (
+            <button
+              onClick={() => handleLikeByUser(data._id as string)}
+              className='flex flex-row items-center gap-x-2 cursor-pointer transition hover:text-red-500 hover:bg-red-100 rounded-full p-1'
+            >
+              {isLikedByUser ? (
                 <>
-                  <IoHeartSharp size={20} color='ff2323' onClick={handleLikeByUser} />
+                  <IoHeartSharp size={20} color='ff2323' />
                   <p className='text-red-500 transition-opacity'>{data?.likes?.length || 0}</p>
                 </>
               ) : (
                 <>
-                  <IoHeartOutline size={20} onClick={handleLikeByUser} />
+                  <IoHeartOutline size={20} />
                   <p className='text-neutral-500'>{data?.likes?.length || 0}</p>
                 </>
               )}
-            </div>
+            </button>
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-500'>
               <IoEyeOutline size={20} />
               <p>{data.user_views}</p>

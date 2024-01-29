@@ -33,6 +33,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
   const [isLoading, setIsLoading] = useState(false)
 
   const videoRef = useRef(null)
+  const toastId = useRef(null)
 
   const [body, setBody] = useState<TweetBody>({
     type: TweetType.Tweet,
@@ -54,6 +55,8 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
   const handleUploadImg = async () => {
     const fd = new FormData()
     fd.append('image', file as File) //key, value
+    ;(toastId.current as any) = toast.loading('Image uploading...')
+
     axios
       .post('/medias/upload-image', fd, {
         headers: {
@@ -63,20 +66,31 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
         baseURL: config.baseUrl
       })
       .then((res) => {
+        toast.update(toastId.current as any, {
+          type: 'success',
+          autoClose: 1000,
+          isLoading: false
+        })
         setBody({
           ...body,
           medias: [{ type: res.data.result[0].type, url: res.data.result[0].url }]
         })
       })
       .catch((err) => {
-        console.log(err)
-        toast.error('Upload img failed')
+        toast.update(toastId.current as any, {
+          render: 'Upload image fail',
+          type: 'error',
+          autoClose: 1000,
+          isLoading: false
+        })
       })
   }
 
   const handleUploadVideo = async () => {
     const fd = new FormData()
     fd.append('video', file as File) //key, value
+    ;(toastId.current as any) = toast.loading('Video uploading...')
+
     axios
       .post('/medias/upload-video', fd, {
         headers: {
@@ -86,41 +100,46 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
         baseURL: config.baseUrl
       })
       .then((res) => {
+        toast.update(toastId.current as any, {
+          type: 'success',
+          autoClose: 1000,
+          isLoading: false
+        })
         setBody({
           ...body,
           medias: [{ type: res.data.result[0].type, url: res.data.result[0].url }]
         })
       })
       .catch((err) => {
-        toast.error('Upload video failed')
-        console.log(err)
+        toast.update(toastId.current as any, {
+          render: 'Upload video fail',
+          type: 'error',
+          autoClose: 1000,
+          isLoading: false
+        })
       })
   }
 
   const createTweet = async () =>
-    axios
-      .post(
-        '/tweets',
-        { ...body },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          },
-          baseURL: config.baseUrl
-        }
-      )
-      .then(() => {
-        toast.success('Tweet created')
-      })
+    axios.post(
+      '/tweets',
+      { ...body },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        },
+        baseURL: config.baseUrl
+      }
+    )
 
   useEffect(() => {
     if (file) createTweet()
   }, [body.medias])
 
   const onSubmit = useCallback(async () => {
+    setIsLoading(true)
     try {
-      setIsLoading(true)
       if (file?.type.startsWith('image/')) {
         await handleUploadImg()
       }
@@ -133,7 +152,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     } finally {
       setIsLoading(false)
     }
-  }, [body, file])
+  }, [body, file, isLoading])
 
   const handleChangeFile = (file?: File) => {
     setFile(file)
@@ -144,6 +163,10 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
       ;(videoRef.current as any).volume = 0.5
     }
   }, [])
+
+  useEffect(() => {
+    console.log(isLoading)
+  }, [isLoading])
 
   return (
     <div className='border-b px-5 p-2'>
