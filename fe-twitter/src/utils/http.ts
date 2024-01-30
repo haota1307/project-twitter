@@ -32,7 +32,6 @@ export class Http {
       baseURL: config.baseUrl,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + this.accessToken,
         'expire-access-token': 60 * 60 * 24, //1 ngay
         'expire-refresh-token': 60 * 60 * 24 * 100 //100 ngay
       },
@@ -74,6 +73,7 @@ export class Http {
       },
       (error: AxiosError) => {
         // chỉ toast  lỗi != 422 & !== 401
+        console.error('Response Error:', error)
         if (
           ![HttpStatusCode.UnprocessableEntity, HttpStatusCode.Unauthorized].includes(error.response?.status as number)
         ) {

@@ -8,13 +8,14 @@ import config from 'src/constants/config'
 import { AppContext } from 'src/contexts/app.context'
 import useLogoutModal from 'src/hooks/useLogoutModal'
 import { getRefreshTokenFromLs } from 'src/utils/auth'
+import http from 'src/utils/http'
 
 export default function LogoutModal() {
   const { setIsAuthenticated } = useContext(AppContext)
   const logoutModal = useLogoutModal()
 
   const onSubmitLogout = () => {
-    axios
+    http
       .post(
         '/users/logout',
         { refresh_token: getRefreshTokenFromLs() },
