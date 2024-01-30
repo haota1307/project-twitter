@@ -1,7 +1,14 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import Avatar from '../Avatar'
 import { AppContext } from 'src/contexts/app.context'
-import { IoBookmarkOutline, IoChatboxOutline, IoEyeOutline, IoHeartOutline, IoHeartSharp } from 'react-icons/io5'
+import {
+  IoBookmarkOutline,
+  IoBookmarkSharp,
+  IoChatboxOutline,
+  IoEyeOutline,
+  IoHeartOutline,
+  IoHeartSharp
+} from 'react-icons/io5'
 import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 import axios from 'axios'
@@ -14,10 +21,16 @@ interface PostItemProps {
 
 export default function PostItem({ data }: PostItemProps) {
   const { profile, isAuthenticated } = useContext(AppContext)
+
   const [isLikedByUser, setIsLikedByUser] = useState(
     data.likes?.some(async (like: any) => (await like.user_id) === profile?._id) || false
   )
   const [likesCount, setLikesCount] = useState(data?.likes?.length || 0)
+
+  const [isBookmarkByUser, setIsBookmarkByUser] = useState(
+    data.bookmark?.some(async (bookmark: any) => (await bookmark.user_id) === profile?._id) || false
+  )
+  const [bookmarkCount, setBookmarkCount] = useState(data?.bookmark?.length || 0)
 
   const videoRef = useRef(null)
 
@@ -77,7 +90,34 @@ export default function PostItem({ data }: PostItemProps) {
     await handleUnLike(data)
   }
 
-  console.log(data)
+  const handleBookmark = async (tweetId: string) => {
+    if (isAuthenticated && tweetId)
+      await axios
+        .post(
+          'bookmarks',
+          {
+            tweet_id: tweetId
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            },
+            baseURL: config.baseUrl
+          }
+        )
+        .then((res) => {
+          console.log(res)
+          setIsBookmarkByUser(true)
+          setBookmarkCount((prevCount) => prevCount + 1)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+  }
+
+  const handleBookmarkByUser = async (data: string) => {
+    await handleBookmark(data)
+  }
 
   return (
     <div className='border-b p-5 cursor-pointer hover:bg-slate-50 transition'>
@@ -127,17 +167,27 @@ export default function PostItem({ data }: PostItemProps) {
                 onClick={() => handleLikeByUser(data._id as string)}
               >
                 <IoHeartOutline size={20} />
-                <p className=''>{data?.likes?.length || 0}</p>
+                <p className=''>{likesCount}</p>
               </div>
             )}
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-500'>
               <IoEyeOutline size={20} />
               <p>{data.user_views}</p>
             </div>
-            <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-yellow-500'>
-              <IoBookmarkOutline size={20} />
-              <p>{data?.bookmark?.length}</p>
-            </div>
+            {isBookmarkByUser ? (
+              <div className='flex flex-row items-center text-yellow-400 gap-2 cursor-pointer hover:text-yellow-500 hover:bg-yellow-100 rounded-full p-2 transform active:scale-50 transition-transform'>
+                <IoBookmarkSharp size={20} />
+                <p>{bookmarkCount}</p>
+              </div>
+            ) : (
+              <div
+                onClick={() => handleBookmarkByUser(data._id as string)}
+                className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer hover:text-yellow-500 hover:bg-yellow-100 rounded-full p-2 transform active:scale-50 transition-transform'
+              >
+                <IoBookmarkOutline size={20} />
+                <p>{bookmarkCount}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
