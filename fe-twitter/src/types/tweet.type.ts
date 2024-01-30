@@ -31,7 +31,7 @@ export interface Tweet {
   mentions: string[]
   comment?: string[]
   likes?: string[]
-  bookmark?: string[]
+  bookmarks?: string[]
   medias: Media[]
   user_views: number
   created_at: string

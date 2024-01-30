@@ -28,9 +28,9 @@ export default function PostItem({ data }: PostItemProps) {
   const [likesCount, setLikesCount] = useState(data?.likes?.length || 0)
 
   const [isBookmarkByUser, setIsBookmarkByUser] = useState(
-    data.bookmark?.some(async (bookmark: any) => (await bookmark.user_id) === profile?._id) || false
+    data.bookmarks?.some(async (bookmark: any) => (await bookmark.user_id) === profile?._id) || false
   )
-  const [bookmarkCount, setBookmarkCount] = useState(data?.bookmark?.length || 0)
+  const [bookmarkCount, setBookmarkCount] = useState(data?.bookmarks?.length || 0)
 
   const videoRef = useRef(null)
 
@@ -118,6 +118,8 @@ export default function PostItem({ data }: PostItemProps) {
   const handleBookmarkByUser = async (data: string) => {
     await handleBookmark(data)
   }
+
+  console.log(data)
 
   return (
     <div className='border-b p-5 cursor-pointer hover:bg-slate-50 transition'>
