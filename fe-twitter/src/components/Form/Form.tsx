@@ -7,23 +7,15 @@ import Button from '../Button'
 import { AppContext } from 'src/contexts/app.context'
 import Avatar from '../Avatar'
 import config from 'src/constants/config'
-import { Media, TweetAudience, TweetType } from 'src/types/tweet.type'
+import { Media, TweetAudience, TweetBody, TweetType } from 'src/types/tweet.type'
 import InputFile from '../InputFile'
+import mediaApi from 'src/apis/media.api'
+import tweetApi from 'src/apis/tweet.api'
 
 interface FormProps {
   placeholder: string
   isComment?: boolean
   postId?: string
-}
-
-interface TweetBody {
-  type: TweetType
-  audience: TweetAudience
-  content: string
-  parent_id: null
-  hashtags: string[]
-  mentions: string[]
-  medias: Media[]
 }
 
 export default function Form({ placeholder, isComment, postId }: FormProps) {
@@ -35,7 +27,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
   const videoRef = useRef(null)
   const toastId = useRef(null)
 
-  const [body, setBody] = useState<TweetBody>({
+  const initialBody = {
     type: TweetType.Tweet,
     audience: TweetAudience.Everyone,
     content: '',
@@ -43,7 +35,9 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     hashtags: [],
     mentions: [],
     medias: []
-  })
+  }
+
+  const [body, setBody] = useState<TweetBody>(initialBody)
 
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
@@ -55,16 +49,9 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
   const handleUploadImg = async () => {
     const fd = new FormData()
     fd.append('image', file as File) //key, value
-    ;(toastId.current as any) = toast.loading('Image uploading...')
-
-    axios
-      .post('/medias/upload-image', fd, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-        },
-        baseURL: config.baseUrl
-      })
+    ;(toastId.current as any) = toast.loading('Tweet uploading...')
+    mediaApi
+      .uploadImg(fd)
       .then((res) => {
         toast.update(toastId.current as any, {
           type: 'success',
@@ -89,16 +76,10 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
   const handleUploadVideo = async () => {
     const fd = new FormData()
     fd.append('video', file as File) //key, value
-    ;(toastId.current as any) = toast.loading('Video uploading...')
+    ;(toastId.current as any) = toast.loading('Tweet uploading...')
 
-    axios
-      .post('/medias/upload-video', fd, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-        },
-        baseURL: config.baseUrl
-      })
+    mediaApi
+      .uploadVideo(fd)
       .then((res) => {
         toast.update(toastId.current as any, {
           type: 'success',
@@ -120,18 +101,10 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
       })
   }
 
-  const createTweet = async () =>
-    axios.post(
-      '/tweets',
-      { ...body },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-        },
-        baseURL: config.baseUrl
-      }
-    )
+  const createTweet = () =>
+    tweetApi.createTweet({ ...body }).then(() => {
+      toast.success('Create success', { autoClose: 1000 })
+    })
 
   useEffect(() => {
     if (file) createTweet()

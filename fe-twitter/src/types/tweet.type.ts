@@ -20,6 +20,16 @@ export enum MediaType {
   Video
 }
 
+export interface TweetBody {
+  type: TweetType
+  audience: TweetAudience
+  content: string
+  parent_id: null
+  hashtags: string[]
+  mentions: string[]
+  medias: Media[]
+}
+
 export interface Tweet {
   _id?: string
   user_id: string

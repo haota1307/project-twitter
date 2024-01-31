@@ -1,31 +1,21 @@
 import axios from 'axios'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { toast } from 'react-toastify'
 
+import authApi from 'src/apis/auth.api'
 import Modal from 'src/components/Modal'
-import config from 'src/constants/config'
-
 import { AppContext } from 'src/contexts/app.context'
 import useLogoutModal from 'src/hooks/useLogoutModal'
-import { getRefreshTokenFromLs } from 'src/utils/auth'
-import http from 'src/utils/http'
 
 export default function LogoutModal() {
   const { setIsAuthenticated } = useContext(AppContext)
+  const [isLoading, setIsLoading] = useState(false)
   const logoutModal = useLogoutModal()
 
   const onSubmitLogout = () => {
-    http
-      .post(
-        '/users/logout',
-        { refresh_token: getRefreshTokenFromLs() },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          },
-          baseURL: config.baseUrl
-        }
-      )
+    setIsLoading(true)
+    authApi
+      .logout()
       .then((res) => {
         toast.success(res.data.message, {
           position: 'top-center',
@@ -40,11 +30,13 @@ export default function LogoutModal() {
       .catch((err) => {
         console.log(err.response?.status)
       })
-      .finally(() => {})
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
   return (
     <Modal
-      // disable={isLoading}
+      disable={isLoading}
       isOpen={logoutModal.isOpen}
       title='Are you sure you want to sign out?'
       actionLabel='Logout'

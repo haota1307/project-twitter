@@ -1,4 +1,6 @@
+import config from 'src/constants/config'
 import { AuthResponse } from 'src/types/auth.type'
+import { getRefreshTokenFromLs } from 'src/utils/auth'
 import http from 'src/utils/http'
 
 export const URL_LOGIN = 'users/login'
@@ -24,11 +26,14 @@ const authApi = {
     return http.post<AuthResponse>(URL_LOGIN, body)
   },
   // Đăng Xuất
-  logout(body: { refresh_token: string }) {
-    return http.post<AuthResponse>(URL_LOGOUT, body, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
-      signal: controller.signal
-    })
+  logout() {
+    return http.post(
+      '/users/logout',
+      { refresh_token: getRefreshTokenFromLs() },
+      {
+        baseURL: config.baseUrl
+      }
+    )
   }
 }
 

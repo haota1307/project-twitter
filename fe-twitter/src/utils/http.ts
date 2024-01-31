@@ -41,7 +41,7 @@ export class Http {
     this.instance.interceptors.request.use(
       (config) => {
         if (this.accessToken && config.headers) {
-          config.headers.authorization = this.accessToken
+          config.headers.authorization = 'Bearer ' + this.accessToken
           return config
         }
         return config
