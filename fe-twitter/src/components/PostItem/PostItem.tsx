@@ -1,6 +1,4 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import Avatar from '../Avatar'
-import { AppContext } from 'src/contexts/app.context'
 import {
   IoBookmarkOutline,
   IoBookmarkSharp,
@@ -9,11 +7,12 @@ import {
   IoHeartOutline,
   IoHeartSharp
 } from 'react-icons/io5'
+
+import Avatar from '../Avatar'
+import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
-import axios from 'axios'
-import config from 'src/constants/config'
-import { toast } from 'react-toastify'
+import interactApi from 'src/apis/interact.api'
 
 interface PostItemProps {
   data: Tweet
@@ -40,22 +39,11 @@ export default function PostItem({ data }: PostItemProps) {
     }
   }, [])
 
-  const handleLike = async (tweetId: string) => {
+  const handleLikeByUser = async (tweetId: string) => {
     if (isAuthenticated && tweetId)
-      await axios
-        .post(
-          'likes',
-          {
-            tweet_id: tweetId
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('access_token')}`
-            },
-            baseURL: config.baseUrl
-          }
-        )
-        .then((res) => {
+      await interactApi
+        .likeTweet(tweetId)
+        .then(() => {
           setIsLikedByUser(true)
           setLikesCount((prevCount) => prevCount + 1)
         })
@@ -64,20 +52,11 @@ export default function PostItem({ data }: PostItemProps) {
         })
   }
 
-  const handleLikeByUser = async (data: string) => {
-    await handleLike(data)
-  }
-
-  const handleUnLike = async (tweetId: string) => {
+  const handleUnLikeByUser = async (tweetId: string) => {
     if (isAuthenticated && tweetId)
-      await axios
-        .delete(`likes/tweets/${tweetId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          },
-          baseURL: config.baseUrl
-        })
-        .then((res) => {
+      await interactApi
+        .unlikeTweet(tweetId)
+        .then(() => {
           setIsLikedByUser(false)
           setLikesCount((prevCount) => prevCount - 1)
         })
@@ -86,27 +65,11 @@ export default function PostItem({ data }: PostItemProps) {
         })
   }
 
-  const handleUnLikeByUser = async (data: string) => {
-    await handleUnLike(data)
-  }
-
-  const handleBookmark = async (tweetId: string) => {
+  const handleBookmarkByUser = async (tweetId: string) => {
     if (isAuthenticated && tweetId)
-      await axios
-        .post(
-          'bookmarks',
-          {
-            tweet_id: tweetId
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('access_token')}`
-            },
-            baseURL: config.baseUrl
-          }
-        )
-        .then((res) => {
-          console.log(res)
+      await interactApi
+        .bookmarkTweet(tweetId)
+        .then(() => {
           setIsBookmarkByUser(true)
           setBookmarkCount((prevCount) => prevCount + 1)
         })
@@ -115,30 +78,17 @@ export default function PostItem({ data }: PostItemProps) {
         })
   }
 
-  const handleBookmarkByUser = async (data: string) => {
-    await handleBookmark(data)
-  }
-
-  const handleUnBookmark = async (tweetId: string) => {
+  const handleUnBookmarkByUser = async (tweetId: string) => {
     if (isAuthenticated && tweetId)
-      await axios
-        .delete(`bookmarks/tweets/${tweetId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          },
-          baseURL: config.baseUrl
-        })
-        .then((res) => {
+      await interactApi
+        .unbookmarkTweet(tweetId)
+        .then(() => {
           setIsBookmarkByUser(false)
           setBookmarkCount((prevCount) => prevCount - 1)
         })
         .catch((err) => {
           console.log(err)
         })
-  }
-
-  const handleUnBookmarkByUser = async (data: string) => {
-    await handleUnBookmark(data)
   }
 
   return (
