@@ -119,7 +119,27 @@ export default function PostItem({ data }: PostItemProps) {
     await handleBookmark(data)
   }
 
-  console.log(data)
+  const handleUnBookmark = async (tweetId: string) => {
+    if (isAuthenticated && tweetId)
+      await axios
+        .delete(`bookmarks/tweets/${tweetId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          },
+          baseURL: config.baseUrl
+        })
+        .then((res) => {
+          setIsBookmarkByUser(false)
+          setBookmarkCount((prevCount) => prevCount - 1)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+  }
+
+  const handleUnBookmarkByUser = async (data: string) => {
+    await handleUnBookmark(data)
+  }
 
   return (
     <div className='border-b p-5 cursor-pointer hover:bg-slate-50 transition'>
@@ -156,35 +176,38 @@ export default function PostItem({ data }: PostItemProps) {
               <p>{data?.comment?.length}</p>
             </div>
             {isLikedByUser ? (
-              <div
-                className='flex flex-row items-center gap-2 text-red-500 cursor-pointer hover:bg-red-100 rounded-full p-2 transform active:scale-50 transition-transform'
+              <button
+                className='flex flex-row items-center gap-2 text-red-500 cursor-pointer hover:bg-red-50 rounded-full p-2 transform active:scale-50 transition-transform'
                 onClick={() => handleUnLikeByUser(data._id as string)}
               >
                 <IoHeartSharp size={20} color='ff2323' />
                 <p className=' transition-opacity '>{likesCount}</p>
-              </div>
+              </button>
             ) : (
-              <div
-                className='flex flex-row items-center gap-2 cursor-pointer text-neutral-500 hover:text-red-500 hover:bg-red-100 rounded-full p-2 transform active:scale-50 transition-transform'
+              <button
+                className='flex flex-row items-center gap-2 cursor-pointer text-neutral-500 hover:text-red-500 hover:bg-red-50 rounded-full p-2 transform active:scale-50 transition-transform'
                 onClick={() => handleLikeByUser(data._id as string)}
               >
                 <IoHeartOutline size={20} />
                 <p className=''>{likesCount}</p>
-              </div>
+              </button>
             )}
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-500'>
               <IoEyeOutline size={20} />
               <p>{data.user_views}</p>
             </div>
             {isBookmarkByUser ? (
-              <div className='flex flex-row items-center text-yellow-400 gap-2 cursor-pointer hover:text-yellow-500 hover:bg-yellow-100 rounded-full p-2 transform active:scale-50 transition-transform'>
+              <div
+                onClick={() => handleUnBookmarkByUser(data._id as string)}
+                className='flex flex-row items-center text-yellow-400 gap-2 cursor-pointer hover:text-yellow-400 hover:bg-yellow-50 rounded-full p-2 transform active:scale-50 transition-transform'
+              >
                 <IoBookmarkSharp size={20} />
                 <p>{bookmarkCount}</p>
               </div>
             ) : (
               <div
                 onClick={() => handleBookmarkByUser(data._id as string)}
-                className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer hover:text-yellow-500 hover:bg-yellow-100 rounded-full p-2 transform active:scale-50 transition-transform'
+                className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer hover:text-yellow-400 hover:bg-yellow-50 rounded-full p-2 transform active:scale-50 transition-transform'
               >
                 <IoBookmarkOutline size={20} />
                 <p>{bookmarkCount}</p>
