@@ -225,4 +225,5 @@ usersRouter.delete(
   unfollowValidator,
   wrapRequestHandler(unfollowController)
 )
+
 export default usersRouter

@@ -13,6 +13,7 @@ import bookmarksRouter from './routes/bookmarks.routes'
 import likeRouter from './routes/likes.routes'
 import conversationsRouter from './routes/conversations.routes'
 import searchRouter from './routes/search.routes'
+import randomRouter from './routes/randoms.routes'
 
 dotenv.config()
 
@@ -48,6 +49,7 @@ app.use('/bookmarks', bookmarksRouter)
 app.use('/likes', likeRouter)
 app.use('/conversations', conversationsRouter)
 app.use('/search', searchRouter)
+app.use('/random', randomRouter)
 
 // Dùng middlewares để xử lý lỗi - Khi app lỗi sẽ nhãy vào đây  <<Default handler>>
 app.use(defaultErrorHandler)
