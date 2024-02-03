@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
 import PostItem from '../PostItem'
-import axios from 'axios'
 import config from 'src/constants/config'
 import { AppContext } from 'src/contexts/app.context'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Tweet, TweetType } from 'src/types/tweet.type'
+import http from 'src/utils/http'
 
 const LIMIT = 5
 const PAGE = 1
@@ -21,7 +21,7 @@ export default function Feed() {
 
   const fetchData = () => {
     if (user_id)
-      axios
+      http
         .get(`tweets/list/${user_id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`
@@ -47,11 +47,8 @@ export default function Feed() {
 
   const fetchMoreData = () => {
     if (user_id && pagination.page <= pagination.total_page)
-      axios
+      http
         .get(`tweets/list/${user_id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          },
           params: {
             limit: LIMIT,
             page: pagination.page + 1

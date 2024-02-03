@@ -9,8 +9,6 @@ export const URL_LOGOUT = 'users/logout'
 export const URL_REFRESH_TOKEN = 'users/refresh-token'
 export const URL_GET_PROFILE = 'users/profile'
 
-const controller = new AbortController()
-
 export const googleApi = {
   GOOGLE_CLIENT_ID: '748812675450-ouolfjf59ohvis3m4inkug0jn3rg7lmn.apps.googleusercontent.com',
   GOOGLE_REDIRECT_URI: 'http://localhost:4000/users/oauth/google'
