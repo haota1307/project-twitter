@@ -182,13 +182,6 @@ usersRouter.patch(
 )
 
 /**
- * Description:  get user profile
- * Path: /:username
- * Method: GET
- */
-usersRouter.get('/:username', wrapRequestHandler(getUserProfileController))
-
-/**
  * Description: Follow someone
  * Path: /follow
  * Method: POST
@@ -225,5 +218,12 @@ usersRouter.delete(
   unfollowValidator,
   wrapRequestHandler(unfollowController)
 )
+
+/**
+ * Description:  get user profile
+ * Path: /:username
+ * Method: GET
+ */
+usersRouter.get('/:username', wrapRequestHandler(getUserProfileController))
 
 export default usersRouter
