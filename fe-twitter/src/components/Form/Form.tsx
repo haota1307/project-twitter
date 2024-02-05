@@ -19,7 +19,7 @@ interface FormProps {
 }
 
 export default function Form({ placeholder, isComment, postId }: FormProps) {
-  const { isAuthenticated } = useContext(AppContext)
+  const { isAuthenticated, profile } = useContext(AppContext)
 
   const [file, setFile] = useState<File>()
   const [isLoading, setIsLoading] = useState(false)
@@ -142,7 +142,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
       {isAuthenticated ? (
         <div className='flex flex-row gap-4'>
           <div>
-            <Avatar />
+            <Avatar url={profile?.avatar} />
           </div>
           <div className='w-full'>
             <textarea
