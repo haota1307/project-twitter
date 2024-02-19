@@ -157,7 +157,7 @@ usersRouter.get('/profile', accessTokenValidator, wrapRequestHandler(getProfileC
 
 /**
  * Description:  Update my profile
- * Path: /me
+ * Path: /profile
  * Method: PATCH
  * Header: {Authorization: Bearer <access token>}
  * Body: UserSchema

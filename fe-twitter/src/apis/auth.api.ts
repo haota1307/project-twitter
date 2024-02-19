@@ -7,7 +7,6 @@ export const URL_LOGIN = 'users/login'
 export const URL_REGISTER = 'users/register'
 export const URL_LOGOUT = 'users/logout'
 export const URL_REFRESH_TOKEN = 'users/refresh-token'
-export const URL_GET_PROFILE = 'users/profile'
 
 export const googleApi = {
   GOOGLE_CLIENT_ID: '748812675450-ouolfjf59ohvis3m4inkug0jn3rg7lmn.apps.googleusercontent.com',

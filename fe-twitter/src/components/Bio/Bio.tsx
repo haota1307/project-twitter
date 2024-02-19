@@ -3,6 +3,7 @@ import { AppContext } from 'src/contexts/app.context'
 import Button from '../Button'
 import { IoCalendarOutline } from 'react-icons/io5'
 import { formatDate } from 'src/utils/date'
+import useEditModal from 'src/hooks/useEditModal'
 
 interface BioProps {
   userId: string
@@ -10,11 +11,12 @@ interface BioProps {
 
 export default function Bio() {
   const { profile } = useContext(AppContext)
+  const editModal = useEditModal()
   return (
     <>
       <div className='border-b pb-4'>
         <div className='flex justify-end p-2'>
-          <Button secondary label='Edit' onClick={() => {}} />
+          <Button secondary label='Edit' onClick={editModal.onOpen} />
         </div>
         <div className='mt-8 px-4'>
           <div className='flex flex-col'>

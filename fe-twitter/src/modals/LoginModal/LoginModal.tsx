@@ -3,7 +3,7 @@ import { useCallback, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import authApi, { URL_GET_PROFILE } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import Input from 'src/components/Input'
 import Modal from 'src/components/Modal'
 import { AppContext } from 'src/contexts/app.context'
@@ -16,6 +16,7 @@ import useRegisterModal from 'src/hooks/useRegisterModal'
 import axios from 'axios'
 import config from 'src/constants/config'
 import ButtonWithGG from 'src/components/ButtonWithGG'
+import userApi from 'src/apis/user.api'
 type FormData = Pick<Schema, 'email' | 'password'>
 
 type DataError = {
@@ -66,13 +67,8 @@ export default function LoginModal() {
   }, [registerModal, loginModal, isLoading])
 
   const getProfile = () => {
-    axios
-      .get(URL_GET_PROFILE, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-        },
-        baseURL: config.baseUrl
-      })
+    userApi
+      .getProfile()
       .then((res) => {
         setProfile(res.data.result[0])
         localStorage.setItem('profile', JSON.stringify(res.data.result[0]))

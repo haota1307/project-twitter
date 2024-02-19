@@ -8,6 +8,7 @@ import LogoutModal from './modals/LogoutModal'
 import { useContext, useEffect } from 'react'
 import { AppContext } from './contexts/app.context'
 import { LocalStorageEventTarget } from './utils/auth'
+import EditModal from './modals/EditModal'
 
 function App() {
   const routeElements = useRouteElements()
@@ -25,6 +26,7 @@ function App() {
       <LoginModal />
       <LogoutModal />
       <RegisterModal />
+      <EditModal />
       {routeElements}
       <ToastContainer />
     </>
