@@ -38,7 +38,7 @@ export default function Input<TFieldValues extends FieldValues>({
           placeholder={placeholder}
           type={type}
           className={`
-            h-auto lg:p-2 p-1.5 text-lg bg-white border-2 rounded-sm outline-none text-black focus:bg-blue-50 focus:border-blue-100 transition disabled:bg-blue-200 disabled:cursor-not-allowed
+            h-auto lg:p-2 p-1.5 text-lg bg-white border-2 rounded-sm outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition disabled:bg-blue-200 disabled:cursor-not-allowed
             w-full
           `}
         ></input>
