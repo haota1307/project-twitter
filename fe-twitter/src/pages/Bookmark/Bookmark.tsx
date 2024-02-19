@@ -1,3 +1,9 @@
+import Header from 'src/components/Header'
+
 export default function Bookmark() {
-  return <div>Bookmark</div>
+  return (
+    <>
+      <Header />
+    </>
+  )
 }

@@ -14,17 +14,14 @@ export default function Followbar() {
     http
       .post('random/users', { sizeList }, { baseURL: config.baseUrl })
       .then((res) => {
-        console.log(res)
         setUsers(res.data.result)
       })
       .catch((err) => console.log(err))
   }, [])
 
-  console.log(users)
-
   return (
     <>
-      <div className='pl-6 py-4 hidden lg:block'>
+      <div className='pl-6 py-4 hidden lg:block col-span-1'>
         <div className='bg-slate-100 rounded-xl top-4 sticky pb-2.5'>
           <h2 className='text-slate-600 text-xl font-semibold p-2'>Who to follow</h2>
           {users.map((user: User, index) => user._id !== profile?._id && <FollowItem key={index} data={user} />)}

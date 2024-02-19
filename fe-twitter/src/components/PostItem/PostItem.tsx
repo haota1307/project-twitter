@@ -92,10 +92,10 @@ export default function PostItem({ data }: PostItemProps) {
   }
 
   return (
-    <div className='border-b p-5 cursor-pointer hover:bg-slate-50 transition'>
-      <div className='flex flex-row items-start gap-3'>
+    <div className='border-b px-5 p-2'>
+      <div className='flex flex-row gap-4'>
         <Avatar />
-        <div>
+        <div className=''>
           <div className='flex flex-row items-center gap-2'>
             <p className='text-black font-semibold cursor-pointer hover:underline'>{profile?.name}</p>
             <span className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>@{data?.user_id}</span>

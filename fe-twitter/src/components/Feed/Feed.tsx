@@ -73,18 +73,21 @@ export default function Feed() {
   }, [user_id])
 
   return (
-    <>
-      <InfiniteScroll
-        hasMore={pagination.page < pagination.total_page}
-        next={fetchMoreData}
-        dataLength={data.length}
-        loader={<h4>Loading...</h4>}
-      >
-        {data?.map((post: Record<string, any>, index) => {
-          // console.log(data)
-          if (post.type === TweetType.Tweet) return <PostItem key={index} data={post as any} />
-        })}
-      </InfiniteScroll>
-    </>
+    <InfiniteScroll
+      hasMore={pagination.page < pagination.total_page}
+      next={fetchMoreData}
+      dataLength={data.length}
+      loader={<h4>Loading...</h4>}
+    >
+      {data?.map((post: Record<string, any>, index) => {
+        // console.log(data)
+        if (post.type === TweetType.Tweet)
+          return (
+            <>
+              <PostItem key={index} data={post as any} />
+            </>
+          )
+      })}
+    </InfiniteScroll>
   )
 }

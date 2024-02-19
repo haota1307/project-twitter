@@ -14,7 +14,7 @@ export default function Header({ isHomePage, showBackArrow, label }: HeaderProps
   return (
     <>
       {isHomePage ? (
-        <div className='border-b bg-white sticky top-0 bg-opacity-90 cursor-pointer'>
+        <div className='border-b bg-white sticky top-0 bg-opacity-90 cursor-pointer w-full'>
           {isAuthenticated ? (
             <div className='flex flex-row'>
               <div className='w-3/6 text-center p-4 hover:bg-slate-100 border-r'>

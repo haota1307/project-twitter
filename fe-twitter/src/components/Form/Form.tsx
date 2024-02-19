@@ -141,9 +141,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     <div className='border-b px-5 p-2'>
       {isAuthenticated ? (
         <div className='flex flex-row gap-4'>
-          <div>
-            <Avatar url={profile?.avatar} />
-          </div>
+          <Avatar url={profile?.avatar} />
           <div className='w-full'>
             <textarea
               disabled={isLoading}
