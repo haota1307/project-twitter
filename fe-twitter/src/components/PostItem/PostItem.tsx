@@ -121,7 +121,7 @@ export default function PostItem({ data }: PostItemProps) {
             </div>
           )}
           <div className='flex flex-row justify-between items-center mt-3 gap-10'>
-            <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500'>
+            <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500 break-words'>
               <IoChatboxOutline size={20} />
               <p>{data?.comment?.length}</p>
             </div>
