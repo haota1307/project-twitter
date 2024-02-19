@@ -5,7 +5,7 @@ import Modal from 'src/components/Modal'
 import { AppContext } from 'src/contexts/app.context'
 import useEditModal from 'src/hooks/useEditModal'
 import { User } from 'src/types/user.type'
-import Datepicker from 'react-tailwindcss-datepicker'
+import Datepicker, { DateValueType } from 'react-tailwindcss-datepicker'
 
 type FormData = Pick<User, 'name' | 'username' | 'bio' | 'date_of_birth' | 'avatar' | 'cover_photo'>
 
@@ -20,20 +20,10 @@ export default function EditModal() {
   const [Bio, setBio] = useState(profile?.bio)
   const [avatar, setAvatar] = useState(profile?.avatar)
   const [coverImg, setCoverImg] = useState(profile?.cover_photo)
-  const [dateOfBirth, setDateOfBirth] = useState({
-    startDate: profile?.date_of_birth,
-    endDate: profile?.date_of_birth
+  const [dateOfBirth, setDateOfBirth] = useState<DateValueType>({
+    startDate: profile?.date_of_birth as Date,
+    endDate: profile?.date_of_birth as Date
   })
-
-  // useEffect(() => {
-  //   if (profile) {
-  //     setName(profile.name)
-  //     setUserame(profile.username as string)
-  //     setBio(profile.bio as string)
-  //     setAvatar(profile.avatar as string)
-  //     setCoverImg(profile.cover_photo as string)
-  //   }
-  // }, [name, username, Bio, avatar, coverImg, dateOfBirth])
 
   const previewImage = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
