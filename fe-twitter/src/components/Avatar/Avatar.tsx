@@ -29,7 +29,13 @@ export default function Avatar({ isLarge, hasBorder, url }: AvatarProps) {
         relative
       `}
       >
-        <img src={url || defaultAvatar} alt='Avatar' className='object-cover rounded-full h-full w-full' />
+        <div className='w-full pt-[100%] relative'>
+          <img
+            src={url || defaultAvatar}
+            alt='Avatar'
+            className='object-cover rounded-full h-full w-full absolute top-0 left-0'
+          />
+        </div>
       </div>
     </>
   )
