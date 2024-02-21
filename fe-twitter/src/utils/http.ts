@@ -87,7 +87,6 @@ export class Http {
           const { url } = config
           // TH: Token hết hạn & request đó không phải là của request refresh token => tiến hành gọi refresh token
           if (isAxiosExpiredTokenError(error) && url !== URL_REFRESH_TOKEN) {
-            console.log('lỗi 401 rồi', error)
             // hạn chế gọi 2 lần handleRefreshToken
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
@@ -105,10 +104,10 @@ export class Http {
               })
             })
           }
-          // clearLS()
-          // this.accessToken = ''
-          // this.refreshToken = ''
-          // this.profile = ''
+          clearLS()
+          this.accessToken = ''
+          this.refreshToken = ''
+          this.profile = ''
         }
         return Promise.reject(error)
       }
