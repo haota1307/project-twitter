@@ -14,6 +14,9 @@ import {
 } from './auth'
 import config from 'src/constants/config'
 import { isAxiosExpiredTokenError, isAxiosUnauthorizedError } from './utils'
+import { URL_GET_PROFILE } from 'src/apis/user.api'
+import { useContext } from 'react'
+import { AppContext } from 'src/contexts/app.context'
 
 const controller = new AbortController()
 
@@ -58,10 +61,14 @@ export class Http {
           const data = response.data as AuthResponse
           this.accessToken = data.result.access_token
           this.refreshToken = data.result.refresh_token
-          // Lưu access token & refresh token & profile đăng nhập
           setAccessTokenToLS(this.accessToken)
           setRefreshTokenToLS(this.refreshToken)
           setProfileToLS(data.result?.user)
+        } else if (url === URL_GET_PROFILE) {
+          this.accessToken = getAccessTokenFromLs()
+          this.refreshToken = getRefreshTokenFromLs()
+          setAccessTokenToLS(this.accessToken)
+          setRefreshTokenToLS(this.refreshToken)
         } else if (url === URL_LOGOUT) {
           // Xóa access token && refresh token khi đăng xuất
           this.accessToken = ''

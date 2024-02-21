@@ -4,6 +4,7 @@ import { getRefreshTokenFromLs } from 'src/utils/auth'
 import http from 'src/utils/http'
 
 export const URL_LOGIN = 'users/login'
+export const URL_LOGIN_WITH_GOOGLE = 'users/oauth/google'
 export const URL_REGISTER = 'users/register'
 export const URL_LOGOUT = 'users/logout'
 export const URL_REFRESH_TOKEN = 'users/refresh-token'
@@ -25,7 +26,7 @@ const authApi = {
   // Đăng Xuất
   logout() {
     return http.post(
-      '/users/logout',
+      URL_LOGOUT,
       { refresh_token: getRefreshTokenFromLs() },
       {
         baseURL: config.baseUrl

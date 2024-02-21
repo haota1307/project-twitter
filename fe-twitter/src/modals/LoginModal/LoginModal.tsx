@@ -17,6 +17,7 @@ import axios from 'axios'
 import config from 'src/constants/config'
 import ButtonWithGG from 'src/components/ButtonWithGG'
 import userApi from 'src/apis/user.api'
+import { setAccessTokenToLS } from 'src/utils/auth'
 type FormData = Pick<Schema, 'email' | 'password'>
 
 type DataError = {

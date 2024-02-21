@@ -28,7 +28,7 @@ export default function LogoutModal() {
         localStorage.removeItem('profile')
       })
       .catch((err) => {
-        console.log(err.response?.status)
+        console.log(err)
       })
       .finally(() => {
         setIsLoading(false)

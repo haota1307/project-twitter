@@ -4,8 +4,8 @@ import { googleApi } from 'src/apis/auth.api'
 const getGoogleAuthURL = () => {
   const url = `https://accounts.google.com/o/oauth2/v2/auth`
   const query = {
-    client_id: '748812675450-ouolfjf59ohvis3m4inkug0jn3rg7lmn.apps.googleusercontent.com',
-    redirect_uri: 'http://localhost:4000/users/oauth/google',
+    client_id: googleApi.GOOGLE_CLIENT_ID,
+    redirect_uri: googleApi.GOOGLE_REDIRECT_URI,
     response_type: 'code',
     scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'].join(
       ' '
