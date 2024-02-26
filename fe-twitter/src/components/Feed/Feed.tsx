@@ -66,6 +66,7 @@ export default function Feed({ userId }: any) {
 
   useEffect(() => {
     fetchData()
+    console.log('fetch')
   }, [userId])
 
   console.log(userId)
@@ -77,7 +78,7 @@ export default function Feed({ userId }: any) {
       loader={<h4>Loading...</h4>}
     >
       {data?.map((post: Record<string, any>, index) => {
-        // console.log(data)
+        console.log(data)
         if (post.type === TweetType.Tweet)
           return (
             <>
