@@ -15,6 +15,15 @@ const tweetApi = {
         baseURL: config.baseUrl
       }
     )
+  },
+  getTweetDetail(id: any) {
+    return http.get(`tweets/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      },
+      baseURL: config.baseUrl
+    })
   }
 }
 export default tweetApi

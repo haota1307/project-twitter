@@ -10,6 +10,7 @@ const Message = lazy(() => import('./pages/Message'))
 const Profile = lazy(() => import('./pages/Profile'))
 const Bookmark = lazy(() => import('./pages/Bookmark'))
 const HomeFollowing = lazy(() => import('./pages/HomeFollowing'))
+const Tweet = lazy(() => import('./pages/Tweet'))
 
 //redirect
 function RedirectRoute() {
@@ -30,6 +31,20 @@ export default function useRouteElement() {
           element: (
             <Suspense fallback={<div>Loading</div>}>
               <Home />
+            </Suspense>
+          )
+        }
+      ]
+    },
+    {
+      path: 'tweets',
+      element: <MainLayout />,
+      children: [
+        {
+          path: ':tweet_id',
+          element: (
+            <Suspense fallback={<div>Loading</div>}>
+              <Tweet />
             </Suspense>
           )
         }

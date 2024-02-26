@@ -13,6 +13,7 @@ import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 import interactApi from 'src/apis/interact.api'
+import { useLocation } from 'react-router-dom'
 
 interface PostItemProps {
   data: Tweet
@@ -21,13 +22,17 @@ interface PostItemProps {
 export default function PostItem({ data }: PostItemProps) {
   const { profile, isAuthenticated } = useContext(AppContext)
 
+  const location = useLocation()
+
+  const [isTweetDetail, setIsTweetDetail] = useState(location.pathname === `/tweets/:${data._id}`)
+
   const [isLikedByUser, setIsLikedByUser] = useState(
-    data.likes?.some(async (like: any) => (await like.user_id) === profile?._id) || false
+    data?.likes?.some(async (like: any) => (await like.user_id) === profile?._id) || false
   )
   const [likesCount, setLikesCount] = useState(data?.likes?.length || 0)
 
   const [isBookmarkByUser, setIsBookmarkByUser] = useState(
-    data.bookmarks?.some(async (bookmark: any) => (await bookmark.user_id) === profile?._id) || false
+    data?.bookmarks?.some(async (bookmark: any) => (await bookmark.user_id) === profile?._id) || false
   )
   const [bookmarkCount, setBookmarkCount] = useState(data?.bookmarks?.length || 0)
 
@@ -107,7 +112,7 @@ export default function PostItem({ data }: PostItemProps) {
           {data?.medias[0]?.type === MediaType.Image && (
             <div className='w-full pt-[100%] relative'>
               <img
-                className='absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
+                className='block absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
                 src={data.medias[0]?.url}
               ></img>
             </div>
@@ -146,7 +151,7 @@ export default function PostItem({ data }: PostItemProps) {
             )}
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-500'>
               <IoEyeOutline size={20} />
-              <p>{data.user_views}</p>
+              <p>{data?.user_views}</p>
             </div>
             {isBookmarkByUser ? (
               <div
