@@ -6,12 +6,13 @@ interface AvatarProps {
   isLarge?: boolean
   hasBorder?: boolean
   url?: string
+  isMyProfile?: boolean
 }
 
 const defaultAvatar =
   'https://img.freepik.com/premium-vector/art-illustration_890735-11.jpg?size=626&ext=jpg&ga=GA1.1.632798143.1705363200&semt=ais'
 
-export default function Avatar({ isLarge, hasBorder, url }: AvatarProps) {
+export default function Avatar({ isLarge, hasBorder, url, isMyProfile }: AvatarProps) {
   const { profile } = useContext(AppContext)
 
   return (
@@ -30,11 +31,19 @@ export default function Avatar({ isLarge, hasBorder, url }: AvatarProps) {
       `}
       >
         <div className='w-full pt-[100%] relative'>
-          <img
-            src={url || defaultAvatar}
-            alt='Avatar'
-            className='block object-cover rounded-full h-full w-full absolute top-0 left-0'
-          />
+          {isMyProfile ? (
+            <img
+              src={profile?.avatar || defaultAvatar}
+              alt='Avatar'
+              className='block object-cover rounded-full h-full w-full absolute top-0 left-0'
+            />
+          ) : (
+            <img
+              src={url || defaultAvatar}
+              alt='Avatar'
+              className='block object-cover rounded-full h-full w-full absolute top-0 left-0'
+            />
+          )}
         </div>
       </div>
     </>

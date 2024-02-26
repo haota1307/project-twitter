@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import PostItem from '../PostItem'
 import config from 'src/constants/config'
-import { AppContext } from 'src/contexts/app.context'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Tweet, TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
@@ -9,20 +8,17 @@ import http from 'src/utils/http'
 const LIMIT = 5
 const PAGE = 1
 
-export default function Feed() {
-  const { profile } = useContext(AppContext)
+export default function Feed({ userId }: any) {
   const [data, setData] = useState([])
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0
   })
 
-  const user_id = profile?._id
-
   const fetchData = () => {
-    if (user_id)
+    if (userId)
       http
-        .get(`tweets/list/${user_id}`, {
+        .get(`tweets/list/${userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`
           },
@@ -46,9 +42,9 @@ export default function Feed() {
   }
 
   const fetchMoreData = () => {
-    if (user_id && pagination.page <= pagination.total_page)
+    if (userId && pagination.page <= pagination.total_page)
       http
-        .get(`tweets/list/${user_id}`, {
+        .get(`tweets/list/${userId}`, {
           params: {
             limit: LIMIT,
             page: pagination.page + 1
@@ -70,8 +66,9 @@ export default function Feed() {
 
   useEffect(() => {
     fetchData()
-  }, [user_id])
+  }, [userId])
 
+  console.log(userId)
   return (
     <InfiniteScroll
       hasMore={pagination.page < pagination.total_page}

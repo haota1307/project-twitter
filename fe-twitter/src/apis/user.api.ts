@@ -11,6 +11,14 @@ const userApi = {
       },
       baseURL: config.baseUrl
     })
+  },
+  getUserProfile(user_id: string) {
+    return http.get(`users/${user_id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      },
+      baseURL: config.baseUrl
+    })
   }
 }
 export default userApi

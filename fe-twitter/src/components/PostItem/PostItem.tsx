@@ -13,7 +13,7 @@ import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 import interactApi from 'src/apis/interact.api'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 interface PostItemProps {
   data: Tweet
@@ -97,82 +97,84 @@ export default function PostItem({ data }: PostItemProps) {
   }
 
   return (
-    <div className='border-b px-5 p-2'>
-      <div className='flex flex-row gap-4'>
+    <Link to={`/tweets/${data._id}`}>
+      <div className='border-b px-5 p-2'>
         <div className='flex flex-row gap-4'>
-          <Avatar />
-        </div>
-        <div>
-          <div className='flex flex-row items-center gap-2'>
-            <p className='text-black font-semibold cursor-pointer hover:underline'>{profile?.name}</p>
-            <span className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>@{data?.user_id}</span>
-            <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
+          <div className='flex flex-row gap-4'>
+            <Avatar isMyProfile />
           </div>
-          <div className='text-black my-2'>{data?.content || ' '}</div>
-          {data?.medias[0]?.type === MediaType.Image && (
-            <div className='w-full pt-[100%] relative'>
-              <img
-                className='block absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
-                src={data.medias[0]?.url}
-              ></img>
+          <div>
+            <div className='flex flex-row items-center gap-2'>
+              <p className='text-black font-semibold cursor-pointer hover:underline'>{profile?.name}</p>
+              <span className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>@{data?.user_id}</span>
+              <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
             </div>
-          )}
-          {data?.medias[0]?.type === MediaType.Video && (
-            <div className='w-full pt-[100%] relative'>
-              <video
-                className='absolute top-0 left-0 w-full h-full bg-black rounded-2xl'
-                src={data.medias[0]?.url}
-                controls
-                ref={videoRef}
-              />
-            </div>
-          )}
-          <div className='flex flex-row justify-between items-center mt-3 gap-10'>
-            <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500 break-words'>
-              <IoChatboxOutline size={20} />
-              <p>{data?.comment?.length}</p>
-            </div>
-            {isLikedByUser ? (
-              <button
-                className='flex flex-row items-center gap-2 text-red-500 cursor-pointer hover:bg-red-50 rounded-full p-2 transform active:scale-50 transition-transform'
-                onClick={() => handleUnLikeByUser(data._id as string)}
-              >
-                <IoHeartSharp size={20} color='ff2323' />
-                <p className=' transition-opacity '>{likesCount}</p>
-              </button>
-            ) : (
-              <button
-                className='flex flex-row items-center gap-2 cursor-pointer text-neutral-500 hover:text-red-500 hover:bg-red-50 rounded-full p-2 transform active:scale-50 transition-transform'
-                onClick={() => handleLikeByUser(data._id as string)}
-              >
-                <IoHeartOutline size={20} />
-                <p className=''>{likesCount}</p>
-              </button>
-            )}
-            <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-500'>
-              <IoEyeOutline size={20} />
-              <p>{data?.user_views}</p>
-            </div>
-            {isBookmarkByUser ? (
-              <div
-                onClick={() => handleUnBookmarkByUser(data._id as string)}
-                className='flex flex-row items-center text-yellow-400 gap-2 cursor-pointer hover:text-yellow-400 hover:bg-yellow-50 rounded-full p-2 transform active:scale-50 transition-transform'
-              >
-                <IoBookmarkSharp size={20} />
-                <p>{bookmarkCount}</p>
-              </div>
-            ) : (
-              <div
-                onClick={() => handleBookmarkByUser(data._id as string)}
-                className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer hover:text-yellow-400 hover:bg-yellow-50 rounded-full p-2 transform active:scale-50 transition-transform'
-              >
-                <IoBookmarkOutline size={20} />
-                <p>{bookmarkCount}</p>
+            <div className='text-black my-2'>{data?.content || ' '}</div>
+            {data?.medias[0]?.type === MediaType.Image && (
+              <div className='w-full pt-[100%] relative'>
+                <img
+                  className='block absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
+                  src={data.medias[0]?.url}
+                ></img>
               </div>
             )}
+            {data?.medias[0]?.type === MediaType.Video && (
+              <div className='w-full pt-[100%] relative'>
+                <video
+                  className='absolute top-0 left-0 w-full h-full bg-black rounded-2xl'
+                  src={data.medias[0]?.url}
+                  controls
+                  ref={videoRef}
+                />
+              </div>
+            )}
+            <div className='flex flex-row justify-between items-center mt-3 gap-10'>
+              <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500 break-words'>
+                <IoChatboxOutline size={20} />
+                <p>{data?.comment?.length}</p>
+              </div>
+              {isLikedByUser ? (
+                <button
+                  className='flex flex-row items-center gap-2 text-red-500 cursor-pointer hover:bg-red-50 rounded-full p-2 transform active:scale-50 transition-transform'
+                  onClick={() => handleUnLikeByUser(data._id as string)}
+                >
+                  <IoHeartSharp size={20} color='ff2323' />
+                  <p className=' transition-opacity '>{likesCount}</p>
+                </button>
+              ) : (
+                <button
+                  className='flex flex-row items-center gap-2 cursor-pointer text-neutral-500 hover:text-red-500 hover:bg-red-50 rounded-full p-2 transform active:scale-50 transition-transform'
+                  onClick={() => handleLikeByUser(data._id as string)}
+                >
+                  <IoHeartOutline size={20} />
+                  <p className=''>{likesCount}</p>
+                </button>
+              )}
+              <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-green-500'>
+                <IoEyeOutline size={20} />
+                <p>{data?.user_views}</p>
+              </div>
+              {isBookmarkByUser ? (
+                <div
+                  onClick={() => handleUnBookmarkByUser(data._id as string)}
+                  className='flex flex-row items-center text-yellow-400 gap-2 cursor-pointer hover:text-yellow-400 hover:bg-yellow-50 rounded-full p-2 transform active:scale-50 transition-transform'
+                >
+                  <IoBookmarkSharp size={20} />
+                  <p>{bookmarkCount}</p>
+                </div>
+              ) : (
+                <div
+                  onClick={() => handleBookmarkByUser(data._id as string)}
+                  className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer hover:text-yellow-400 hover:bg-yellow-50 rounded-full p-2 transform active:scale-50 transition-transform'
+                >
+                  <IoBookmarkOutline size={20} />
+                  <p>{bookmarkCount}</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
