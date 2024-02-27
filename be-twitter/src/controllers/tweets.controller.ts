@@ -54,7 +54,7 @@ export const getTweetChildrenController = async (req: Request<TweetParam, any, a
 }
 
 export const getTweetOfUserController = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
-  const user_id = req.decoded_authorization?.user_id as string
+  const { user_id } = req.params
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
   const result = await tweetsService.getTweetOfUser({

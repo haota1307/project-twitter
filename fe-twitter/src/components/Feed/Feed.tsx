@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import PostItem from '../PostItem'
 import config from 'src/constants/config'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { Tweet, TweetType } from 'src/types/tweet.type'
+import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
+import { useLocation } from 'react-router-dom'
 
 const LIMIT = 5
 const PAGE = 1
