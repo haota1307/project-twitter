@@ -450,23 +450,40 @@ class UsersService {
             as: 'followed'
           }
         },
-        {
-          $addFields: {
-            following_count: {
-              $size: '$following'
-            },
-            followed_count: {
-              $size: '$followed'
-            }
-          }
-        },
+
         {
           $project: {
             password: 0,
             email_verify_token: 0,
             forgot_password_token: 0,
-            following: 0,
-            followed: 0
+            following: {
+              password: 0,
+              forgot_password_token: 0,
+              email_verify_token: 0,
+              twitter_circle: 0,
+              date_of_birth: 0,
+              created_at: 0,
+              updated_at: 0,
+              bio: 0,
+              location: 0,
+              website: 0,
+              verify: 0,
+              email: 0
+            },
+            followed: {
+              password: 0,
+              forgot_password_token: 0,
+              email_verify_token: 0,
+              twitter_circle: 0,
+              date_of_birth: 0,
+              created_at: 0,
+              updated_at: 0,
+              bio: 0,
+              location: 0,
+              website: 0,
+              verify: 0,
+              email: 0
+            }
           }
         }
       ])
