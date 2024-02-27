@@ -1,4 +1,5 @@
 import { useCallback, useContext, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Avatar from 'src/components/Avatar'
 import Button from 'src/components/Button'
 import config from 'src/constants/config'
@@ -23,6 +24,8 @@ export default function FollowItem({ data }: FollowItemInterface) {
     loginModal.onOpen()
   }, [isAuthenticated, loginModal])
 
+  console.log(profile)
+
   const handleFollowByUser = () => {
     http
       .post(
@@ -45,10 +48,22 @@ export default function FollowItem({ data }: FollowItemInterface) {
   }
   return (
     <div className='flex flex-row items-start gap-2 mt-2 hover:bg-slate-200 p-2'>
-      <Avatar url={data.avatar} />
+      <Link to={`/users/${data.username}`}>
+        <Avatar url={data.avatar} />
+      </Link>
       <div className='flex flex-col flex-1 items-start gap-2 truncate'>
-        <p className='text-black text-sm font-semibold cursor-pointer hover:underline'>{data.name}</p>
-        <p className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>@{data.username}</p>
+        <Link
+          to={`/users/${data.username}`}
+          className='text-black text-sm font-semibold cursor-pointer hover:underline'
+        >
+          {data.name}
+        </Link>
+        <Link
+          to={`/users/${data.username}`}
+          className='text-neutral-500 cursor-pointer hover:underline hidden md:block'
+        >
+          @{data.username}
+        </Link>
       </div>
       <div className='flex flex-row items-end mr-0'>
         {!isFollow ? (

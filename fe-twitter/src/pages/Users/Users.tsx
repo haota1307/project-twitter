@@ -8,10 +8,10 @@ import Header from 'src/components/Header'
 import { User } from 'src/types/user.type'
 
 export default function Users() {
-  const { user_id } = useParams()
+  const { user_name } = useParams()
   const { data: userData } = useQuery({
-    queryKey: ['userProfile', user_id],
-    queryFn: () => userApi.getUserProfile(user_id as string)
+    queryKey: ['userProfile', user_name],
+    queryFn: () => userApi.getUserProfile(user_name as string)
   })
   const dataUser = userData?.data.result[0] as User
   // console.log(dataUser)

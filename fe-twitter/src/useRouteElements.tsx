@@ -56,7 +56,7 @@ export default function useRouteElement() {
       element: <MainLayout />,
       children: [
         {
-          path: ':user_id',
+          path: ':user_name',
           element: (
             <Suspense fallback={<div>Loading</div>}>
               <Users />

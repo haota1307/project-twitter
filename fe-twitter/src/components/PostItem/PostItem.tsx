@@ -97,7 +97,7 @@ export default function PostItem({ data }: PostItemProps) {
   }
 
   return (
-    <Link to={`/tweets/${data._id}`}>
+    <Link to={`/tweets/${data?._id}`}>
       <div className='border-b px-5 p-2'>
         <div className='flex flex-row gap-4'>
           <div className='flex flex-row gap-4'>
