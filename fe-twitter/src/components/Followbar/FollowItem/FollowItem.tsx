@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Avatar from 'src/components/Avatar'
 import Button from 'src/components/Button'
@@ -10,11 +10,18 @@ import http from 'src/utils/http'
 
 interface FollowItemInterface {
   data: User
+  followingArrId: string[]
 }
 
-export default function FollowItem({ data }: FollowItemInterface) {
+export default function FollowItem({ data, followingArrId }: FollowItemInterface) {
   const { isAuthenticated, profile } = useContext(AppContext)
   const [isFollow, setIsFollow] = useState(false)
+
+  useEffect(() => {
+    setIsFollow(followingArrId?.some((id) => id === data?._id || false))
+  }, [data])
+
+  console.log(isFollow)
 
   const loginModal = useLoginModal()
   const isToggle = useCallback(() => {
@@ -23,8 +30,6 @@ export default function FollowItem({ data }: FollowItemInterface) {
     }
     loginModal.onOpen()
   }, [isAuthenticated, loginModal])
-
-  console.log(profile)
 
   const handleFollowByUser = () => {
     http

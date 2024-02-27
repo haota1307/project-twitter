@@ -54,11 +54,11 @@ export default function Bio({ data }: User | any) {
         </div>
         <div className='flex flex-row items-center mt-4 gap-6 px-4'>
           <div className='flex flex-row items-center gap-1'>
-            <p className='text-black'>{isMyProfilePage ? profile?.following_count : data?.following_count}</p>
+            <p className='text-black'>{isMyProfilePage ? profile?.following?.length : data?.following?.length}</p>
             <p className='text-black/50'>Following</p>
           </div>
           <div className='flex flex-row items-center gap-1'>
-            <p className='text-black'>{isMyProfilePage ? profile?.followed_count : data?.followed_count}</p>
+            <p className='text-black'>{isMyProfilePage ? profile?.followed?.length : data?.followed?.length}</p>
             <p className='text-black/50'>Followed</p>
           </div>
         </div>
