@@ -14,12 +14,14 @@ import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 import interactApi from 'src/apis/interact.api'
 import { Link, useLocation } from 'react-router-dom'
+import { User } from 'src/types/user.type'
 
 interface PostItemProps {
   data: Tweet
+  user?: User
 }
 
-export default function PostItem({ data }: PostItemProps) {
+export default function PostItem({ data, user }: PostItemProps) {
   const { profile, isAuthenticated } = useContext(AppContext)
 
   const location = useLocation()
@@ -96,16 +98,18 @@ export default function PostItem({ data }: PostItemProps) {
         })
   }
 
+  console.log(data)
+
   return (
     <Link to={`/tweets/${data?._id}`}>
       <div className='border-b px-5 p-2'>
         <div className='flex flex-row gap-4'>
           <div className='flex flex-row gap-4'>
-            <Avatar isMyProfile />
+            <Avatar url={user?.avatar} />
           </div>
           <div>
             <div className='flex flex-row items-center gap-2'>
-              <p className='text-black font-semibold cursor-pointer hover:underline'>{profile?.name}</p>
+              <p className='text-black font-semibold cursor-pointer hover:underline'>{user?.name || profile?.name}</p>
               <span className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>@{data?.user_id}</span>
               <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
             </div>

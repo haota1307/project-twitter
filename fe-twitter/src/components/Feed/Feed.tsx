@@ -4,22 +4,30 @@ import config from 'src/constants/config'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
-import { useLocation } from 'react-router-dom'
-
+import { User } from 'src/types/user.type'
 const LIMIT = 5
 const PAGE = 1
 
-export default function Feed({ userId }: any) {
+interface FeedProps {
+  user?: User
+}
+
+export default function Feed({ user }: FeedProps) {
   const [data, setData] = useState([])
+  const [userData, setUserData] = useState()
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0
   })
 
+  useEffect(() => {
+    setUserData(user as any)
+  }, [user?._id])
+
   const fetchData = () => {
-    if (userId)
+    if (user?._id)
       http
-        .get(`tweets/list/${userId}`, {
+        .get(`tweets/list/${user?._id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`
           },
@@ -43,9 +51,9 @@ export default function Feed({ userId }: any) {
   }
 
   const fetchMoreData = () => {
-    if (userId && pagination.page <= pagination.total_page)
+    if (user?._id && pagination.page <= pagination.total_page)
       http
-        .get(`tweets/list/${userId}`, {
+        .get(`tweets/list/${user?._id}`, {
           params: {
             limit: LIMIT,
             page: pagination.page + 1
@@ -67,10 +75,14 @@ export default function Feed({ userId }: any) {
 
   useEffect(() => {
     fetchData()
-    console.log('fetch')
-  }, [userId])
+  }, [user?._id])
 
-  console.log(userId)
+  if (data.length === 0)
+    return (
+      <>
+        <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>The user has no tweet yet</div>
+      </>
+    )
   return (
     <InfiniteScroll
       hasMore={pagination.page < pagination.total_page}
@@ -79,11 +91,10 @@ export default function Feed({ userId }: any) {
       loader={<h4>Loading...</h4>}
     >
       {data?.map((post: Record<string, any>, index) => {
-        console.log(data)
         if (post.type === TweetType.Tweet)
           return (
             <>
-              <PostItem key={index} data={post as any} />
+              <PostItem key={index} data={post as any} user={userData} />
             </>
           )
       })}

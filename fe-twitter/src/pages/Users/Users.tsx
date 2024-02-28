@@ -20,7 +20,7 @@ export default function Users() {
       <Header label={dataUser?.username} showBackArrow />
       <BackGround data={dataUser} />
       <Bio data={dataUser} />
-      <Feed userId={dataUser?._id} />
+      <Feed user={dataUser} />
     </>
   )
 }
