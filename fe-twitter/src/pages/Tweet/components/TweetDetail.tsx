@@ -13,7 +13,7 @@ export default function TweetDetail({ data }: PostItemProps) {
   const { profile } = useContext(AppContext)
   const videoRef = useRef(null)
 
-  const isMyTweet = data.user_id === profile?._id
+  const isMyTweet = data?.user_id === profile?._id
 
   useEffect(() => {
     if (videoRef.current) {

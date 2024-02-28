@@ -106,7 +106,6 @@ export default function PostItem({ data, user }: PostItemProps) {
           <div>
             <div className='flex flex-row items-center gap-2'>
               <p className='text-black font-semibold cursor-pointer hover:underline'>{user?.name || profile?.name}</p>
-              <span className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>@{data?.user_id}</span>
               <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
             </div>
             <div className='text-black my-2'>{data?.content || ' '}</div>
