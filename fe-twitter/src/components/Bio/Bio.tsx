@@ -33,18 +33,15 @@ export default function Bio({ data }: User | any) {
             <p className='text-black text-2xl font-semibold'>{isMyProfilePage ? profile?.name : data?.name}</p>
             <p className='text-black/50 text-md'>@{isMyProfilePage ? profile?.username : data?.username}</p>
           </div>
-          {(profile?.bio === '' && isMyProfilePage) || (data?.bio === '' && isMyProfilePage) ? (
+          {(profile?.bio !== '' && isMyProfilePage) || (data?.bio !== '' && !isMyProfilePage) ? (
             <div className='flex flex-col mt-4'>
-              <p className='text-black'>{isMyProfilePage ? profile?.bio : data?.bio} aa</p>
+              <p className='text-black'>{isMyProfilePage ? profile?.bio : data?.bio}</p>
             </div>
           ) : (
             <div className='flex flex-col mt-4'>
               <p className='text-black'>Have a nice day 💕💕</p>
             </div>
           )}
-          {/* <div className='flex flex-col mt-4'>
-            <p className='text-black'>{isMyProfilePage ? profile?.bio : data?.bio}</p>
-          </div> */}
           <div className='flex flex-row items-center gap-2 mt-4 text-black/50'>
             <IoCalendarOutline size={20} />
             <p>
