@@ -21,8 +21,6 @@ export default function FollowItem({ data, followingArrId }: FollowItemInterface
     setIsFollow(followingArrId?.some((id) => id === data?._id || false))
   }, [data])
 
-  console.log(isFollow)
-
   const loginModal = useLoginModal()
   const isToggle = useCallback(() => {
     if (isAuthenticated) {
@@ -51,6 +49,18 @@ export default function FollowItem({ data, followingArrId }: FollowItemInterface
         console.log(err)
       })
   }
+
+  const handleUnfollowByUser = () => {
+    http
+      .delete(`users/follow/${data._id}`)
+      .then((res) => {
+        console.log(res)
+        setIsFollow(false)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
   return (
     <div className='flex flex-row items-start gap-2 mt-2 hover:bg-slate-200 p-2'>
       <Link to={`/users/${data.username}`}>
@@ -74,7 +84,7 @@ export default function FollowItem({ data, followingArrId }: FollowItemInterface
         {!isFollow ? (
           <Button label='Follow' secondary onClick={isAuthenticated ? handleFollowByUser : isToggle} />
         ) : (
-          <Button label='Following' secondary onClick={isAuthenticated ? handleFollowByUser : isToggle} />
+          <Button label='Following' secondary onClick={isAuthenticated ? handleUnfollowByUser : isToggle} />
         )}
       </div>
     </div>
