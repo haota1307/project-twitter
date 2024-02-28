@@ -5,6 +5,7 @@ import { TWEETS_MESSAGES } from '~/constants/messages'
 import { Pagination, TweetParam, TweetQuery, TweetRequestBody } from '~/models/requests/Tweet.requests'
 import { TokenPayload } from '~/models/requests/User.requests'
 import tweetsService from '~/services/tweets.services'
+import usersService from '~/services/users.services'
 
 export const createTweetController = async (req: Request<ParamsDictionary, any, TweetRequestBody>, res: Response) => {
   const { user_id } = req.decoded_authorization as TokenPayload
@@ -15,10 +16,26 @@ export const createTweetController = async (req: Request<ParamsDictionary, any, 
   })
 }
 
+// export const getTweetController = async (req: Request, res: Response) => {
+//   const result = await tweetsService.increaseView(req.params.tweet_id, req.decoded_authorization?.user_id)
+//   const tweet = {
+//     ...req.tweet,
+//     guest_views: result.guest_views,
+//     user_views: result.user_views,
+//     updated_at: result.updated_at
+//   }
+//   return res.json({
+//     message: TWEETS_MESSAGES.GET_TWEET_SUCCESSFULLY,
+//     result: tweet
+//   })
+// }
+
 export const getTweetController = async (req: Request, res: Response) => {
   const result = await tweetsService.increaseView(req.params.tweet_id, req.decoded_authorization?.user_id)
+  const users = await tweetsService.getUserWithTweetId(req.params.tweet_id)
   const tweet = {
     ...req.tweet,
+    users,
     guest_views: result.guest_views,
     user_views: result.user_views,
     updated_at: result.updated_at

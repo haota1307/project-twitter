@@ -27,7 +27,6 @@ class TweetsService {
 
   async createTweet(user_id: string, body: TweetRequestBody) {
     const hashtags = await this.checkAndCreateHashtags(body.hashtags)
-    console.log(hashtags)
     const result = await databaseService.tweets.insertOne(
       new Tweet({
         audience: body.audience,
@@ -443,6 +442,12 @@ class TweetsService {
             }
           },
           {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user'
+          },
+          {
             $lookup: {
               from: 'users',
               localField: 'mentions',
@@ -492,42 +497,30 @@ class TweetsService {
           },
           {
             $addFields: {
-              bookmarks: {
-                $size: '$bookmarks'
-              },
-              likes: {
-                $size: '$likes'
-              },
-              retweet_count: {
-                $size: {
-                  $filter: {
-                    input: '$tweet_children',
-                    as: 'item',
-                    cond: {
-                      $eq: ['$$item.type', TweetType.Retweet]
-                    }
+              retweet: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.Retweet]
                   }
                 }
               },
-              comment_count: {
-                $size: {
-                  $filter: {
-                    input: '$tweet_children',
-                    as: 'item',
-                    cond: {
-                      $eq: ['$$item.type', TweetType.Comment]
-                    }
+              comment: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.Comment]
                   }
                 }
               },
-              quote_count: {
-                $size: {
-                  $filter: {
-                    input: '$tweet_children',
-                    as: 'item',
-                    cond: {
-                      $eq: ['$$item.type', TweetType.QuoteTweet]
-                    }
+              quote: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.QuoteTweet]
                   }
                 }
               }
@@ -621,6 +614,32 @@ class TweetsService {
       tweets,
       total: total[0]?.total || 0
     }
+  }
+
+  async getUserWithTweetId(tweet_id: string) {
+    const users = await databaseService.tweets
+      .aggregate([
+        {
+          $match: {
+            _id: new ObjectId(tweet_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $project: {
+            user: 1
+          }
+        }
+      ])
+      .toArray()
+    return users
   }
 }
 

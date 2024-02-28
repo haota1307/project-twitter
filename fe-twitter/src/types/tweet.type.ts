@@ -43,6 +43,7 @@ export interface Tweet {
   likes?: string[]
   bookmarks?: string[]
   medias: Media[]
+  users: any
   user_views: number
   created_at: string
   updated_at: string

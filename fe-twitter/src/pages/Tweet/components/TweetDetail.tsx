@@ -20,11 +20,14 @@ export default function TweetDetail({ data }: PostItemProps) {
       ;(videoRef.current as any).volume = 0.5
     }
   }, [])
+
+  // console.log(data?.users[0].user[0]._id)
+
   return (
     <div className='border-b px-5 py-6'>
       <div className='flex flex-row gap-4'>
         <div className='flex flex-row gap-4'>
-          <Avatar isMyProfile={isMyTweet} />
+          {isMyTweet ? <Avatar isMyProfile /> : <Avatar url={data?.users[0].user[0].avatar} />}
         </div>
         <div>
           <div className='flex flex-row items-center gap-2'>
