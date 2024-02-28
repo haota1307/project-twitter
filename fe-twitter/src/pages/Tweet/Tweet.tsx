@@ -12,12 +12,13 @@ export default function Tweet() {
     queryKey: ['tweetDetail', tweet_id],
     queryFn: () => tweetApi.getTweetDetail(tweet_id)
   })
+
   return (
     <>
       <Header label='Tweet' showBackArrow />
       <TweetDetail data={tweetDetailData?.data.result} />
       <Form isComment placeholder='Tweet your reply' />
-      {/* <Comment /> */}
+      <Comment tweetParent={tweetDetailData?.data.result} key={tweetDetailData?.data.result._id} />
     </>
   )
 }

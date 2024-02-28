@@ -13,6 +13,8 @@ export default function TweetDetail({ data }: PostItemProps) {
   const { profile } = useContext(AppContext)
   const videoRef = useRef(null)
 
+  const isMyTweet = data.user_id === profile?._id
+
   useEffect(() => {
     if (videoRef.current) {
       ;(videoRef.current as any).volume = 0.5
@@ -22,7 +24,7 @@ export default function TweetDetail({ data }: PostItemProps) {
     <div className='border-b px-5 py-6'>
       <div className='flex flex-row gap-4'>
         <div className='flex flex-row gap-4'>
-          <Avatar />
+          <Avatar isMyProfile={isMyTweet} />
         </div>
         <div>
           <div className='flex flex-row items-center gap-2'>

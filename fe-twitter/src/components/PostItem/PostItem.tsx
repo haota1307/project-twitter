@@ -24,10 +24,6 @@ interface PostItemProps {
 export default function PostItem({ data, user }: PostItemProps) {
   const { profile, isAuthenticated } = useContext(AppContext)
 
-  const location = useLocation()
-
-  const [isTweetDetail, setIsTweetDetail] = useState(location.pathname === `/tweets/:${data._id}`)
-
   const [isLikedByUser, setIsLikedByUser] = useState(
     data?.likes?.some(async (like: any) => (await like.user_id) === profile?._id) || false
   )
