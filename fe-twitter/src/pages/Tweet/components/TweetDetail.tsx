@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
-import { IoChatboxOutline } from 'react-icons/io5'
+import { useContext, useEffect, useRef } from 'react'
 import Avatar from 'src/components/Avatar'
 import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
