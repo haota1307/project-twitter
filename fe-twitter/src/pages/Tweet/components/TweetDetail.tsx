@@ -21,8 +21,6 @@ export default function TweetDetail({ data }: PostItemProps) {
     }
   }, [])
 
-  // console.log(data?.users[0].user[0]._id)
-
   return (
     <div className='border-b px-5 py-6'>
       <div className='flex flex-row gap-4'>
