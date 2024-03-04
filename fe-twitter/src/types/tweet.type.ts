@@ -24,7 +24,7 @@ export interface TweetBody {
   type: TweetType
   audience: TweetAudience
   content: string
-  parent_id: null
+  parent_id: null | string
   hashtags: string[]
   mentions: string[]
   medias: Media[]

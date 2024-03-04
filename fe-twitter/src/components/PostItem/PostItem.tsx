@@ -94,8 +94,6 @@ export default function PostItem({ data, user }: PostItemProps) {
         })
   }
 
-  console.log('data: ', data)
-
   return (
     <Link to={`/tweets/${data?._id}`}>
       <div className='border-b px-5 p-2'>

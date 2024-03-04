@@ -16,26 +16,31 @@ interface FormProps {
   placeholder: string
   isComment?: boolean
   postId?: string
+  parentId?: string
 }
 
-export default function Form({ placeholder, isComment, postId }: FormProps) {
+export default function Form({ placeholder, isComment, postId, parentId }: FormProps) {
   const { isAuthenticated, profile } = useContext(AppContext)
 
   const [file, setFile] = useState<File>()
   const [isLoading, setIsLoading] = useState(false)
+  const [type, setType] = useState(isComment ? TweetType.Comment : TweetType.Tweet)
+  const [tweetParentId, setTweetParentId] = useState<string | null>(parentId ? parentId : null)
 
   const videoRef = useRef(null)
   const toastId = useRef(null)
 
   const initialBody = {
-    type: TweetType.Tweet,
+    type,
     audience: TweetAudience.Everyone,
     content: '',
-    parent_id: null,
+    parent_id: tweetParentId as string | null,
     hashtags: [],
     mentions: [],
     medias: []
   }
+
+  console.log('parentId: ', parentId)
 
   const [body, setBody] = useState<TweetBody>(initialBody)
 
@@ -45,6 +50,8 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
   const previewFile = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
+
+  console.log(body)
 
   const handleUploadImg = async () => {
     const fd = new FormData()
