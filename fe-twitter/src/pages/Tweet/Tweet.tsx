@@ -16,7 +16,7 @@ export default function Tweet() {
   return (
     <>
       <Header label='Tweet' showBackArrow />
-      <TweetDetail data={tweetDetailData?.data.result} />
+      <TweetDetail data={tweetDetailData?.data?.result} />
       <Form isComment placeholder='Tweet your reply' />
       <Comment tweetParent={tweetDetailData?.data.result} key={tweetDetailData?.data.result._id} />
     </>

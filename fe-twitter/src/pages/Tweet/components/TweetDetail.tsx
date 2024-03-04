@@ -24,7 +24,7 @@ export default function TweetDetail({ data }: PostItemProps) {
     <div className='border-b px-5 py-6'>
       <div className='flex flex-row gap-4'>
         <div className='flex flex-row gap-4'>
-          {isMyTweet ? <Avatar isMyProfile /> : <Avatar url={data?.users[0].user[0].avatar} />}
+          {isMyTweet ? <Avatar isMyProfile /> : <Avatar url={data?.user[0].avatar} />}
         </div>
         <div>
           <div className='flex flex-row items-center gap-2'>

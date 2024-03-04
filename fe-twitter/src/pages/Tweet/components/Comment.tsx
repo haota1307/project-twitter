@@ -71,10 +71,8 @@ export default function Comment({ tweetParent }: CommentItemProps) {
   }
 
   useEffect(() => {
-    fetchData()
+    if (tweetParent) fetchData()
   }, [tweetParent])
-
-  console.log(data)
 
   if (data.length === 0)
     return (

@@ -31,6 +31,7 @@ export interface TweetBody {
 }
 
 export interface Tweet {
+  user: any
   _id?: string
   user_id: string
   type: TweetType

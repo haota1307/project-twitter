@@ -181,8 +181,32 @@ class TweetsService {
           }
         },
         {
+          $lookup: {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
           $project: {
-            tweet_children: 0
+            tweet_children: 0,
+            user: {
+              password: 0,
+              email_verify_token: 0,
+              forgot_password_token: 0,
+              twitter_circle: 0,
+              date_of_bỉth: 0,
+              bio: 0,
+              date_of_birth: 0,
+              created_at: 0,
+              updated_at: 0,
+              verify: 0,
+              location: 0,
+              website: 0,
+              email: 0,
+              cover_photo: 0
+            }
           }
         },
         {
@@ -634,7 +658,22 @@ class TweetsService {
         },
         {
           $project: {
-            user: 1
+            user: {
+              password: 0,
+              email_verify_token: 0,
+              forgot_password_token: 0,
+              twitter_circle: 0,
+              date_of_bỉth: 0,
+              bio: 0,
+              date_of_birth: 0,
+              created_at: 0,
+              updated_at: 0,
+              verify: 0,
+              location: 0,
+              website: 0,
+              email: 0,
+              cover_photo: 0
+            }
           }
         }
       ])
