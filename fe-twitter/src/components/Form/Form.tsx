@@ -17,9 +17,10 @@ interface FormProps {
   isComment?: boolean
   postId?: string
   parentId?: string
+  hiddenBtn?: boolean
 }
 
-export default function Form({ placeholder, isComment, postId, parentId }: FormProps) {
+export default function Form({ placeholder, isComment, postId, parentId, hiddenBtn }: FormProps) {
   const { isAuthenticated, profile } = useContext(AppContext)
 
   const [file, setFile] = useState<File>()
@@ -183,7 +184,9 @@ export default function Form({ placeholder, isComment, postId, parentId }: FormP
                 <InputFile isImageFile onChange={handleChangeFile as any} />
                 <InputFile isVideoFile onChange={handleChangeFile as any} />
               </div>
-              <Button disabled={isLoading || body.content === ''} onClick={onSubmit} label='Tweet' secondary />
+              {!hiddenBtn && (
+                <Button disabled={isLoading || body.content === ''} onClick={onSubmit} label='Tweet' secondary />
+              )}
             </div>
           </div>
         </div>

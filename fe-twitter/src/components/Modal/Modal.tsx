@@ -5,13 +5,14 @@ import Button from '../Button'
 interface ModalProps {
   isOpen?: boolean
   onClose: () => void
-  onSubmit: () => void
+  onSubmit?: () => void
   title?: string
   body?: React.ReactElement
   footer?: React.ReactElement
   actionLabel: string
   disable?: boolean
   cancelButton?: boolean
+  noSubmit?: boolean
 }
 
 export default function Modal({
@@ -23,6 +24,7 @@ export default function Modal({
   footer,
   actionLabel,
   disable,
+  noSubmit,
   cancelButton
 }: ModalProps) {
   const handleClose = useCallback(() => {
@@ -36,7 +38,7 @@ export default function Modal({
     if (disable) {
       return
     }
-    onSubmit()
+    if (onSubmit) onSubmit()
   }, [disable, onSubmit])
 
   const handleCancel = useCallback(() => {
@@ -67,11 +69,13 @@ export default function Modal({
             {/* body */}
             <div className='relative px-10 flex-auto'>{body}</div>
             {/* footer */}
-            <div className='flex flex-col gap-2 lg:px-10 px-10 py-6'>
-              <Button disabled={disable} label={actionLabel} secondary fullWidth large onClick={handleSubmit} />
-              {cancelButton && <Button disabled={disable} label={'Cancel'} fullWidth large onClick={handleCancel} />}
-              {footer}
-            </div>
+            {!noSubmit && (
+              <div className='flex flex-col gap-2 lg:px-10 px-10 py-6'>
+                <Button disabled={disable} label={actionLabel} secondary fullWidth large onClick={handleSubmit} />
+                {cancelButton && <Button disabled={disable} label={'Cancel'} fullWidth large onClick={handleCancel} />}
+                {footer}
+              </div>
+            )}
           </div>
         </div>
       </div>

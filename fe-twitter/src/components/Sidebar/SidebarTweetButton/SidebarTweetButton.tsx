@@ -2,16 +2,21 @@ import { useCallback, useContext } from 'react'
 import { IoPencilOutline } from 'react-icons/io5'
 import { AppContext } from 'src/contexts/app.context'
 import useLoginModal from 'src/hooks/useLoginModal'
+import usePostModal from 'src/hooks/usePostModal'
 
 export default function SidebarTweetButton() {
   const { isAuthenticated } = useContext(AppContext)
 
   const loginModal = useLoginModal()
+  const postModal = usePostModal()
+
   const isToggle = useCallback(() => {
     if (!isAuthenticated) {
       loginModal.onOpen()
+      return
     }
-  }, [isAuthenticated, loginModal])
+    postModal.onOpen()
+  }, [loginModal, postModal])
   return (
     <>
       <div onClick={isToggle}>
