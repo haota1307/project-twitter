@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
 import PostItem from 'src/components/PostItem'
+import { User } from 'src/types/user.type'
 const LIMIT = 5
 const PAGE = 1
 
@@ -34,6 +35,7 @@ export default function NewFeed() {
           total_page
         })
         setData(tweets)
+        console.log(tweets[0]?.user)
       })
       .catch((err) => {
         console.log(err)
@@ -84,7 +86,7 @@ export default function NewFeed() {
         if (post.type === TweetType.Tweet)
           return (
             <>
-              <PostItem key={index} data={post as any} user={userData} />
+              <PostItem key={index} data={post as any} />
             </>
           )
       })}

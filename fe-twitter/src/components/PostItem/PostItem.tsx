@@ -13,7 +13,7 @@ import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 import interactApi from 'src/apis/interact.api'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { User } from 'src/types/user.type'
 
 interface PostItemProps {
@@ -99,11 +99,13 @@ export default function PostItem({ data, user }: PostItemProps) {
       <div className='border-b px-5 p-2'>
         <div className='flex flex-row gap-4'>
           <div className='flex flex-row gap-4'>
-            <Avatar url={user?.avatar || data?.user[0]?.avatar} />
+            <Avatar url={user?.avatar || data?.user[0]?.avatar || data?.user.avatar} />
           </div>
           <div>
             <div className='flex flex-row items-center gap-2'>
-              <p className='text-black font-semibold cursor-pointer hover:underline'>{user?.name || profile?.name}</p>
+              <p className='text-black font-semibold cursor-pointer hover:underline'>
+                {data?.user.name || user?.name || profile?.name}
+              </p>
               <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
             </div>
             <div className='text-black my-2'>{data?.content || ' '}</div>
