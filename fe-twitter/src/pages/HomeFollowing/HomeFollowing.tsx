@@ -1,5 +1,11 @@
-import React from 'react'
+import Header from 'src/components/Header'
+import NewFeed from '../NewFeed'
 
 export default function HomeFollowing() {
-  return <div>HomeFollowing</div>
+  return (
+    <>
+      <Header showBackArrow label='New feeds' />
+      <NewFeed />
+    </>
+  )
 }
