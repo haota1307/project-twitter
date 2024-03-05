@@ -18,6 +18,7 @@ export default function Bio({ data }: User | any) {
   const isMyProfilePage = location.pathname === '/profile'
 
   const editModal = useEditModal()
+
   return (
     <>
       <div className='border-b pb-4'>

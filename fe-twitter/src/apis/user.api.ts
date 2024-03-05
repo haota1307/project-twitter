@@ -19,6 +19,18 @@ const userApi = {
       },
       baseURL: config.baseUrl
     })
+  },
+  updateUserProfile(data: any) {
+    return http.patch(
+      'users/profile',
+      { ...data },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        },
+        baseURL: config.baseUrl
+      }
+    )
   }
 }
 export default userApi

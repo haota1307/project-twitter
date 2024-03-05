@@ -18,7 +18,7 @@ export default function Followbar() {
         setUsers(res.data.result)
       })
       .catch((err) => console.log(err))
-  }, [])
+  }, [isAuthenticated, profile?._id])
 
   useEffect(() => {
     if (isAuthenticated)
@@ -28,7 +28,7 @@ export default function Followbar() {
           setProfile(res.data.result[0])
         })
         .catch((err) => console.log(err))
-  }, [])
+  }, [isAuthenticated])
 
   const listFollowingUserId = profile?.following?.map((user: any) => user?._id) as string[]
 
@@ -37,7 +37,7 @@ export default function Followbar() {
       <div className='pl-6 py-4 hidden lg:block col-span-1'>
         <div className='bg-slate-100 rounded-xl top-4 sticky pb-2.5'>
           <h2 className='text-slate-600 text-xl font-semibold p-2'>Who to follow</h2>
-          {users.map(
+          {users?.map(
             (user: User, index) =>
               user?._id !== profile?._id && <FollowItem key={index} data={user} followingArrId={listFollowingUserId} />
           )}
