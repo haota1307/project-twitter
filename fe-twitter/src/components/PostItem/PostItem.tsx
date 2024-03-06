@@ -104,7 +104,7 @@ export default function PostItem({ data, user }: PostItemProps) {
           <div>
             <div className='flex flex-row items-center gap-2'>
               <p className='text-black font-semibold cursor-pointer hover:underline'>
-                {data?.user.name || user?.name || profile?.name}
+                {data?.user?.name || user?.name || profile?.name}
               </p>
               <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
             </div>

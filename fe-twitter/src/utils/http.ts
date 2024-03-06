@@ -15,8 +15,6 @@ import {
 import config from 'src/constants/config'
 import { isAxiosExpiredTokenError, isAxiosUnauthorizedError } from './utils'
 import { URL_GET_PROFILE } from 'src/apis/user.api'
-import { useContext } from 'react'
-import { AppContext } from 'src/contexts/app.context'
 
 const controller = new AbortController()
 
@@ -93,7 +91,7 @@ export class Http {
           const config = error.response?.config || { headers: {}, url: '' }
           const { url } = config
           // TH: Token hết hạn & request đó không phải là của request refresh token => tiến hành gọi refresh token
-          if (isAxiosExpiredTokenError(error) && url !== URL_REFRESH_TOKEN) {
+          if (isAxiosExpiredTokenError(error)) {
             // hạn chế gọi 2 lần handleRefreshToken
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
@@ -131,8 +129,6 @@ export class Http {
         const { access_token } = res.data.result
         setAccessTokenToLS(access_token)
         this.accessToken = access_token
-        console.log(res)
-
         return access_token
       })
       .catch((error) => {
