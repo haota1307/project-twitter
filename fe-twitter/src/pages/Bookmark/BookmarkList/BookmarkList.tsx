@@ -14,7 +14,6 @@ const PAGE = 1
 
 export default function BookmarkList({ userId }: BookmarkProps) {
   const [data, setData] = useState([])
-  const [bookmarkId, setBookmarkId] = useState([])
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0
@@ -38,8 +37,8 @@ export default function BookmarkList({ userId }: BookmarkProps) {
           setPagination({
             page,
             total_page
-          })
-          setBookmarkId(list_Bookmark?.map((bookmark: any) => bookmark?.tweet_id))
+          }),
+            setData(list_Bookmark)
         })
         .catch((err) => {
           console.log(err)
@@ -57,8 +56,8 @@ export default function BookmarkList({ userId }: BookmarkProps) {
           baseURL: config.baseUrl
         })
         .then((res) => {
-          const { tweets, page, total_page } = res.data.result
-          setData((prevData) => [...prevData, ...tweets] as any)
+          const { list_Bookmark, page, total_page } = res.data.result
+          setData((prevData) => [...prevData, ...list_Bookmark] as any)
           setPagination({
             page: page,
             total_page
@@ -73,27 +72,6 @@ export default function BookmarkList({ userId }: BookmarkProps) {
     if (userId) fetchData()
   }, [userId])
 
-  useEffect(() => {
-    if (bookmarkId.length > 0) {
-      bookmarkId.map((tweetId: string) => {
-        http
-          .get(`tweets/${tweetId}`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('access_token')}`
-            },
-            baseURL: config.baseUrl
-          })
-          .then((res) => {
-            setData((prev) => [...prev, res.data.result] as any)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      })
-    }
-  }, [bookmarkId])
-
-  console.log('bookmarkId', bookmarkId)
   console.log('data', data)
 
   if (data.length === 0)
@@ -112,11 +90,10 @@ export default function BookmarkList({ userId }: BookmarkProps) {
       loader={<h4>Loading...</h4>}
     >
       {data?.map((post: Record<string, any>, index) => {
-        console.log('map', post)
-        if (post.type === TweetType.Tweet)
+        if (post.tweet[0].type === TweetType.Tweet)
           return (
             <>
-              <PostItem key={index} data={post as any} />
+              <PostItem key={post.tweet[0]._id} data={post.tweet[0] as any} user={post.user[0]} />
             </>
           )
       })}

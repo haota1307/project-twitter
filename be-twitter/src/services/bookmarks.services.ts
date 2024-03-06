@@ -24,17 +24,6 @@ class BookmarkService {
     return result as WithId<Bookmark>
   }
 
-  // async myBookmarkTweet({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
-  //   const isMyBookmarks = await databaseService.bookmarks
-  //     .find({ user_id: new ObjectId(user_id) })
-  //     .sort({ created_at: -1 })
-  //     .skip(limit * (page - 1))
-  //     .limit(limit)
-  //     .toArray()
-  //   const total = await databaseService.followers.countDocuments({ user_id: new ObjectId(user_id) })
-  //   return { isMyBookmarks, total }
-  // }
-
   async myBookmarkTweet({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
     const isMyBookmarks = await databaseService.bookmarks
       .aggregate([
@@ -49,6 +38,14 @@ class BookmarkService {
             localField: 'user_id',
             foreignField: '_id',
             as: 'user'
+          }
+        },
+        {
+          $lookup: {
+            from: 'tweets',
+            localField: 'tweet_id',
+            foreignField: '_id',
+            as: 'tweet'
           }
         },
         {
@@ -109,30 +106,50 @@ class BookmarkService {
         },
         {
           $addFields: {
-            retweet: {
-              $filter: {
-                input: '$tweet_children',
-                as: 'item',
-                cond: {
-                  $eq: ['$$item.type', TweetType.Retweet]
+            tweet: {
+              likes: {
+                $map: {
+                  input: '$likes',
+                  as: 'like',
+                  in: {
+                    _id: '$$like.user_id'
+                  }
                 }
-              }
-            },
-            comment: {
-              $filter: {
-                input: '$tweet_children',
-                as: 'item',
-                cond: {
-                  $eq: ['$$item.type', TweetType.Comment]
+              },
+              bookmarks: {
+                $map: {
+                  input: '$bookmarks',
+                  as: 'bookmark',
+                  in: {
+                    _id: '$$bookmark.user_id'
+                  }
                 }
-              }
-            },
-            quote: {
-              $filter: {
-                input: '$tweet_children',
-                as: 'item',
-                cond: {
-                  $eq: ['$$item.type', TweetType.QuoteTweet]
+              },
+              retweet: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.Retweet]
+                  }
+                }
+              },
+              comment: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.Comment]
+                  }
+                }
+              },
+              quote: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.QuoteTweet]
+                  }
                 }
               }
             }
@@ -149,6 +166,12 @@ class BookmarkService {
         {
           $project: {
             tweet_children: 0,
+            tweet_id: 0,
+            user_id: 0,
+            hashtags: 0,
+            mentions: 0,
+            bookmarks: 0,
+            likes: 0,
             user: {
               password: 0,
               email_verify_token: 0,

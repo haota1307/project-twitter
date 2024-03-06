@@ -94,12 +94,14 @@ export default function PostItem({ data, user }: PostItemProps) {
         })
   }
 
+  console.log('datapo', data)
+
   return (
     <Link to={`/tweets/${data?._id}`}>
       <div className='border-b px-5 p-2'>
         <div className='flex flex-row gap-4'>
           <div className='flex flex-row gap-4'>
-            <Avatar url={user?.avatar || data?.user[0]?.avatar || data?.user.avatar} />
+            <Avatar url={user?.avatar || data?.user[0]?.avatar || data?.user?.avatar || ''} />
           </div>
           <div>
             <div className='flex flex-row items-center gap-2'>
@@ -130,7 +132,7 @@ export default function PostItem({ data, user }: PostItemProps) {
             <div className='flex flex-row justify-between items-center mt-3 gap-10'>
               <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500 break-words'>
                 <IoChatboxOutline size={20} />
-                <p>{data?.comment?.length || (data as any)?.comment_count}</p>
+                <p>{data?.comment?.length}</p>
               </div>
               {isLikedByUser ? (
                 <button
