@@ -1,33 +1,29 @@
 import { useEffect, useState } from 'react'
-import PostItem from '../PostItem'
-import config from 'src/constants/config'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { TweetType } from 'src/types/tweet.type'
+import PostItem from 'src/components/PostItem'
+import config from 'src/constants/config'
+import { Tweet, TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
-import { User } from 'src/types/user.type'
+
+interface BookmarkProps {
+  userId: string
+}
+
 const LIMIT = 5
 const PAGE = 1
 
-interface FeedProps {
-  user?: User
-}
-
-export default function Feed({ user }: FeedProps) {
+export default function BookmarkList({ userId }: BookmarkProps) {
   const [data, setData] = useState([])
-  const [userData, setUserData] = useState()
+  const [bookmarkId, setBookmarkId] = useState([])
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0
   })
 
-  useEffect(() => {
-    setUserData(user as any)
-  }, [user?._id])
-
   const fetchData = () => {
-    if (user?._id)
+    if (userId)
       http
-        .get(`tweets/list/${user?._id}`, {
+        .get('bookmarks/my-bookmarks', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`
           },
@@ -38,12 +34,12 @@ export default function Feed({ user }: FeedProps) {
           baseURL: config.baseUrl
         })
         .then((res) => {
-          const { tweets, page, total_page } = res.data.result
+          const { list_Bookmark, page, total_page } = res.data.result
           setPagination({
             page,
             total_page
           })
-          setData(tweets)
+          setBookmarkId(list_Bookmark?.map((bookmark: any) => bookmark?.tweet_id))
         })
         .catch((err) => {
           console.log(err)
@@ -51,9 +47,9 @@ export default function Feed({ user }: FeedProps) {
   }
 
   const fetchMoreData = () => {
-    if (user?._id && pagination.page <= pagination.total_page)
+    if (userId && pagination.page <= pagination.total_page)
       http
-        .get(`tweets/list/${user?._id}`, {
+        .get('bookmarks/my-bookmarks', {
           params: {
             limit: LIMIT,
             page: pagination.page + 1
@@ -74,15 +70,38 @@ export default function Feed({ user }: FeedProps) {
   }
 
   useEffect(() => {
-    fetchData()
-  }, [user?._id])
+    if (userId) fetchData()
+  }, [userId])
 
+  useEffect(() => {
+    if (bookmarkId.length > 0) {
+      bookmarkId.map((tweetId: string) => {
+        http
+          .get(`tweets/${tweetId}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            },
+            baseURL: config.baseUrl
+          })
+          .then((res) => {
+            setData((prev) => [...prev, res.data.result] as any)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      })
+    }
+  }, [bookmarkId])
+
+  console.log('bookmarkId', bookmarkId)
   console.log('data', data)
 
   if (data.length === 0)
     return (
       <>
-        <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>The user has no tweet yet</div>
+        <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>
+          You haven't bookmarked any tweets yet
+        </div>
       </>
     )
   return (
@@ -93,10 +112,11 @@ export default function Feed({ user }: FeedProps) {
       loader={<h4>Loading...</h4>}
     >
       {data?.map((post: Record<string, any>, index) => {
+        console.log('map', post)
         if (post.type === TweetType.Tweet)
           return (
             <>
-              <PostItem key={index} data={post as any} user={userData} />
+              <PostItem key={index} data={post as any} />
             </>
           )
       })}

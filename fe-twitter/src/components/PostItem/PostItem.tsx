@@ -130,7 +130,7 @@ export default function PostItem({ data, user }: PostItemProps) {
             <div className='flex flex-row justify-between items-center mt-3 gap-10'>
               <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500 break-words'>
                 <IoChatboxOutline size={20} />
-                <p>{data?.comment?.length}</p>
+                <p>{data?.comment?.length || (data as any)?.comment_count}</p>
               </div>
               {isLikedByUser ? (
                 <button

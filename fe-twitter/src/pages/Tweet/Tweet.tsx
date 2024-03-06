@@ -13,8 +13,6 @@ export default function Tweet() {
     queryFn: () => tweetApi.getTweetDetail(tweet_id)
   })
 
-  console.log(tweet_id)
-
   return (
     <>
       <Header label='Tweet' showBackArrow />
