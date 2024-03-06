@@ -1,6 +1,7 @@
 import { ObjectId, WithId } from 'mongodb'
 import databaseService from './database.services'
 import { Bookmark } from '~/models/schemas/Bookmark.schema'
+import { TweetType } from '~/constants/enums'
 
 class BookmarkService {
   async bookmarkTweet(user_id: string, tweet_id: string) {
@@ -23,14 +24,190 @@ class BookmarkService {
     return result as WithId<Bookmark>
   }
 
+  // async myBookmarkTweet({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+  //   const isMyBookmarks = await databaseService.bookmarks
+  //     .find({ user_id: new ObjectId(user_id) })
+  //     .sort({ created_at: -1 })
+  //     .skip(limit * (page - 1))
+  //     .limit(limit)
+  //     .toArray()
+  //   const total = await databaseService.followers.countDocuments({ user_id: new ObjectId(user_id) })
+  //   return { isMyBookmarks, total }
+  // }
+
   async myBookmarkTweet({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
     const isMyBookmarks = await databaseService.bookmarks
-      .find({ user_id: new ObjectId(user_id) })
-      .sort({ created_at: -1 })
-      .skip(limit * (page - 1))
-      .limit(limit)
+      .aggregate([
+        {
+          $match: {
+            user_id: new ObjectId(user_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $lookup: {
+            from: 'hashtags',
+            localField: 'hashtags',
+            foreignField: '_id',
+            as: 'hashtags'
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'mentions',
+            foreignField: '_id',
+            as: 'mentions'
+          }
+        },
+        {
+          $addFields: {
+            mentions: {
+              $map: {
+                input: '$mentions',
+                as: 'mention',
+                in: {
+                  _id: '$$mention._id',
+                  name: '$$mention.name',
+                  username: '$$mention.username',
+                  email: '$$mention.email'
+                }
+              }
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: 'bookmarks',
+            localField: 'tweet_id',
+            foreignField: 'tweet_id',
+            as: 'bookmarks'
+          }
+        },
+        {
+          $lookup: {
+            from: 'likes',
+            localField: 'tweet_id',
+            foreignField: 'tweet_id',
+            as: 'likes'
+          }
+        },
+        {
+          $lookup: {
+            from: 'tweets',
+            localField: 'tweet_id',
+            foreignField: 'parent_id',
+            as: 'tweet_children'
+          }
+        },
+        {
+          $addFields: {
+            retweet: {
+              $filter: {
+                input: '$tweet_children',
+                as: 'item',
+                cond: {
+                  $eq: ['$$item.type', TweetType.Retweet]
+                }
+              }
+            },
+            comment: {
+              $filter: {
+                input: '$tweet_children',
+                as: 'item',
+                cond: {
+                  $eq: ['$$item.type', TweetType.Comment]
+                }
+              }
+            },
+            quote: {
+              $filter: {
+                input: '$tweet_children',
+                as: 'item',
+                cond: {
+                  $eq: ['$$item.type', TweetType.QuoteTweet]
+                }
+              }
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        {
+          $project: {
+            tweet_children: 0,
+            user: {
+              password: 0,
+              email_verify_token: 0,
+              forgot_password_token: 0,
+              twitter_circle: 0,
+              date_of_bỉth: 0,
+              bio: 0,
+              date_of_birth: 0,
+              created_at: 0,
+              updated_at: 0,
+              verify: 0,
+              location: 0,
+              website: 0,
+              email: 0,
+              cover_photo: 0
+            }
+          }
+        },
+        {
+          $skip: limit * (page - 1) // Công thức phân trang
+        },
+        {
+          $limit: limit
+        }
+      ])
       .toArray()
-    const total = await databaseService.followers.countDocuments({ user_id: new ObjectId(user_id) })
+
+    const ids: ObjectId[] = isMyBookmarks.map((tweet) => tweet._id as ObjectId)
+    const inc = user_id ? { user_views: 1 } : { guest_views: 1 }
+    const date = new Date()
+    // Không return nên phải dùng $set và chạy forEach đễ trả về giá trị
+    const [, total] = await Promise.all([
+      databaseService.tweets.updateMany(
+        {
+          _id: {
+            $in: ids // tìm các id có trong mãng ids
+          }
+        },
+        {
+          $inc: inc,
+          $set: {
+            updated_at: date
+          }
+        }
+      ),
+      await databaseService.bookmarks.countDocuments({
+        user_id_id: new ObjectId(user_id)
+      })
+    ])
+    // return về dữ liệu đã được cập nhật
+    isMyBookmarks.forEach((tweet) => {
+      tweet.updated_at = date
+      if (user_id) {
+        tweet.user_views += 1
+      } else {
+        tweet.guest_views += 1
+      }
+    })
+
     return { isMyBookmarks, total }
   }
 
