@@ -34,14 +34,6 @@ class BookmarkService {
         },
         {
           $lookup: {
-            from: 'users',
-            localField: 'user_id',
-            foreignField: '_id',
-            as: 'user'
-          }
-        },
-        {
-          $lookup: {
             from: 'tweets',
             localField: 'tweet_id',
             foreignField: '_id',
@@ -158,7 +150,7 @@ class BookmarkService {
         {
           $lookup: {
             from: 'users',
-            localField: 'user_id',
+            localField: 'tweet.user_id',
             foreignField: '_id',
             as: 'user'
           }
