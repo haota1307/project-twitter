@@ -94,8 +94,6 @@ export default function PostItem({ data, user }: PostItemProps) {
         })
   }
 
-  console.log('datapo', data)
-
   return (
     <div className='border-b px-5 p-2'>
       <div className='flex flex-row gap-4'>
