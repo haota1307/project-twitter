@@ -10,6 +10,7 @@ interface InputProps<TFieldValues extends FieldValues> extends InputHTMLAttribut
   disabled?: boolean
   name: FieldPath<TFieldValues>
   rules?: RegisterOptions
+  classNameOptionSearch?: boolean
 }
 
 export default function Input<TFieldValues extends FieldValues>({
@@ -22,6 +23,7 @@ export default function Input<TFieldValues extends FieldValues>({
   rules,
   onChange,
   errorMessage,
+  classNameOptionSearch,
   ...rest
 }: InputProps<TFieldValues>) {
   const registerResult = register && name ? register(name, rules) : null
@@ -37,9 +39,12 @@ export default function Input<TFieldValues extends FieldValues>({
           value={value}
           placeholder={placeholder}
           type={type}
-          className={`
-            h-auto lg:p-2 p-1.5 text-lg bg-white border-2 rounded-sm outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition disabled:bg-blue-200 disabled:cursor-not-allowed
-            w-full
+          className={`${
+            classNameOptionSearch
+              ? `block w-full p-2.5 ps-10 bg-white border-2 rounded-xl outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition disabled:bg-blue-200 disabled:cursor-not-allowed`
+              : `h-auto lg:p-2 p-1.5 text-lg bg-white border-2 rounded-sm outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition disabled:bg-blue-200 disabled:cursor-not-allowed w-full`
+          }
+            
           `}
         ></input>
         <div className='ml-2 mt-1 text-red-600 text-sm text-left'>{errorMessage}</div>
