@@ -1,11 +1,15 @@
 import Header from 'src/components/Header'
 import SearchInput from './components/SearchInput'
+import SearchResult from './components/SearchResult'
 
 export default function Explore() {
   return (
     <>
-      <Header showBackArrow label='Explore' />
-      <SearchInput />
+      <div className='flex items-center'>
+        <Header showBackArrow hiddenBorder />
+        <SearchInput />
+      </div>
+      <SearchResult />
     </>
   )
 }

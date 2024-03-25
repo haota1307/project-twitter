@@ -7,9 +7,10 @@ interface HeaderProps {
   isHomePage?: boolean
   showBackArrow?: boolean
   label?: string
+  hiddenBorder?: boolean
 }
 
-export default function Header({ isHomePage, showBackArrow, label }: HeaderProps) {
+export default function Header({ isHomePage, showBackArrow, label, hiddenBorder }: HeaderProps) {
   const { isAuthenticated } = useContext(AppContext)
   return (
     <>
@@ -33,11 +34,11 @@ export default function Header({ isHomePage, showBackArrow, label }: HeaderProps
           )}
         </div>
       ) : (
-        <div className='border-b-[1px] p-3'>
+        <div className={`${hiddenBorder ? '' : `border-b`} p-3`}>
           <div className='flex flex-row items-center gap-2'>
             {showBackArrow && (
               <Link to='/' className='hover:opacity-80 hover:bg-slate-200 p-2 rounded-full'>
-                <IoArrowBack color='black' size={20} className='cursor-pointer  transition' />
+                <IoArrowBack color='black' size={20} className='cursor-pointer transition' />
               </Link>
             )}
             <h1 className='text-black text-xl font-semibold'>{label}</h1>

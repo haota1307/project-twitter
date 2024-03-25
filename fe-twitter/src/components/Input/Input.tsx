@@ -41,7 +41,7 @@ export default function Input<TFieldValues extends FieldValues>({
           type={type}
           className={`${
             classNameOptionSearch
-              ? `block w-full p-2.5 ps-10 bg-white border-2 rounded-xl outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition disabled:bg-blue-200 disabled:cursor-not-allowed`
+              ? `peer block w-full p-2.5 ps-10 bg-white border-2 rounded-xl outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition disabled:bg-blue-200 disabled:cursor-not-allowed`
               : `h-auto lg:p-2 p-1.5 text-lg bg-white border-2 rounded-sm outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition disabled:bg-blue-200 disabled:cursor-not-allowed w-full`
           }
             
