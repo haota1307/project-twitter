@@ -7,7 +7,9 @@ export default function Explore() {
     <>
       <div className='flex items-center'>
         <Header showBackArrow hiddenBorder />
-        <SearchInput />
+        <div className='focus-within:w-full'>
+          <SearchInput />
+        </div>
       </div>
       <SearchResult />
     </>
