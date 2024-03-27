@@ -11,23 +11,23 @@ export default function Login() {
   useEffect(() => {
     const access_token = params.get('access_token')
     const refresh_token = params.get('refresh_token')
-    setIsAuthenticated(true)
     setAccessTokenToLS(access_token as string)
     setRefreshTokenToLS(refresh_token as string)
+    setIsAuthenticated(true)
     setIsLoginOAuth(true)
     if (Boolean(getAccessTokenFromLs)) {
+      console.log('get')
       userApi
         .getProfile()
         .then((res) => {
           setProfile(res.data.result[0])
           localStorage.setItem('profile', JSON.stringify(res.data.result[0]))
+          navigate('/')
         })
         .catch((err) => {
           console.log(err)
         })
     }
-
-    navigate('/')
   }, [params, navigate])
   return <div>Login</div>
 }

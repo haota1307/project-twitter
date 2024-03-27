@@ -24,4 +24,6 @@ export interface User {
   cover_photo?: string
   following?: string[]
   followed?: string[]
+  followed_count?: number
+  following_count?: number
 }

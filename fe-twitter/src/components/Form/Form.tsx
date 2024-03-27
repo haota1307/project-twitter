@@ -41,8 +41,6 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
     medias: []
   }
 
-  console.log('parentId: ', parentId)
-
   const [body, setBody] = useState<TweetBody>(initialBody)
 
   const registerModal = useRegisterModal()
@@ -51,8 +49,6 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
   const previewFile = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
-
-  console.log(body)
 
   const handleUploadImg = async () => {
     const fd = new FormData()
