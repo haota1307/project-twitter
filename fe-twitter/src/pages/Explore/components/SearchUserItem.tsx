@@ -1,6 +1,6 @@
 import Avatar from 'src/components/Avatar'
 
-export default function SearchItem() {
+export default function SearchUserItem() {
   return (
     <div className='px-5 p-2 '>
       <div className='flex flex-row items-start gap-2 mt-2 hover:bg-slate-200 p-2 rounded-md'>

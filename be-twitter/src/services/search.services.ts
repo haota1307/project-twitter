@@ -155,42 +155,30 @@ class SearchService {
           },
           {
             $addFields: {
-              bookmarks: {
-                $size: '$bookmarks'
-              },
-              likes: {
-                $size: '$likes'
-              },
-              retweet_count: {
-                $size: {
-                  $filter: {
-                    input: '$tweet_children',
-                    as: 'item',
-                    cond: {
-                      $eq: ['$$item.type', TweetType.Retweet]
-                    }
+              retweet: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.Retweet]
                   }
                 }
               },
-              comment_count: {
-                $size: {
-                  $filter: {
-                    input: '$tweet_children',
-                    as: 'item',
-                    cond: {
-                      $eq: ['$$item.type', TweetType.Comment]
-                    }
+              comment: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.Comment]
                   }
                 }
               },
-              quote_count: {
-                $size: {
-                  $filter: {
-                    input: '$tweet_children',
-                    as: 'item',
-                    cond: {
-                      $eq: ['$$item.type', TweetType.QuoteTweet]
-                    }
+              quote: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.QuoteTweet]
                   }
                 }
               }
