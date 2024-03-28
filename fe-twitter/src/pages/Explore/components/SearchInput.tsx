@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IoSearchOutline } from 'react-icons/io5'
 import searchApi from 'src/apis/search.api'
 import Input from 'src/components/Input'
@@ -6,16 +6,21 @@ import { useDebounce } from 'src/hooks/useDebounce'
 
 interface SearchInputProps {
   onFocusInput?: React.FocusEventHandler<HTMLDivElement>
+  handleSearch?: () => Promise<void>
 }
 
 export default function SearchInput({ onFocusInput }: SearchInputProps) {
   const [searchValue, setSearchValue] = useState<string>('')
+  const [searchResult, setSearchResult] = useState()
   const debouncedSearch = useDebounce(searchValue)
 
   const onSearch = async () => {
     await searchApi
       .searchTweet(debouncedSearch, 20, 1, 0)
-      .then((data) => console.log(data))
+      .then((data) => {
+        // console.log(data.data.result.tweets)
+        setSearchResult(data.data.result.tweets)
+      })
       .catch((err) => console.log(err))
   }
 
@@ -28,6 +33,8 @@ export default function SearchInput({ onFocusInput }: SearchInputProps) {
 
     onSearch()
   }, [debouncedSearch])
+
+  console.log('searchResult', searchResult)
 
   return (
     <div className='max-w-lg mx-auto' onFocus={onFocusInput}>

@@ -77,8 +77,6 @@ export default function Feed({ user }: FeedProps) {
     fetchData()
   }, [user?._id])
 
-  console.log('data', data)
-
   if (data.length === 0)
     return (
       <>
