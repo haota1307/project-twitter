@@ -1,11 +1,16 @@
 import Header from 'src/components/Header'
 import NewFeed from '../NewFeed'
+import AlertVerify from 'src/components/AlertVerify'
+import { useContext } from 'react'
+import { AppContext } from 'src/contexts/app.context'
 
 export default function HomeFollowing() {
+  const { profile } = useContext(AppContext)
+
   return (
     <>
       <Header showBackArrow label='New feeds' />
-      <NewFeed />
+      {profile?.verify === 1 ? <NewFeed /> : <AlertVerify />}
     </>
   )
 }
