@@ -16,7 +16,7 @@ export const googleApi = {
 
 const authApi = {
   // Đăng kí
-  registerAccount(body: { email: string; password: string }) {
+  registerAccount(body: { email: string; password: string; name: string }) {
     return http.post<AuthResponse>(URL_REGISTER, body)
   },
   // Đăng Nhập

@@ -165,7 +165,7 @@ class UsersService {
         _id: user_id,
         username: `user${user_id.toString()}`,
         email_verify_token,
-        date_of_birth: new Date(payload.date_of_birth), // chuyển isoString ->> date
+        date_of_birth: new Date(), // chuyển isoString ->> date
         password: hashPassword(payload.password)
       })
     )

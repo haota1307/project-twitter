@@ -15,8 +15,9 @@ import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import useRegisterModal from 'src/hooks/useRegisterModal'
 import useLoginModal from 'src/hooks/useLoginModal'
 import ButtonWithGG from 'src/components/ButtonWithGG'
+import userApi from 'src/apis/user.api'
 
-type FormData = Schema
+type FormData = Pick<Schema, 'email' | 'password' | 'name' | 'confirm_password'>
 
 type DataError = {
   location: string
@@ -31,13 +32,12 @@ type FormDataError = {
   password: DataError
 }
 
-const RegisterSchema = schema
+const RegisterSchema = schema.pick(['email', 'password', 'name', 'confirm_password'])
 
 export default function RegisterModal() {
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
-  const { setIsAuthenticated } = useContext(AppContext)
-  const navigate = useNavigate()
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
 
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
@@ -53,11 +53,11 @@ export default function RegisterModal() {
     resolver: yupResolver(RegisterSchema)
   })
 
-  const registerAccountMutation = useMutation({
-    mutationFn: (body: Pick<FormData, 'email' | 'password'>) => authApi.registerAccount(body)
+  const registerMutation = useMutation({
+    mutationFn: (body: Pick<FormData, 'email' | 'password' | 'name'>) => authApi.registerAccount(body as any)
   })
 
-  const isLoading = registerAccountMutation.isPending
+  const isLoading = registerMutation.isPending
 
   const toggleLogin = useCallback(() => {
     if (isLoading) {
@@ -67,22 +67,32 @@ export default function RegisterModal() {
     loginModal.onOpen()
   }, [registerModal, loginModal, isLoading])
 
+  const getProfile = () => {
+    userApi
+      .getProfile()
+      .then((res) => {
+        setProfile(res.data.result[0])
+        localStorage.setItem('profile', JSON.stringify(res.data.result[0]))
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   const onSubmit = handleSubmit((data) => {
-    registerAccountMutation.mutate(data, {
+    registerMutation.mutateAsync(data, {
       onSuccess: (data) => {
         setIsAuthenticated(true)
+        getProfile()
+
         toast.success(data.data.message, {
           position: 'top-center',
           autoClose: 1000
         })
         registerModal.onClose()
-        navigate('/')
       },
-      // Show error
       onError: (error) => {
         console.log('error', error)
-
-        // Check error 422
         if (isAxiosUnprocessableEntityError<ErrorResponseApi<FormDataError>>(error)) {
           const formError = error.response?.data.errors
           if (formError?.email) {
@@ -110,7 +120,7 @@ export default function RegisterModal() {
         placeholder='Email'
         onChange={(e) => setEmail(e.target.value)}
         value={email}
-        disabled={registerAccountMutation.isPending}
+        disabled={registerMutation.isPending}
         errorMessage={errors.email?.message}
       />
       <Input
@@ -119,17 +129,17 @@ export default function RegisterModal() {
         placeholder='name'
         onChange={(e) => setName(e.target.value)}
         value={name}
-        disabled={registerAccountMutation.isPending}
+        disabled={registerMutation.isPending}
         errorMessage={errors.name?.message}
       />
-      <div className={`flex w-full `}>
+      <div className={`flex w-full`}>
         <Input
           name='password'
           register={register}
           placeholder='Password'
           onChange={(e) => setPassword(e.target.value)}
           value={password}
-          disabled={registerAccountMutation.isPending}
+          disabled={registerMutation.isPending}
           errorMessage={errors.password?.message}
         />
         <Input
@@ -138,7 +148,7 @@ export default function RegisterModal() {
           placeholder='Confirm password'
           onChange={(e) => setConfirmPassword(e.target.value)}
           value={confirmPassword}
-          disabled={registerAccountMutation.isPending}
+          disabled={registerMutation.isPending}
           errorMessage={errors.confirm_password?.message}
         />
       </div>
@@ -159,7 +169,7 @@ export default function RegisterModal() {
 
   return (
     <Modal
-      disable={registerAccountMutation.isPending}
+      disable={registerMutation.isPending}
       isOpen={registerModal.isOpen}
       title='Create an account'
       actionLabel='Register'
