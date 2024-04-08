@@ -35,13 +35,9 @@ export default function Explore() {
     onSearch()
   }, [debouncedSearch])
 
-  console.log('searchResult', searchResult)
-  console.log('isSearching', isSearching)
-
   return (
     <>
       <div className='flex items-center'>
-        {/* <Header showBackArrow hiddenBorder label='Search' /> */}
         <div className='focus-within:w-full mt-2'>
           <div className='max-w-lg mx-auto'>
             <div className='relative'>
