@@ -33,6 +33,7 @@ _Cần làm_
 
 _Bug_
 
+- Register ✔️
 - Giao diện
 - Hết hạn access token -> logout -> bugggggggggggg
 - ...

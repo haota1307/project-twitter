@@ -5,12 +5,12 @@ import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 
 export default function HomeFollowing() {
-  const { profile } = useContext(AppContext)
+  const { profile, isAuthenticated } = useContext(AppContext)
 
   return (
     <>
       <Header showBackArrow label='New feeds' />
-      {profile?.verify === 1 ? <NewFeed /> : <AlertVerify />}
+      {profile?.verify === 1 || !isAuthenticated ? <NewFeed /> : <AlertVerify />}
     </>
   )
 }

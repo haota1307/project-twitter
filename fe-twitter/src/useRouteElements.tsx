@@ -12,6 +12,7 @@ const Bookmark = lazy(() => import('./pages/Bookmark'))
 const HomeFollowing = lazy(() => import('./pages/HomeFollowing'))
 const Tweet = lazy(() => import('./pages/Tweet'))
 const Users = lazy(() => import('./pages/Users'))
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail'))
 
 //redirect
 function RedirectRoute() {
@@ -115,6 +116,16 @@ export default function useRouteElement() {
             <MainLayout>
               <Suspense fallback={<div>Loading</div>}>
                 <HomeFollowing />
+              </Suspense>
+            </MainLayout>
+          )
+        },
+        {
+          path: '/email-verifications',
+          element: (
+            <MainLayout>
+              <Suspense fallback={<div>Loading</div>}>
+                <VerifyEmail />
               </Suspense>
             </MainLayout>
           )

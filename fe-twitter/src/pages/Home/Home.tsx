@@ -5,12 +5,12 @@ import Header from 'src/components/Header'
 import { AppContext } from 'src/contexts/app.context'
 
 export default function Home() {
-  const { profile } = useContext(AppContext)
+  const { profile, isAuthenticated } = useContext(AppContext)
 
   return (
     <>
       <Header isHomePage />
-      {profile?.verify === 1 ? <Form placeholder="What's happening?!" /> : <AlertVerify />}
+      {profile?.verify === 1 || !isAuthenticated ? <Form placeholder="What's happening?!" /> : <AlertVerify />}
     </>
   )
 }
