@@ -13,6 +13,8 @@ const HomeFollowing = lazy(() => import('./pages/HomeFollowing'))
 const Tweet = lazy(() => import('./pages/Tweet'))
 const Users = lazy(() => import('./pages/Users'))
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'))
+const VerifyForgotPasswordToken = lazy(() => import('./pages/VerifyForgotPasswordToken'))
+const ResetPassword = lazy(() => import('./pages/ResetPassword'))
 
 //redirect
 function RedirectRoute() {
@@ -137,6 +139,22 @@ export default function useRouteElement() {
       element: (
         <Suspense fallback={<div>Loading</div>}>
           <Login />
+        </Suspense>
+      )
+    },
+    {
+      path: '/forgot-password',
+      element: (
+        <Suspense fallback={<div>Loading</div>}>
+          <VerifyForgotPasswordToken />
+        </Suspense>
+      )
+    },
+    {
+      path: '/reset-password',
+      element: (
+        <Suspense fallback={<div>Loading</div>}>
+          <ResetPassword />
         </Suspense>
       )
     }

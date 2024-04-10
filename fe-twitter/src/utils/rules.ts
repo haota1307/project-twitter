@@ -46,7 +46,8 @@ export const schema = yup.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
       'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.'
     ),
-  confirm_password: handleConfirmPasswordYup('password')
+  confirm_password: handleConfirmPasswordYup('password'),
+  forgot_password_token: yup.string().required('Token is required')
 })
 
 export type Schema = yup.InferType<typeof schema>

@@ -1,11 +1,13 @@
 import { useCallback } from 'react'
-import { IoCloseOutline } from 'react-icons/io5'
+import { IoArrowBackOutline, IoCloseOutline } from 'react-icons/io5'
 import Button from '../Button'
+import { Link } from 'react-router-dom'
 
 interface ModalProps {
   isOpen?: boolean
   onClose: () => void
   onSubmit?: () => void
+  onBackHome?: boolean
   title?: string
   body?: React.ReactElement
   footer?: React.ReactElement
@@ -19,6 +21,7 @@ export default function Modal({
   isOpen,
   onClose,
   onSubmit,
+  onBackHome,
   title,
   body,
   footer,
@@ -35,9 +38,9 @@ export default function Modal({
   }, [disable, onClose])
 
   const handleSubmit = useCallback(() => {
-    if (disable) {
-      return
-    }
+    // if (disable) {
+    //   return
+    // }
     if (onSubmit) onSubmit()
   }, [disable, onSubmit])
 
@@ -61,10 +64,20 @@ export default function Modal({
               <h3 className='text-3xl font-semibold text-black'>{title}</h3>
               <button
                 onClick={handleClose}
-                className='p-1 ml-auto border-0 hover:opacity-70 hover:text-red-600 transition'
+                className={`p-1 ml-auto border-0 hover:opacity-70 hover:text-red-600 transition ${
+                  onBackHome && 'hidden'
+                }`}
               >
                 <IoCloseOutline size={20} />
               </button>
+              {onBackHome && (
+                <Link
+                  to={'/'}
+                  className='flex justify-center items-center p-1 ml-auto border-0 hover:opacity-70 hover:text-red-600 transition'
+                >
+                  <IoArrowBackOutline size={20} /> <span className='ml-2'>Back home</span>
+                </Link>
+              )}
             </div>
             {/* body */}
             <div className='relative px-10 flex-auto'>{body}</div>

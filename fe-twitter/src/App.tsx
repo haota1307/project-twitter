@@ -10,6 +10,7 @@ import { AppContext } from './contexts/app.context'
 import { LocalStorageEventTarget } from './utils/auth'
 import EditModal from './modals/EditModal'
 import PostModal from './modals/PostModal'
+import ResetPasswordModal from './modals/ResetPasswordModal'
 
 function App() {
   const routeElements = useRouteElements()

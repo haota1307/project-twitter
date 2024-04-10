@@ -15,6 +15,7 @@ import { toast } from 'react-toastify'
 import useRegisterModal from 'src/hooks/useRegisterModal'
 import ButtonWithGG from 'src/components/ButtonWithGG'
 import userApi from 'src/apis/user.api'
+
 type FormData = Pick<Schema, 'email' | 'password'>
 
 type DataError = {

@@ -1,5 +1,9 @@
-import React from 'react'
+import ResetPasswordModal from 'src/modals/ResetPasswordModal'
 
 export default function ResetPassword() {
-  return <div>ResetPassword</div>
+  return (
+    <>
+      <ResetPasswordModal />
+    </>
+  )
 }

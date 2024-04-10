@@ -3,6 +3,7 @@ import { UseFormRegister, FieldValues, FieldPath, RegisterOptions } from 'react-
 
 interface InputProps<TFieldValues extends FieldValues> extends InputHTMLAttributes<HTMLInputElement> {
   placeholder?: string
+  hidden?: boolean
   value?: string
   type?: string
   register?: UseFormRegister<TFieldValues>
@@ -16,6 +17,7 @@ interface InputProps<TFieldValues extends FieldValues> extends InputHTMLAttribut
 export default function Input<TFieldValues extends FieldValues>({
   placeholder,
   name,
+  hidden,
   register,
   value,
   type,
@@ -30,7 +32,7 @@ export default function Input<TFieldValues extends FieldValues>({
 
   return (
     <>
-      <div className='w-full h-auto px-1'>
+      <div className={`w-full h-auto px-1 ${hidden && 'hidden'}`}>
         <input
           {...rest}
           {...registerResult}
