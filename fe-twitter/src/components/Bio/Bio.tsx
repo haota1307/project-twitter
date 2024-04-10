@@ -6,6 +6,7 @@ import { formatDate } from 'src/utils/date'
 import useEditModal from 'src/hooks/useEditModal'
 import { useLocation } from 'react-router-dom'
 import { User } from 'src/types/user.type'
+import Popover from '../Popover'
 
 interface BioProps {
   userId: string
@@ -19,10 +20,30 @@ export default function Bio({ data }: User | any) {
 
   const editModal = useEditModal()
 
+  const itemPopover = [
+    {
+      name: 'Change avatar',
+      onClick: () => console.log('Change avatar')
+    },
+    {
+      name: 'Change cover photo',
+      onClick: () => console.log('Change cover photo')
+    },
+    {
+      name: 'Change password',
+      onClick: () => console.log('Change password')
+    },
+    {
+      name: 'Forgot password',
+      onClick: () => console.log('Forgot password')
+    }
+  ]
+
   return (
     <>
       <div className='border-b pb-4'>
-        <div className='flex justify-end p-2'>
+        <div className='flex justify-end p-2 items-center gap-4'>
+          <Popover item={itemPopover} />
           {isMyProfilePage ? (
             <Button secondary label='Edit' onClick={editModal.onOpen} />
           ) : (

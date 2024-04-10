@@ -2,8 +2,10 @@ _Cần làm_
 
 - Authen:
 
-  - Trang xác thực tài khoản
+  - Trang xác thực tài khoản ✔️
   - Quên tài khoản mật khẩu
+    - Quên tài khoản trong profile
+    - Quên tài khoản lúc đăng nhập
   - Đổi mật khẩu
 
 - Main feed
