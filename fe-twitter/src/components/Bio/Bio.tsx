@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from '../Button'
 import { IoCalendarOutline } from 'react-icons/io5'
@@ -7,6 +7,8 @@ import useEditModal from 'src/hooks/useEditModal'
 import { useLocation } from 'react-router-dom'
 import { User } from 'src/types/user.type'
 import Popover from '../Popover'
+import http from 'src/utils/http'
+import { toast } from 'react-toastify'
 
 interface BioProps {
   userId: string
@@ -14,11 +16,41 @@ interface BioProps {
 
 export default function Bio({ data }: User | any) {
   const { profile } = useContext(AppContext)
+  const [disabled, setDisabled] = useState(false)
 
   const location = useLocation()
   const isMyProfilePage = location.pathname === '/profile'
 
   const editModal = useEditModal()
+
+  const handleDisabled = () => {
+    // Disable the button
+    setDisabled(true)
+
+    // Enable the button after 60 seconds
+    setTimeout(() => {
+      setDisabled(false)
+    }, 60000) // 60 seconds
+  }
+
+  const handleForgotPassword = () => {
+    http
+      .post('/users/forgot-password', { email: profile?.email })
+      .then((data) => {
+        toast.success(data.data.message, {
+          position: 'top-right',
+          autoClose: 2000
+        })
+        handleDisabled()
+      })
+      .catch((err) => {
+        toast.error(err.data.message, {
+          position: 'top-right',
+          autoClose: 2000
+        })
+      })
+    console.log('heheh')
+  }
 
   const itemPopover = [
     {
@@ -35,7 +67,8 @@ export default function Bio({ data }: User | any) {
     },
     {
       name: 'Forgot password',
-      onClick: () => console.log('Forgot password')
+      onClick: handleForgotPassword,
+      disabled: disabled
     }
   ]
 
