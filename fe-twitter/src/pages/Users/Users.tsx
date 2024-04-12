@@ -14,7 +14,6 @@ export default function Users() {
     queryFn: () => userApi.getUserProfile(user_name as string)
   })
   const dataUser = userData?.data.result[0] as User
-  // console.log(dataUser)
   return (
     <>
       <Header label={dataUser?.username} showBackArrow />

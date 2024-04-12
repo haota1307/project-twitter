@@ -8,8 +8,6 @@ import { AppContext } from 'src/contexts/app.context'
 export default function Profile() {
   const { profile } = useContext(AppContext)
 
-  const user_id = profile?._id
-
   return (
     <>
       <Header label='Profile' showBackArrow />
