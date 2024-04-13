@@ -22,7 +22,7 @@ export default function BackGround({ data }: any) {
       ) : (
         <div className='bg-slate-200 h-52 relative'>
           {data?.cover_photo && (
-            <img src={profile?.cover_photo} alt='Back ground cover' className='object-cover h-full w-full' />
+            <img src={data?.cover_photo} alt='Back ground cover' className='object-cover h-full w-full' />
           )}
           <div className='absolute -bottom-16 left-4'>
             <Avatar isLarge hasBorder url={data?.avatar} />
