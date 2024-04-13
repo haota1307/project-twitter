@@ -11,7 +11,7 @@ export default function Profile() {
   return (
     <>
       <Header label='Profile' showBackArrow />
-      <BackGround />
+      <BackGround edit />
       <Bio />
       <Feed user={profile as any} />
     </>

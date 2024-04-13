@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import Avatar from '../Avatar'
 import { AppContext } from 'src/contexts/app.context'
 import { useLocation } from 'react-router-dom'
 
-export default function BackGround({ data }: any) {
+export default function BackGround({ data, edit }: any) {
   const { profile } = useContext(AppContext)
   const location = useLocation()
   const isMyProfilePage = location.pathname === '/profile'
@@ -16,7 +16,7 @@ export default function BackGround({ data }: any) {
             <img src={profile?.cover_photo} alt='Back ground cover' className='object-cover h-full w-full' />
           )}
           <div className='absolute -bottom-16 left-4'>
-            <Avatar isLarge hasBorder url={profile?.avatar} isMyProfile />
+            <Avatar isLarge hasBorder url={profile?.avatar} isMyProfile edit={edit} />
           </div>
         </div>
       ) : (

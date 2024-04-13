@@ -14,7 +14,6 @@ import useChangePasswordModal from 'src/hooks/useChangePasswordModal'
 export default function Bio({ data }: User | any) {
   const { profile } = useContext(AppContext)
   const [disabled, setDisabled] = useState(false)
-  const [isOpenPopover, setIsOpenPopover] = useState(false)
 
   const location = useLocation()
   const isMyProfilePage = location.pathname === '/profile'
@@ -41,7 +40,6 @@ export default function Bio({ data }: User | any) {
           autoClose: 2000
         })
         handleDisabled()
-        setIsOpenPopover(false)
       })
       .catch((err) => {
         toast.error(err.data.message, {
