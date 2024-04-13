@@ -1,4 +1,5 @@
 import config from 'src/constants/config'
+import ResetPassword from 'src/pages/ResetPassword'
 import http from 'src/utils/http'
 
 export const URL_GET_PROFILE = 'users/profile'
@@ -31,6 +32,22 @@ const userApi = {
         baseURL: config.baseUrl
       }
     )
+  },
+  resetPassword(data: { password: string; confirm_password: string; forgot_password_token: string }) {
+    return http.post('users/reset-password', data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      },
+      baseURL: config.baseUrl
+    })
+  },
+  changePassword(data: { password: string; confirm_password: string; old_password: string }) {
+    return http.put('users/change-password', data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      },
+      baseURL: config.baseUrl
+    })
   }
 }
 export default userApi

@@ -9,15 +9,18 @@ import { User } from 'src/types/user.type'
 import Popover from '../Popover'
 import http from 'src/utils/http'
 import { toast } from 'react-toastify'
+import useChangePasswordModal from 'src/hooks/useChangePasswordModal'
 
 export default function Bio({ data }: User | any) {
   const { profile } = useContext(AppContext)
   const [disabled, setDisabled] = useState(false)
+  const [isOpenPopover, setIsOpenPopover] = useState(false)
 
   const location = useLocation()
   const isMyProfilePage = location.pathname === '/profile'
 
   const editModal = useEditModal()
+  const changePasswordModal = useChangePasswordModal()
 
   const handleDisabled = () => {
     // Disable the button
@@ -38,6 +41,7 @@ export default function Bio({ data }: User | any) {
           autoClose: 2000
         })
         handleDisabled()
+        setIsOpenPopover(false)
       })
       .catch((err) => {
         toast.error(err.data.message, {
@@ -45,6 +49,13 @@ export default function Bio({ data }: User | any) {
           autoClose: 2000
         })
       })
+  }
+
+  const toggleChangePasswordModal = () => {
+    if (changePasswordModal.isOpen) {
+      return
+    }
+    changePasswordModal.onOpen()
   }
 
   const itemPopover = [
@@ -58,7 +69,7 @@ export default function Bio({ data }: User | any) {
     },
     {
       name: 'Change password',
-      onClick: () => console.log('Change password')
+      onClick: toggleChangePasswordModal
     },
     {
       name: 'Forgot password',

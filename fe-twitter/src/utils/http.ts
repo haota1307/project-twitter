@@ -109,10 +109,10 @@ export class Http {
               })
             })
           }
-          clearLS()
-          this.accessToken = ''
-          this.refreshToken = ''
-          this.profile = ''
+          // clearLS()
+          // this.accessToken = ''
+          // this.refreshToken = ''
+          // this.profile = ''
         }
         return Promise.reject(error)
       }

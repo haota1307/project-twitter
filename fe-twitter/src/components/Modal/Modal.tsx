@@ -55,7 +55,7 @@ export default function Modal({
 
   return (
     <>
-      <div className='flex justify-center items-center overflow-x-hidden overflow-y-scroll fixed inset-0 z-50 outline-none focus:outline-none bg-neutral-800 bg-opacity-70'>
+      <div className='flex justify-center items-center overflow-x-hidden overflow-y-scroll fixed inset-0 z-[999] outline-none focus:outline-none bg-neutral-800 bg-opacity-70'>
         <div className='relative w-full lg:w-3/6 h-auto'>
           {/* content */}
           <div className='h-full lg:h-auto border rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>

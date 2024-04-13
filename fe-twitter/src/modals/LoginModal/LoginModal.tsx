@@ -95,6 +95,7 @@ export default function LoginModal() {
         // Check error 422
         if (isAxiosUnprocessableEntityError<ErrorResponseApi<FormDataError>>(error)) {
           const formError = error.response?.data.errors
+          console.log('Login eerr:', error.response?.data)
           if (formError?.email) {
             setError('email', {
               message: formError.email.msg,

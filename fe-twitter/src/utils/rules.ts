@@ -46,6 +46,15 @@ export const schema = yup.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
       'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.'
     ),
+  old_password: yup
+    .string()
+    .required('Old password required')
+    .min(6, 'Old password length from 6 - 50 characters')
+    .max(50, 'Old password length from 6 - 50 characters')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+      'Old password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.'
+    ),
   confirm_password: handleConfirmPasswordYup('password'),
   forgot_password_token: yup.string().required('Token is required')
 })

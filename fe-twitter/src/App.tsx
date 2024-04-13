@@ -11,6 +11,7 @@ import { LocalStorageEventTarget } from './utils/auth'
 import EditModal from './modals/EditModal'
 import PostModal from './modals/PostModal'
 import ResetPasswordModal from './modals/ResetPasswordModal'
+import ChangePasswordModal from './modals/ChangePasswordModal'
 
 function App() {
   const routeElements = useRouteElements()
@@ -30,6 +31,7 @@ function App() {
       <RegisterModal />
       <EditModal />
       <PostModal />
+      <ChangePasswordModal />
       {routeElements}
       <ToastContainer />
     </>

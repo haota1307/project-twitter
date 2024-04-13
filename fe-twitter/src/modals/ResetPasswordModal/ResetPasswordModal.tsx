@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import userApi from 'src/apis/user.api'
 import Input from 'src/components/Input'
 import Modal from 'src/components/Modal'
 import useResetPasswordModal from 'src/hooks/useResetPasswordModal'
@@ -35,7 +36,7 @@ export default function ResetPasswordModal() {
   })
 
   const resetPasswordMutation = useMutation({
-    mutationFn: (body: FormData) => http.post('users/reset-password', body)
+    mutationFn: (body: FormData) => userApi.resetPassword(body)
   })
 
   const onSubmit = handleSubmit((data) => {
@@ -47,6 +48,7 @@ export default function ResetPasswordModal() {
           autoClose: 1500
         })
         navigate('/')
+        resetPasswordModal.onClose()
       },
       // Show error
       onError: (error) => {
