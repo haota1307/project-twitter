@@ -98,7 +98,7 @@ export default function PostItem({ data, user }: PostItemProps) {
     <div className='border-b px-5 p-2'>
       <div className='flex flex-row gap-4'>
         <div className='flex flex-row gap-4'>
-          <Avatar url={user?.avatar || data?.user[0]?.avatar || data?.user?.avatar || ''} />
+          <Avatar url={profile?.avatar || user?.avatar || data?.user[0]?.avatar || data?.user?.avatar || ''} />
         </div>
         <div>
           <Link to={`/tweets/${data?._id}`}>

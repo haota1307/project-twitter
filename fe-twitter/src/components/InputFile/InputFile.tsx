@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { IoImageOutline, IoVideocamOutline } from 'react-icons/io5'
+import { IconType } from 'react-icons'
 import { toast } from 'react-toastify'
 import config from 'src/constants/config'
 
@@ -7,9 +7,11 @@ interface Props {
   onChange?: (file?: File) => void
   isImageFile?: boolean
   isVideoFile?: boolean
+  Icon: IconType
+  iconSize?: number
 }
 
-export default function InputFile({ onChange, isImageFile, isVideoFile }: Props) {
+export default function InputFile({ onChange, isImageFile, isVideoFile, Icon, iconSize }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileFromLocal = event.target.files?.[0] // Lấy ảnh
@@ -20,7 +22,7 @@ export default function InputFile({ onChange, isImageFile, isVideoFile }: Props)
       fileFromLocal &&
       (fileFromLocal.size >= config.maxSizeUploadImage || !fileFromLocal.type.includes('image'))
     ) {
-      toast.error('File ảnh không đúng định dạng quy định ', {
+      toast.error('The image file is malformed or too large(size < 300kb)', {
         autoClose: 1000,
         position: 'top-center'
       })
@@ -29,7 +31,7 @@ export default function InputFile({ onChange, isImageFile, isVideoFile }: Props)
       fileFromLocal &&
       (fileFromLocal.size >= config.maxSizeUploadVideo || !fileFromLocal.type.includes('video'))
     ) {
-      toast.error('File video không đúng định dạng quy định ', {
+      toast.error('The video file is malformed or too large(size < 50MB)', {
         autoClose: 1000,
         position: 'top-center'
       })
@@ -50,13 +52,8 @@ export default function InputFile({ onChange, isImageFile, isVideoFile }: Props)
         onClick={(e) => ((e.target as any).value = null)}
         ref={fileInputRef}
       />
-      <button
-        onClick={handleUpload}
-        type='button'
-        className='p-2 mx-1 rounded-lg hover:cursor-pointer hover:bg-slate-100'
-      >
-        {isImageFile && <IoImageOutline size={20} />}
-        {isVideoFile && <IoVideocamOutline size={20} />}
+      <button onClick={handleUpload} type='button' className='p-2 rounded-full hover:cursor-pointer hover:bg-slate-100'>
+        {Boolean(Icon) && <Icon size={iconSize || 20} />}
       </button>
     </>
   )

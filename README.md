@@ -4,9 +4,9 @@ _Cần làm_
 
   - Trang xác thực tài khoản ✔️
   - Quên tài khoản mật khẩu
-    - Quên tài khoản trong profile
+    - Quên tài khoản trong profile ✔️
     - Quên tài khoản lúc đăng nhập
-  - Đổi mật khẩu
+  - Đổi mật khẩu ✔️
 
 - Main feed
 

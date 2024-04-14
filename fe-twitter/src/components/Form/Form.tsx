@@ -11,6 +11,7 @@ import { Media, TweetAudience, TweetBody, TweetType } from 'src/types/tweet.type
 import InputFile from '../InputFile'
 import mediaApi from 'src/apis/media.api'
 import tweetApi from 'src/apis/tweet.api'
+import { IoImageOutline, IoVideocamOutline } from 'react-icons/io5'
 
 interface FormProps {
   placeholder: string
@@ -177,8 +178,8 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
             </div>
             <div className='my-1.5 flex flex-row justify-between'>
               <div className='flex justify-center items-center'>
-                <InputFile isImageFile onChange={handleChangeFile as any} />
-                <InputFile isVideoFile onChange={handleChangeFile as any} />
+                <InputFile isImageFile onChange={handleChangeFile as any} Icon={IoImageOutline} />
+                <InputFile isVideoFile onChange={handleChangeFile as any} Icon={IoVideocamOutline} />
               </div>
               {!hiddenBtn && (
                 <Button disabled={isLoading || body.content === ''} onClick={onSubmit} label='Tweet' secondary />
