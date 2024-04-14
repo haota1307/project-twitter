@@ -35,7 +35,7 @@ export default function Avatar({ isLarge, hasBorder, url, isMyProfile, edit }: A
   const handleUploadImg = async () => {
     const fd = new FormData()
     fd.append('image', fileTmp as File) //key, value
-    ;(toastId.current as any) = toast.loading('Tweet uploading...')
+    ;(toastId.current as any) = toast.loading('Avatar uploading...')
     mediaApi
       .uploadImg(fd)
       .then((res) => {
