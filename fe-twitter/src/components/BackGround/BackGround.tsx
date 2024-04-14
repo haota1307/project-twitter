@@ -102,7 +102,7 @@ export default function BackGround({ data, edit }: any) {
       {edit && (
         <button
           className='absolute bottom-1 right-1 m-auto w-fit rounded-full bg-gray-50 border cursor-pointer opacity-70'
-          title='Change avatar'
+          title='Change background'
         >
           <div className='hover:opacity-90'>
             <InputFile isImageFile onChange={handleChangeFile as any} Icon={IoCreateOutline} iconSize={20} />

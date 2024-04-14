@@ -58,14 +58,6 @@ export default function Bio({ data }: User | any) {
 
   const itemPopover = [
     {
-      name: 'Change avatar',
-      onClick: () => console.log('Change avatar')
-    },
-    {
-      name: 'Change cover photo',
-      onClick: () => console.log('Change cover photo')
-    },
-    {
       name: 'Change password',
       onClick: toggleChangePasswordModal
     },
@@ -93,22 +85,29 @@ export default function Bio({ data }: User | any) {
             <p className='text-black/50 text-md'>@{isMyProfilePage ? profile?.username : data?.username}</p>
           </div>
           {(profile?.bio !== '' && isMyProfilePage) || (data?.bio !== '' && !isMyProfilePage) ? (
-            <div className='flex flex-col mt-4'>
+            <div className='flex flex-col mt-2.5'>
               <p className='text-black'>{isMyProfilePage ? profile?.bio : data?.bio}</p>
             </div>
           ) : (
-            <div className='flex flex-col mt-4'>
+            <div className='flex flex-col mt-2.5'>
               <p className='text-black'>Have a nice day 💕💕</p>
             </div>
           )}
-          <div className='flex flex-row items-center gap-2 mt-4 text-black/50'>
+          <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
+            <IoCalendarOutline size={20} />
+            <p>
+              Birthday{' '}
+              {isMyProfilePage ? formatDate(profile?.date_of_birth as any) : formatDate(data?.date_of_birth as any)}
+            </p>
+          </div>
+          <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
             <IoCalendarOutline size={20} />
             <p>
               Joined {isMyProfilePage ? formatDate(profile?.created_at as any) : formatDate(data?.created_at as any)}
             </p>
           </div>
         </div>
-        <div className='flex flex-row items-center mt-4 gap-6 px-4'>
+        <div className='flex flex-row items-center mt-2.5 gap-6 px-4'>
           <div className='flex flex-row items-center gap-1'>
             <p className='text-black'>{isMyProfilePage ? profile?.following?.length : data?.following_count}</p>
             <p className='text-black/50'>Following</p>

@@ -25,13 +25,13 @@ _Cần làm_
 - Edit
 
   - User name: ?????
-  - Thay đổi img avatar, cover photo
+  - Thay đổi img avatar, cover photo ✔️
   - Hiển thị ngày sinh
 
 - Conversation
 
 - Button back trang
-  - history page
+  - history page(goback) ✔️(tạm)
 
 _Bug_
 

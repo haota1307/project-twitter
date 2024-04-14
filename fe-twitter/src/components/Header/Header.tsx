@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { IoArrowBack } from 'react-icons/io5'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AppContext } from 'src/contexts/app.context'
 
 interface HeaderProps {
@@ -12,6 +12,7 @@ interface HeaderProps {
 
 export default function Header({ isHomePage, showBackArrow, label, hiddenBorder }: HeaderProps) {
   const { isAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
   return (
     <>
       {isHomePage ? (
@@ -37,9 +38,9 @@ export default function Header({ isHomePage, showBackArrow, label, hiddenBorder 
         <div className={`${hiddenBorder ? '' : `border-b`} p-3`}>
           <div className='flex flex-row items-center gap-2'>
             {showBackArrow && (
-              <Link to='/' className='hover:opacity-80 hover:bg-slate-200 p-2 rounded-full'>
+              <button onClick={() => navigate(-1)} className='hover:opacity-80 hover:bg-slate-200 p-2 rounded-full'>
                 <IoArrowBack color='black' size={20} className='cursor-pointer transition' />
-              </Link>
+              </button>
             )}
             <h1 className='text-black text-xl font-semibold'>{label}</h1>
           </div>
