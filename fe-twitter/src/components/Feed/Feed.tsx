@@ -84,22 +84,20 @@ export default function Feed({ user }: FeedProps) {
       </>
     )
   return (
-    <div className='w-fit'>
-      <InfiniteScroll
-        hasMore={pagination.page < pagination.total_page}
-        next={fetchMoreData}
-        dataLength={data.length}
-        loader={<h4>Loading...</h4>}
-      >
-        {data?.map((post: Record<string, any>, index) => {
-          if (post.type === TweetType.Tweet)
-            return (
-              <>
-                <PostItem key={index} data={post as any} user={userData} />
-              </>
-            )
-        })}
-      </InfiniteScroll>
-    </div>
+    <InfiniteScroll
+      hasMore={pagination.page < pagination.total_page}
+      next={fetchMoreData}
+      dataLength={data.length}
+      loader={<h4>Loading...</h4>}
+    >
+      {data?.map((post: Record<string, any>, index) => {
+        if (post.type === TweetType.Tweet)
+          return (
+            <>
+              <PostItem key={index} data={post as any} user={userData} />
+            </>
+          )
+      })}
+    </InfiniteScroll>
   )
 }

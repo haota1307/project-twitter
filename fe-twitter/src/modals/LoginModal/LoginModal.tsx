@@ -150,7 +150,7 @@ export default function LoginModal() {
   const footerContent = (
     <>
       <ButtonWithGG />
-      <div className='text-neutral-400 text-center mt-6 mb-4 flex justify-center gap-2'>
+      <div className='text-neutral-400 text-center mt-6 mb-4 flex flex-col gap-2'>
         <div className='flex justify-center items-center'>
           <p>You don't have an account?</p>
           <span onClick={toggleLoginModal} className='text-blue-600 cursor-pointer hover:underline ml-1'>

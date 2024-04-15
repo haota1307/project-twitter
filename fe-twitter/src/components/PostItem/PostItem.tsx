@@ -95,7 +95,7 @@ export default function PostItem({ data, user }: PostItemProps) {
   }
 
   return (
-    <div className='border-b px-5 p-2'>
+    <div className='border-b px-5 p-2 '>
       <div className='flex flex-row gap-4'>
         <div className='flex flex-row gap-4'>
           <Avatar url={profile?.avatar || user?.avatar || data?.user[0]?.avatar || data?.user?.avatar || ''} />
@@ -108,7 +108,7 @@ export default function PostItem({ data, user }: PostItemProps) {
               </p>
               <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
             </div>
-            <div className='text-black my-2'>{data?.content || ' '}</div>
+            <div className='text-black my-2 whitespace-pre-line break-words'>{data?.content || ' '}</div>
             {data?.medias[0]?.type === MediaType.Image && (
               <div className='w-full pt-[100%] relative'>
                 <img
