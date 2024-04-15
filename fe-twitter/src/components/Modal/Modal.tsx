@@ -55,10 +55,10 @@ export default function Modal({
 
   return (
     <>
-      <div className='flex justify-center items-center overflow-x-hidden overflow-y-scroll fixed inset-0 z-[999] outline-none focus:outline-none bg-neutral-800 bg-opacity-70'>
-        <div className='relative w-full lg:w-3/6 h-auto'>
+      <div className='flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-[999] outline-none focus:outline-none bg-neutral-800 bg-opacity-70'>
+        <div className='relative w-full max-w-2xl max-h-full'>
           {/* content */}
-          <div className='h-full lg:h-auto border rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
+          <div className='h-full lg:h-auto border rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none '>
             {/* header */}
             <div className='flex items-center justify-center p-10 rounded-t'>
               <h3 className='text-3xl font-semibold text-black'>{title}</h3>

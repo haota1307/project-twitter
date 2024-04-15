@@ -15,6 +15,8 @@ import { toast } from 'react-toastify'
 import useRegisterModal from 'src/hooks/useRegisterModal'
 import ButtonWithGG from 'src/components/ButtonWithGG'
 import userApi from 'src/apis/user.api'
+import Button from 'src/components/Button'
+import useForgotPasswordModal from 'src/hooks/useForgotpasswordModal'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 
@@ -36,6 +38,7 @@ const loginSchema = schema.pick(['email', 'password'])
 export default function LoginModal() {
   const loginModal = useLoginModal()
   const registerModal = useRegisterModal()
+  const forgotPasswordModal = useForgotPasswordModal()
 
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
 
@@ -57,11 +60,19 @@ export default function LoginModal() {
 
   const isLoading = loginMutation.isPending
 
-  const toggleLogin = useCallback(() => {
+  const toggleLoginModal = useCallback(() => {
     if (isLoading) {
       return
     }
     registerModal.onOpen()
+    loginModal.onClose()
+  }, [registerModal, loginModal, isLoading])
+
+  const toggleForgotPasswordModal = useCallback(() => {
+    if (isLoading) {
+      return
+    }
+    forgotPasswordModal.onOpen()
     loginModal.onClose()
   }, [registerModal, loginModal, isLoading])
 
@@ -139,11 +150,21 @@ export default function LoginModal() {
   const footerContent = (
     <>
       <ButtonWithGG />
-      <div className='text-neutral-400 text-center mt-4 flex justify-center'>
-        <p>You don't have an account?</p>
-        <span onClick={toggleLogin} className='text-blue-600 cursor-pointer hover:underline ml-1'>
-          Create account
-        </span>
+      <div className='text-neutral-400 text-center mt-6 mb-4 flex justify-center gap-2'>
+        <div className='flex justify-center items-center'>
+          <p>You don't have an account?</p>
+          <span onClick={toggleLoginModal} className='text-blue-600 cursor-pointer hover:underline ml-1'>
+            Create account
+          </span>
+          ,
+        </div>
+
+        <div className='flex justify-center items-center'>
+          <p>if you forget your password</p>
+          <span onClick={toggleForgotPasswordModal} className='text-blue-600 cursor-pointer hover:underline ml-1'>
+            forgot password
+          </span>
+        </div>
       </div>
     </>
   )

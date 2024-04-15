@@ -120,7 +120,7 @@ export default function PostItem({ data, user }: PostItemProps) {
             {data?.medias[0]?.type === MediaType.Video && (
               <div className='w-full pt-[100%] relative'>
                 <video
-                  className='absolute top-0 left-0 w-full h-full bg-black rounded-2xl'
+                  className='block absolute top-0 left-0 w-full h-full bg-black rounded-2xl object-cover'
                   src={data.medias[0]?.url}
                   controls
                   ref={videoRef}

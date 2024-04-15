@@ -10,6 +10,7 @@ import Popover from '../Popover'
 import http from 'src/utils/http'
 import { toast } from 'react-toastify'
 import useChangePasswordModal from 'src/hooks/useChangePasswordModal'
+import userApi from 'src/apis/user.api'
 
 export default function Bio({ data }: User | any) {
   const { profile } = useContext(AppContext)
@@ -32,8 +33,8 @@ export default function Bio({ data }: User | any) {
   }
 
   const handleForgotPassword = () => {
-    http
-      .post('/users/forgot-password', { email: profile?.email })
+    userApi
+      .forgotPassword({ email: profile?.email || '' })
       .then((data) => {
         toast.success(data.data.message, {
           position: 'top-right',

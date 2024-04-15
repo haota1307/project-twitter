@@ -32,7 +32,7 @@ export default function ButtonWithGG() {
       </div>
       <Link
         to={googleOAuthUrl}
-        className='w-full font-semibold mt-3 shadow-sm rounded-full py-2.5 bg-indigo-100 text-gray-800 flex items-center justify-center hover:opacity-85'
+        className='w-full font-semibold mt-3 shadow-sm rounded-full py-2 bg-indigo-100 text-gray-800 flex items-center justify-center hover:opacity-85'
       >
         <div className='bg-white p-2 rounded-full'>
           <svg className='w-4' viewBox='0 0 533.5 544.3'>

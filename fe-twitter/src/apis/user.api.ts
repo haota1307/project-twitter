@@ -48,6 +48,11 @@ const userApi = {
       },
       baseURL: config.baseUrl
     })
+  },
+  forgotPassword(data: { email: string }) {
+    return http.post('/users/forgot-password', data, {
+      baseURL: config.baseUrl
+    })
   }
 }
 export default userApi

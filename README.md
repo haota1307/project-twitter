@@ -1,11 +1,11 @@
 _Cần làm_
 
-- Authen:
+- Authen: ✔️
 
   - Trang xác thực tài khoản ✔️
-  - Quên tài khoản mật khẩu
+  - Quên tài khoản mật khẩu ✔️
     - Quên tài khoản trong profile ✔️
-    - Quên tài khoản lúc đăng nhập
+    - Quên tài khoản lúc đăng nhập ✔️
   - Đổi mật khẩu ✔️
 
 - Main feed
@@ -26,7 +26,7 @@ _Cần làm_
 
   - User name: ?????
   - Thay đổi img avatar, cover photo ✔️
-  - Hiển thị ngày sinh
+  - Hiển thị ngày sinh ✔️
 
 - Conversation
 
