@@ -144,6 +144,19 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
     }
   }, [])
 
+  const renderContentWithHashtags = (content: any) => {
+    return content.split(' ').map((word: any, index: any) => {
+      // Kiểm tra xem từ có phải là hashtag không
+      if (word.startsWith('#')) {
+        return (
+          <span key={index} className='text-blue-500 font-semibold mr-1'>
+            {word}
+          </span>
+        )
+      }
+    })
+  }
+
   return (
     <div className='border-b px-5 p-2'>
       {isAuthenticated ? (
@@ -157,6 +170,7 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
               placeholder={placeholder}
               className='disabled:opacity-80 peer mt-3 w-full right-0 resize-none outline-none text-lg placeholder-neutral-400 text-black'
             ></textarea>
+            <div className='mb-2'>{renderContentWithHashtags(body.content)}</div>
             {file?.type.startsWith('image/') && (
               <div className='w-full pt-[100%] relative'>
                 <img src={previewFile} className='absolute top-0 left-0 bg-white w-full h-full object-cover' />
@@ -172,7 +186,7 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
                 />
               </div>
             )}
-            <hr className='opacity-0 peer-focus:opacity-100 h-[1px] w-full border-neutral-500 transition' />
+            <hr className='opacity-0 peer-focus:opacity-100 h-[1px] w-full border-neutral-500 transition mb-2' />
             <div className='flex justify-start items-center mt-1'>
               <p className='text-base text-blue-500 font-semibold p-2 hover:bg-blue-50 hover:cursor-pointer rounded-3xl'>
                 Every one??
