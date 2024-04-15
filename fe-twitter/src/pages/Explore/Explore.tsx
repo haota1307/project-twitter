@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import searchApi from 'src/apis/search.api'
 import { useDebounce } from 'src/hooks/useDebounce'
 import SkeletonLoading from 'src/components/SkeletonLoading'
+import Header from 'src/components/Header'
 
 export default function Explore() {
   const [searchValue, setSearchValue] = useState<string>('')
@@ -38,6 +39,7 @@ export default function Explore() {
   return (
     <>
       <div className='flex items-center'>
+        <Header hiddenBorder showBackArrow />
         <div className='focus-within:w-full mt-2'>
           <div className='max-w-lg mx-auto'>
             <div className='relative'>
