@@ -25,27 +25,27 @@ function RedirectRoute() {
 }
 
 export default function useRouteElement() {
-  const Loading = (
-    <div className='w-full h-screen flex justify-center items-center  bg-gradient-to-bl from-blue-50 via-sky-300 to-sky-400'>
+  const LoadingPage = (
+    <div className='w-full h-screen flex justify-center items-center  bg-gradient-to-r from-blue-200 to-cyan-200'>
       <div className='animate-pulse flex justify-center items-center'>
         <IoLogoTwitter size={80} color='#fff' />
       </div>
     </div>
   )
-
   const routeElements = useRoutes([
     {
       path: '',
-      element: (
-        <Suspense fallback={Loading}>
-          <MainLayout />
-        </Suspense>
-      ),
       children: [
         {
           index: true,
           path: '/',
-          element: <Home />
+          element: (
+            <Suspense fallback={LoadingPage}>
+              <MainLayout>
+                <Home />
+              </MainLayout>
+            </Suspense>
+          )
         }
       ]
     },
@@ -55,7 +55,11 @@ export default function useRouteElement() {
       children: [
         {
           path: ':tweet_id',
-          element: <Tweet />
+          element: (
+            <Suspense>
+              <Tweet />
+            </Suspense>
+          )
         }
       ]
     },
@@ -65,7 +69,11 @@ export default function useRouteElement() {
       children: [
         {
           path: ':user_name',
-          element: <Users />
+          element: (
+            <Suspense>
+              <Users />
+            </Suspense>
+          )
         }
       ]
     },
@@ -76,61 +84,61 @@ export default function useRouteElement() {
         {
           path: '/Explore',
           element: (
-            <Suspense fallback={Loading}>
-              <MainLayout>
+            <MainLayout>
+              <Suspense>
                 <Explore />
-              </MainLayout>
-            </Suspense>
+              </Suspense>
+            </MainLayout>
           )
         },
         {
           path: '/Messages',
           element: (
-            <Suspense fallback={Loading}>
-              <MainLayout>
+            <MainLayout>
+              <Suspense>
                 <Message />
-              </MainLayout>
-            </Suspense>
+              </Suspense>
+            </MainLayout>
           )
         },
         {
           path: '/Profile',
           element: (
-            <Suspense fallback={Loading}>
-              <MainLayout>
+            <MainLayout>
+              <Suspense>
                 <Profile />
-              </MainLayout>
-            </Suspense>
+              </Suspense>
+            </MainLayout>
           )
         },
         {
           path: '/Bookmark',
           element: (
-            <Suspense fallback={Loading}>
-              <MainLayout>
+            <MainLayout>
+              <Suspense>
                 <Bookmark />
-              </MainLayout>
-            </Suspense>
+              </Suspense>
+            </MainLayout>
           )
         },
         {
           path: '/Following',
           element: (
-            <Suspense fallback={Loading}>
-              <MainLayout>
+            <MainLayout>
+              <Suspense>
                 <HomeFollowing />
-              </MainLayout>
-            </Suspense>
+              </Suspense>
+            </MainLayout>
           )
         },
         {
           path: '/email-verifications',
           element: (
-            <Suspense fallback={Loading}>
-              <MainLayout>
+            <MainLayout>
+              <Suspense>
                 <VerifyEmail />
-              </MainLayout>
-            </Suspense>
+              </Suspense>
+            </MainLayout>
           )
         }
       ]
@@ -138,7 +146,7 @@ export default function useRouteElement() {
     {
       path: '/login/oauth',
       element: (
-        <Suspense fallback={Loading}>
+        <Suspense>
           <Login />
         </Suspense>
       )
@@ -146,7 +154,7 @@ export default function useRouteElement() {
     {
       path: '/forgot-password',
       element: (
-        <Suspense fallback={Loading}>
+        <Suspense>
           <VerifyForgotPasswordToken />
         </Suspense>
       )
@@ -154,7 +162,7 @@ export default function useRouteElement() {
     {
       path: '/reset-password',
       element: (
-        <Suspense fallback={Loading}>
+        <Suspense>
           <ResetPassword />
         </Suspense>
       )

@@ -6,12 +6,12 @@ import useRegisterModal from 'src/hooks/useRegisterModal'
 import Button from '../Button'
 import { AppContext } from 'src/contexts/app.context'
 import Avatar from '../Avatar'
-import config from 'src/constants/config'
 import { Media, TweetAudience, TweetBody, TweetType } from 'src/types/tweet.type'
 import InputFile from '../InputFile'
 import mediaApi from 'src/apis/media.api'
 import tweetApi from 'src/apis/tweet.api'
 import { IoImageOutline, IoVideocamOutline } from 'react-icons/io5'
+import { extractHashtags } from 'src/utils/hashtag'
 
 interface FormProps {
   placeholder: string
@@ -46,6 +46,8 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
 
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
+
+  const hashtagFromBody = extractHashtags(body?.content)
 
   const previewFile = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
@@ -107,7 +109,7 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
   }
 
   const createTweet = () =>
-    tweetApi.createTweet({ ...body }).then(() => {
+    tweetApi.createTweet({ ...body, hashtags: hashtagFromBody }).then(() => {
       toast.success('Create success', { autoClose: 1000 })
     })
 

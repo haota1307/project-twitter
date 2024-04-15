@@ -93,9 +93,9 @@ export default function Feed({ user }: FeedProps) {
       {data?.map((post: Record<string, any>, index) => {
         if (post.type === TweetType.Tweet)
           return (
-            <>
+            <div className=''>
               <PostItem key={index} data={post as any} user={userData} />
-            </>
+            </div>
           )
       })}
     </InfiniteScroll>

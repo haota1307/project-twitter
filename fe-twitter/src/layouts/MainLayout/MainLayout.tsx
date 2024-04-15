@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Outlet } from 'react-router-dom'
 import Followbar from 'src/components/Followbar'
 import Sidebar from 'src/components/Sidebar'
@@ -5,7 +6,7 @@ import Sidebar from 'src/components/Sidebar'
 interface Props {
   children?: React.ReactNode
 }
-export default function MainLayout({ children }: Props) {
+function MainLayoutInner({ children }: Props) {
   return (
     <>
       <div className='h-screen bg-white'>
@@ -23,3 +24,5 @@ export default function MainLayout({ children }: Props) {
     </>
   )
 }
+const MainLayout = memo(MainLayoutInner)
+export default MainLayout
