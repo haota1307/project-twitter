@@ -15,6 +15,7 @@ _Cần làm_
 
 - Tweet
 
+  - Hashtag
   - Audian
   - Sửa, xóa
 
@@ -24,7 +25,7 @@ _Cần làm_
 
 - Edit
 
-  - User name: ?????
+  -
   - Thay đổi img avatar, cover photo ✔️
   - Hiển thị ngày sinh ✔️
 
