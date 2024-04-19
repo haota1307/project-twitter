@@ -4,10 +4,11 @@ import SearchUserItem from './SearchUserItem'
 import SearchTweetItem from './SearchTweetItem'
 
 interface SearchResultProps {
-  data?: string[]
+  dataTweet?: string[]
+  dataUser?: string[]
 }
 
-export default function SearchResult({ data }: SearchResultProps) {
+export default function SearchResult({ dataTweet, dataUser }: SearchResultProps) {
   const [isActiveTweetBtn, setIsActiveTweet] = useState<Boolean>(true)
   const [isActiveUserBtn, setIsActiveUserBtn] = useState<Boolean>(false)
 
@@ -49,7 +50,8 @@ export default function SearchResult({ data }: SearchResultProps) {
             User
           </button>
         </div>
-        {isActiveTweetBtn ? <SearchTweetItem data={data} /> : <SearchUserItem />}
+
+        {isActiveTweetBtn ? <SearchTweetItem data={dataTweet} /> : <SearchUserItem data={dataUser as string[]} />}
       </div>
     </>
   )

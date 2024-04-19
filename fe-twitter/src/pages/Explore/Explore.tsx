@@ -9,16 +9,30 @@ import Header from 'src/components/Header'
 
 export default function Explore() {
   const [searchValue, setSearchValue] = useState<string>('')
-  const [searchResult, setSearchResult] = useState()
+  const [searchTweetResult, setSearchTweetResult] = useState()
+  const [searchUserResult, setSearchUserResult] = useState()
   const [isSearching, setIsSearching] = useState<Boolean>()
   const debouncedSearch = useDebounce(searchValue)
 
-  const onSearch = async () => {
+  const onSearchTweet = async () => {
     setIsSearching(true)
     searchApi
       .searchTweet(debouncedSearch, 20, 1, 0)
       .then((data) => {
-        setSearchResult(data.data.result.tweets)
+        setSearchTweetResult(data.data.result.tweets)
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsSearching(false)
+      })
+  }
+
+  const onSearchUser = async () => {
+    setIsSearching(true)
+    searchApi
+      .searchUser(debouncedSearch, 20, 1)
+      .then((data) => {
+        setSearchUserResult(data.data.result.user)
       })
       .catch((err) => console.log(err))
       .finally(() => {
@@ -32,8 +46,8 @@ export default function Explore() {
     // Kiểm tra nếu debouncedSearch chỉ chứa khoảng trắng
     const isWhitespace = /^\s*$/.test(debouncedSearch)
     if (isWhitespace) return
-
-    onSearch()
+    onSearchTweet()
+    onSearchUser()
   }, [debouncedSearch])
 
   return (
@@ -56,7 +70,7 @@ export default function Explore() {
           </div>
         </div>
       </div>
-      {isSearching ? <SkeletonLoading /> : <SearchResult data={searchResult} />}
+      {isSearching ? <SkeletonLoading /> : <SearchResult dataTweet={searchTweetResult} dataUser={searchUserResult} />}
     </>
   )
 }
