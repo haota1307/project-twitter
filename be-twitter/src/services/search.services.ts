@@ -275,6 +275,59 @@ class SearchService {
       total: total[0]?.total || 0
     }
   }
+
+  async searchUser({ limit, page, content }: { limit: number; page: number; content: string }) {
+    const $match: any = {
+      $text: {
+        $search: content
+      }
+    }
+    const [users, total] = await Promise.all([
+      databaseService.users
+        .aggregate([
+          {
+            $match
+          },
+          {
+            $project: {
+              name: 1,
+              username: 1,
+              avatar: 1,
+              cover_photo: 1
+            }
+          },
+          {
+            $skip: 0
+          },
+          {
+            $limit: 10
+          }
+        ])
+        .toArray(),
+      databaseService.users
+        .aggregate([
+          {
+            $match
+          },
+          {
+            $project: {
+              name: 1,
+              username: 1,
+              avatar: 1,
+              cover_photo: 1
+            }
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+    return {
+      users,
+      total: total[0]?.total || 0
+    }
+  }
 }
 
 const searchService = new SearchService()

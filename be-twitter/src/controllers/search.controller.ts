@@ -24,3 +24,22 @@ export const searchTweetController = async (req: Request<ParamsDictionary, any, 
     }
   })
 }
+
+export const searchUserController = async (req: Request<ParamsDictionary, any, any, SearchQuery>, res: Response) => {
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const result = await searchService.searchUser({
+    limit,
+    page,
+    content: req.query.content
+  })
+  res.json({
+    message: 'Search Successfully',
+    result: {
+      user: result.users,
+      limit,
+      page,
+      total_page: Math.ceil(result.total / limit)
+    }
+  })
+}

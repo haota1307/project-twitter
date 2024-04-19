@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { searchTweetController } from '~/controllers/search.controller'
+import { searchTweetController, searchUserController } from '~/controllers/search.controller'
 import { searchValidator } from '~/middlewares/search.middlewares'
 import { paginationValidator } from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
@@ -14,6 +14,15 @@ searchRouter.get(
   searchValidator,
   paginationValidator,
   wrapRequestHandler(searchTweetController)
+)
+
+searchRouter.get(
+  '/user',
+  accessTokenValidator,
+  verifiedUserValidator,
+  searchValidator,
+  paginationValidator,
+  wrapRequestHandler(searchUserController)
 )
 
 export default searchRouter
