@@ -120,7 +120,6 @@ export class Http {
   }
   // handle Refresh token
   private handleRefreshToken() {
-    console.log('Refresh token')
     return this.instance
       .post<RefreshTokenReponse>(URL_REFRESH_TOKEN, {
         refresh_token: this.refreshToken

@@ -21,7 +21,6 @@ export default function LogoutModal() {
           position: 'top-center',
           autoClose: 1500
         })
-        logoutModal.onClose()
         setIsAuthenticated(false)
         localStorage.removeItem('access_token')
         localStorage.removeItem('refresh_token')
@@ -31,6 +30,7 @@ export default function LogoutModal() {
         console.log(err)
       })
       .finally(() => {
+        logoutModal.onClose()
         setIsLoading(false)
       })
   }
