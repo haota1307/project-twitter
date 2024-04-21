@@ -110,7 +110,11 @@ export default function PostItem({ data, user }: PostItemProps) {
               {data.content.split(' ').map((str, index) => {
                 if (str.startsWith('#')) {
                   return (
-                    <Link to={`/explore/${str.substring(1)}`} key={index} className='text-blue-500 font-bold italic'>
+                    <Link
+                      to={`/explore/tweet?content=${str.substring(1)}`}
+                      key={index}
+                      className='text-blue-500 font-bold italic'
+                    >
                       {str}{' '}
                     </Link>
                   )
