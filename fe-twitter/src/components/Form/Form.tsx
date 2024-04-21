@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import useLoginModal from 'src/hooks/useLoginModal'
@@ -6,12 +5,12 @@ import useRegisterModal from 'src/hooks/useRegisterModal'
 import Button from '../Button'
 import { AppContext } from 'src/contexts/app.context'
 import Avatar from '../Avatar'
-import { Media, TweetAudience, TweetBody, TweetType } from 'src/types/tweet.type'
+import { TweetAudience, TweetBody, TweetType } from 'src/types/tweet.type'
 import InputFile from '../InputFile'
 import mediaApi from 'src/apis/media.api'
 import tweetApi from 'src/apis/tweet.api'
 import { IoImageOutline, IoVideocamOutline } from 'react-icons/io5'
-import { extractHashtags } from 'src/utils/hashtag'
+import { useDebounce } from 'src/hooks/useDebounce'
 
 interface FormProps {
   placeholder: string
@@ -25,13 +24,10 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
   const { isAuthenticated, profile } = useContext(AppContext)
 
   const [file, setFile] = useState<File>()
+  const [hashtags, setHashtags] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [type, setType] = useState(isComment ? TweetType.Comment : TweetType.Tweet)
   const [tweetParentId, setTweetParentId] = useState<string | null>(parentId ? parentId : null)
-
-  const videoRef = useRef(null)
-  const toastId = useRef(null)
-
   const initialBody = {
     type,
     audience: TweetAudience.Everyone,
@@ -41,13 +37,28 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
     mentions: [],
     medias: []
   }
-
   const [body, setBody] = useState<TweetBody>(initialBody)
+
+  const videoRef = useRef(null)
+  const toastId = useRef(null)
 
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
 
-  const hashtagFromBody = extractHashtags(body?.content)
+  const debouncedContent = useDebounce(body.content)
+
+  useEffect(() => {
+    const isWhitespace = /^\s*$/.test(debouncedContent)
+    if (!debouncedContent || debouncedContent.trim() === '') return
+    if (isWhitespace) return
+
+    // setHashtags((body.content.match(/#[^\s#]+/g) || []).map((tag) => tag.substring(1)))
+    const uniqueHashtags = new Set<string>()
+    const matches = body.content.match(/#[^\s#]+/g) || []
+    matches.forEach((tag) => uniqueHashtags.add(tag.substring(1)))
+
+    setHashtags(Array.from(uniqueHashtags))
+  }, [debouncedContent])
 
   const previewFile = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
@@ -109,13 +120,9 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
   }
 
   const createTweet = () =>
-    tweetApi.createTweet({ ...body, hashtags: hashtagFromBody }).then(() => {
+    tweetApi.createTweet({ ...body }).then(() => {
       toast.success('Create success', { autoClose: 1000 })
     })
-
-  useEffect(() => {
-    if (file) createTweet()
-  }, [body.medias])
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true)
@@ -144,18 +151,26 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
     }
   }, [])
 
-  const renderContentWithHashtags = (content: any) => {
-    return content.split(' ').map((word: any, index: any) => {
-      // Kiểm tra xem từ có phải là hashtag không
-      if (word.startsWith('#')) {
-        return (
-          <span key={index} className='text-blue-500 font-semibold mr-1'>
-            {word}
-          </span>
-        )
+  useEffect(() => {
+    if (file) createTweet()
+  }, [body.medias])
+
+  const handleHashtag = (value: string) => {
+    const uniqueHashtags = new Set<string>()
+    value.split(' ').forEach((str) => {
+      if (str.startsWith('#')) {
+        uniqueHashtags.add(str)
       }
     })
+
+    return Array.from(uniqueHashtags).map((tag) => (
+      <a key={tag} href={`/${tag}`} className='text-blue-500 font-bold'>
+        {tag}{' '}
+      </a>
+    ))
   }
+
+  console.log(body)
 
   return (
     <div className='border-b px-5 p-2'>
@@ -164,13 +179,14 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
           <Avatar url={profile?.avatar} />
           <div className='w-full'>
             <textarea
+              id='textarea'
               disabled={isLoading}
-              onChange={(e) => setBody({ ...body, content: e.target.value })}
+              onChange={(e) => setBody({ ...body, content: e.target.value, hashtags: hashtags })}
               value={body.content}
               placeholder={placeholder}
               className='disabled:opacity-80 peer mt-3 w-full right-0 resize-none outline-none text-lg placeholder-neutral-400 text-black'
             ></textarea>
-            <div className='mb-2'>{renderContentWithHashtags(body.content)}</div>
+            {hashtags.length > 0 && <p className='ml-1'>Hashtag: {handleHashtag(body.content)}</p>}
             {file?.type.startsWith('image/') && (
               <div className='w-full pt-[100%] relative'>
                 <img src={previewFile} className='absolute top-0 left-0 bg-white w-full h-full object-cover' />

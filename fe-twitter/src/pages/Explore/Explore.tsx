@@ -12,6 +12,7 @@ export default function Explore() {
   const [searchTweetResult, setSearchTweetResult] = useState()
   const [searchUserResult, setSearchUserResult] = useState()
   const [isSearching, setIsSearching] = useState<Boolean>()
+
   const debouncedSearch = useDebounce(searchValue)
 
   const onSearchTweet = async () => {
