@@ -9,7 +9,6 @@ import Input from 'src/components/Input'
 import Modal from 'src/components/Modal'
 import useResetPasswordModal from 'src/hooks/useResetPasswordModal'
 import { ErrorResponseApi } from 'src/types/utils.type'
-import http from 'src/utils/http'
 import { Schema, schema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 

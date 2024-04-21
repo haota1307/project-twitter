@@ -6,14 +6,17 @@ import searchApi from 'src/apis/search.api'
 import { useDebounce } from 'src/hooks/useDebounce'
 import SkeletonLoading from 'src/components/SkeletonLoading'
 import Header from 'src/components/Header'
+import { useLocation } from 'react-router-dom'
 
 export default function Explore() {
   const [searchValue, setSearchValue] = useState<string>('')
   const [searchTweetResult, setSearchTweetResult] = useState()
   const [searchUserResult, setSearchUserResult] = useState()
   const [isSearching, setIsSearching] = useState<Boolean>()
+  const location = useLocation()
+  const { searchHashtag } = location.state || {}
 
-  const debouncedSearch = useDebounce(searchValue)
+  const debouncedSearch = useDebounce(searchHashtag || searchValue)
 
   const onSearchTweet = async () => {
     setIsSearching(true)
@@ -51,11 +54,15 @@ export default function Explore() {
     onSearchUser()
   }, [debouncedSearch])
 
+  useEffect(() => {
+    if (searchHashtag) onSearchTweet()
+  }, [searchHashtag])
+
   return (
     <>
       <div className='flex items-center'>
         <Header hiddenBorder showBackArrow />
-        <div className='focus-within:w-full mt-2'>
+        <div className='w-full mt-2'>
           <div className='max-w-lg mx-auto'>
             <div className='relative'>
               <div className='absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-500'>
@@ -65,6 +72,7 @@ export default function Explore() {
                 name='Search'
                 placeholder='Search'
                 onChange={(e) => setSearchValue(e.target.value)}
+                value={searchHashtag || searchValue}
                 classNameOptionSearch
               />
             </div>

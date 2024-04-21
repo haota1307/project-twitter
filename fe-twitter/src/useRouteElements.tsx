@@ -92,6 +92,16 @@ export default function useRouteElement() {
           )
         },
         {
+          path: '/Explore/tweet',
+          element: (
+            <MainLayout>
+              <Suspense>
+                <Explore />
+              </Suspense>
+            </MainLayout>
+          )
+        },
+        {
           path: '/Messages',
           element: (
             <MainLayout>

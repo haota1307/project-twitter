@@ -3,9 +3,10 @@ import { TweetType } from 'src/types/tweet.type'
 
 interface SearchTweetItemProps {
   data?: string[]
+  borderTop?: boolean
 }
 
-export default function SearchTweetItem({ data }: SearchTweetItemProps) {
+export default function SearchTweetItem({ data, borderTop }: SearchTweetItemProps) {
   if (data?.length === 0 || data === undefined)
     return (
       <div className='mt-12 text-gray-400 flex items-center justify-center'>
@@ -13,7 +14,7 @@ export default function SearchTweetItem({ data }: SearchTweetItemProps) {
       </div>
     )
   return (
-    <div>
+    <div className={borderTop ? 'border-t mt-4' : ''}>
       {data?.map((post: any, index) => {
         if (post?.type === TweetType.Tweet) console.log(post)
         return (

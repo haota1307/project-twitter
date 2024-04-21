@@ -21,7 +21,7 @@ _Cần làm_
 
 - Explore
 
-  - Search: user
+  - Search: user ✔️
 
 - Edit
 

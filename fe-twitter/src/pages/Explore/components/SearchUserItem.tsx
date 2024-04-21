@@ -16,7 +16,7 @@ export default function SearchUserItem({ data }: SearUserItemProps) {
     <>
       {data?.map((user: any) => (
         <Link to={`/users/${user.username}`}>
-          <div className='flex flex-row items-start gap-2 p-2 hover:bg-slate-200'>
+          <div className='flex flex-row items-start gap-2 px-2 py-4 hover:bg-slate-200 border-b'>
             <div>
               <Avatar url={user?.avatar} />
             </div>

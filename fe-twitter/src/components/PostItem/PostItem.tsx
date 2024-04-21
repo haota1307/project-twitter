@@ -13,7 +13,7 @@ import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 import interactApi from 'src/apis/interact.api'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { User } from 'src/types/user.type'
 
 interface PostItemProps {
@@ -112,8 +112,9 @@ export default function PostItem({ data, user }: PostItemProps) {
                   return (
                     <Link
                       to={`/explore/tweet?content=${str.substring(1)}`}
+                      state={{ searchHashtag: str.substring(1) }}
                       key={index}
-                      className='text-blue-500 font-bold italic'
+                      className='text-blue-500 font-bold italic hover:opacity-80'
                     >
                       {str}{' '}
                     </Link>
