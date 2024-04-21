@@ -106,7 +106,18 @@ export default function PostItem({ data, user }: PostItemProps) {
               </p>
               <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
             </div>
-            <div className='text-black my-2 whitespace-pre-line break-words'>{data?.content || ' '}</div>
+            <div className='text-black my-2 whitespace-pre-line break-words'>
+              {data.content.split(' ').map((str, index) => {
+                if (str.startsWith('#')) {
+                  return (
+                    <Link to={`/explore/${str.substring(1)}`} key={index} className='text-blue-500 font-bold italic'>
+                      {str}{' '}
+                    </Link>
+                  )
+                }
+                return str + ' '
+              })}
+            </div>
             {data?.medias[0]?.type === MediaType.Image && (
               <div className='w-full pt-[100%] relative'>
                 <img

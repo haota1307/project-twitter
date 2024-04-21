@@ -15,7 +15,7 @@ _Cần làm_
 
 - Tweet
 
-  - Hashtag
+  - Hashtag ✔️
   - Audian
   - Sửa, xóa
 
