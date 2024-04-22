@@ -27,7 +27,7 @@ export const MyBookmarksController = async (req: Request, res: Response) => {
     result: {
       limit,
       page,
-      total_page: Math.ceil((result.total as number) / limit),
+      total_page: Math.ceil((result.total as any) / limit),
       list_Bookmark: result.isMyBookmarks
     }
   })

@@ -89,7 +89,7 @@ export default function BookmarkList({ userId }: BookmarkProps) {
       loader={<h4>Loading...</h4>}
     >
       {data?.map((post: Record<string, any>) => {
-        if (post?.tweet[0]?.type === TweetType?.Tweet)
+        if (post?.tweet[0]?.type === TweetType?.Tweet && post.tweet[0] !== undefined)
           return (
             <>
               <PostItem key={post.tweet[0]._id} data={post.tweet[0] as any} user={post.user[0]} />
