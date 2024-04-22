@@ -18,9 +18,10 @@ interface FormProps {
   postId?: string
   parentId?: string
   hiddenBtn?: boolean
+  refreshFeed?: () => void
 }
 
-export default function Form({ placeholder, isComment, postId, parentId, hiddenBtn }: FormProps) {
+export default function Form({ placeholder, isComment, postId, parentId, hiddenBtn, refreshFeed }: FormProps) {
   const { isAuthenticated, profile } = useContext(AppContext)
 
   const [file, setFile] = useState<File>()
@@ -123,6 +124,9 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
     tweetApi.createTweet({ ...body }).then(() => {
       toast.success('Create success', { autoClose: 1000 })
       setBody(initialBody)
+      if (refreshFeed) {
+        refreshFeed()
+      }
     })
 
   const onSubmit = useCallback(async () => {

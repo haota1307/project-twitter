@@ -72,6 +72,10 @@ export default function Home() {
     fetchData()
   }, [])
 
+  const handleNewPost = () => {
+    fetchData()
+  }
+
   if (data.length === 0)
     return (
       <>
@@ -81,7 +85,11 @@ export default function Home() {
   return (
     <>
       <Header isHomePage />
-      {profile?.verify === 1 || !isAuthenticated ? <Form placeholder="What's happening?!" /> : <AlertVerify />}
+      {profile?.verify === 1 || !isAuthenticated ? (
+        <Form placeholder="What's happening?!" refreshFeed={handleNewPost} />
+      ) : (
+        <AlertVerify />
+      )}
       <InfiniteScroll
         hasMore={pagination.page < pagination.total_page}
         next={fetchMoreData}
