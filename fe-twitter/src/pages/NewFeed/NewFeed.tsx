@@ -4,7 +4,6 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
 import PostItem from 'src/components/PostItem'
-import { User } from 'src/types/user.type'
 const LIMIT = 5
 const PAGE = 1
 
