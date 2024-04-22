@@ -72,6 +72,7 @@ export default function BookmarkList({ userId }: BookmarkProps) {
     if (userId) fetchData()
   }, [userId])
 
+  console.log(data)
   if (data.length === 0)
     return (
       <>
@@ -87,8 +88,8 @@ export default function BookmarkList({ userId }: BookmarkProps) {
       dataLength={data.length}
       loader={<h4>Loading...</h4>}
     >
-      {data?.map((post: Record<string, any>, index) => {
-        if (post.tweet[0].type === TweetType.Tweet)
+      {data?.map((post: Record<string, any>) => {
+        if (post?.tweet[0]?.type === TweetType?.Tweet)
           return (
             <>
               <PostItem key={post.tweet[0]._id} data={post.tweet[0] as any} user={post.user[0]} />
