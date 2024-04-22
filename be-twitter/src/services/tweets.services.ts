@@ -782,14 +782,9 @@ class TweetsService {
           {
             $match: {
               audience: TweetAudience.Everyone,
-              parent_id: null
+              parent_id: null,
+              type: TweetType.Tweet
             }
-          },
-          {
-            $skip: limit * (page - 1)
-          },
-          {
-            $limit: limit
           },
           {
             $count: 'total'
@@ -797,25 +792,25 @@ class TweetsService {
         ])
         .toArray()
     ])
-    // const tweet_ids = tweets.map((tweet) => tweet._id as ObjectId)
-    // const date = new Date()
-    // await databaseService.tweets.updateMany(
-    //   {
-    //     _id: {
-    //       $in: tweet_ids // tìm các id có trong mãng tweet_ids
-    //     }
-    //   },
-    //   {
-    //     $inc: { user_views: 1 },
-    //     $set: {
-    //       updated_at: date
-    //     }
-    //   }
-    // )
-    // tweets.forEach((tweet) => {
-    //   tweet.updated_at = date
-    //   tweet.user_views += 1
-    // })
+    const tweet_ids = tweets.map((tweet) => tweet._id as ObjectId)
+    const date = new Date()
+    await databaseService.tweets.updateMany(
+      {
+        _id: {
+          $in: tweet_ids // tìm các id có trong mãng tweet_ids
+        }
+      },
+      {
+        $inc: { user_views: 1 },
+        $set: {
+          updated_at: date
+        }
+      }
+    )
+    tweets.forEach((tweet) => {
+      tweet.updated_at = date
+      tweet.user_views += 1
+    })
     return {
       tweets,
       total: total[0]?.total || 0

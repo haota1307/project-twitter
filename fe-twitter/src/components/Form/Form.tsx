@@ -122,6 +122,7 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
   const createTweet = () =>
     tweetApi.createTweet({ ...body }).then(() => {
       toast.success('Create success', { autoClose: 1000 })
+      setBody(initialBody)
     })
 
   const onSubmit = useCallback(async () => {

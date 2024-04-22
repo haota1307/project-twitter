@@ -9,7 +9,7 @@ export default function HomeFollowing() {
 
   return (
     <>
-      <Header showBackArrow label='New feeds' />
+      <Header isHomePage />
       {profile?.verify === 1 || !isAuthenticated ? <NewFeed /> : <AlertVerify />}
     </>
   )

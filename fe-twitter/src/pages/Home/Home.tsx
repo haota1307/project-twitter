@@ -6,7 +6,6 @@ import Header from 'src/components/Header'
 import PostItem from 'src/components/PostItem'
 import config from 'src/constants/config'
 import { AppContext } from 'src/contexts/app.context'
-import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
 
 const LIMIT = 5
@@ -15,7 +14,6 @@ const PAGE = 1
 export default function Home() {
   const { profile, isAuthenticated } = useContext(AppContext)
   const [data, setData] = useState([])
-  const [userData, setUserData] = useState()
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0
@@ -50,7 +48,7 @@ export default function Home() {
   const fetchMoreData = () => {
     if (pagination.page <= pagination.total_page)
       http
-        .get('tweets', {
+        .get('tweets/home-feed', {
           params: {
             limit: LIMIT,
             page: pagination.page + 1
@@ -91,12 +89,11 @@ export default function Home() {
         loader={<h4>Loading...</h4>}
       >
         {data?.map((post: Record<string, any>, index) => {
-          if (post.type === TweetType.Tweet)
-            return (
-              <>
-                <PostItem key={index} data={post as any} />
-              </>
-            )
+          return (
+            <>
+              <PostItem key={index} data={post as any} />
+            </>
+          )
         })}
       </InfiniteScroll>
     </>
