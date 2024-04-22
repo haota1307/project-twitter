@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import Avatar from 'src/components/Avatar'
 import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
@@ -32,7 +33,23 @@ export default function TweetDetail({ data }: PostItemProps) {
             <span className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>@{data?.user_id}</span>
             <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
           </div>
-          <div className='text-black my-2'>{data?.content || ' '}</div>
+          <div className='text-black my-2'>
+            {data.content.split(' ').map((str, index) => {
+              if (str.startsWith('#')) {
+                return (
+                  <Link
+                    to={`/explore`}
+                    state={{ searchHashtag: str.substring(1) }}
+                    key={index}
+                    className='text-blue-500 font-bold italic hover:opacity-80'
+                  >
+                    {str}{' '}
+                  </Link>
+                )
+              }
+              return str + ' '
+            })}
+          </div>
           {data?.medias[0]?.type === MediaType.Image && (
             <div className='w-full pt-[100%] relative'>
               <img

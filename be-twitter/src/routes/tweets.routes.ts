@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   createTweetController,
+  getHomeFeedsController,
   getNewFeedsController,
   getTweetChildrenController,
   getTweetController,
@@ -17,6 +18,15 @@ import { accessTokenValidator, isUserLoggedInValidator, verifiedUserValidator } 
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const tweetsRouter = Router()
+
+/**
+ * Description: Get new feeds
+ * Path: /
+ * Method: GET
+ * Query: {limit: number, page: number}
+ */
+
+tweetsRouter.get('/home-feed', paginationValidator, wrapRequestHandler(getHomeFeedsController))
 
 /**
  * Description: create tweet
@@ -100,4 +110,5 @@ tweetsRouter.get(
   verifiedUserValidator,
   wrapRequestHandler(getNewFeedsController)
 )
+
 export default tweetsRouter

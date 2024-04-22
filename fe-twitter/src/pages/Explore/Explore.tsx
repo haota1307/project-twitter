@@ -9,14 +9,14 @@ import Header from 'src/components/Header'
 import { useLocation } from 'react-router-dom'
 
 export default function Explore() {
-  const [searchValue, setSearchValue] = useState<string>('')
+  const location = useLocation()
+  const { searchHashtag } = location.state || {}
+  const [searchValue, setSearchValue] = useState<string>(searchHashtag || '')
   const [searchTweetResult, setSearchTweetResult] = useState()
   const [searchUserResult, setSearchUserResult] = useState()
   const [isSearching, setIsSearching] = useState<Boolean>()
-  const location = useLocation()
-  const { searchHashtag } = location.state || {}
 
-  const debouncedSearch = useDebounce(searchHashtag || searchValue)
+  const debouncedSearch = useDebounce(searchValue)
 
   const onSearchTweet = async () => {
     setIsSearching(true)
@@ -51,12 +51,10 @@ export default function Explore() {
     const isWhitespace = /^\s*$/.test(debouncedSearch)
     if (isWhitespace) return
     onSearchTweet()
-    onSearchUser()
+    if (!searchHashtag) onSearchUser()
   }, [debouncedSearch])
 
-  useEffect(() => {
-    if (searchHashtag) onSearchTweet()
-  }, [searchHashtag])
+  console.log(searchHashtag)
 
   return (
     <>
@@ -72,7 +70,7 @@ export default function Explore() {
                 name='Search'
                 placeholder='Search'
                 onChange={(e) => setSearchValue(e.target.value)}
-                value={searchHashtag || searchValue}
+                value={searchValue}
                 classNameOptionSearch
               />
             </div>

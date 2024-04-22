@@ -170,8 +170,6 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
     ))
   }
 
-  console.log(body)
-
   return (
     <div className='border-b px-5 p-2'>
       {isAuthenticated ? (
@@ -179,7 +177,6 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
           <Avatar url={profile?.avatar} />
           <div className='w-full'>
             <textarea
-              id='textarea'
               disabled={isLoading}
               onChange={(e) => setBody({ ...body, content: e.target.value, hashtags: hashtags })}
               value={body.content}

@@ -96,3 +96,22 @@ export const getNewFeedsController = async (req: Request<ParamsDictionary, any, 
     }
   })
 }
+
+export const getHomeFeedsController = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const result = await tweetsService.getHomeFeeds({
+    limit,
+    page
+  })
+
+  return res.json({
+    message: TWEETS_MESSAGES.GET_NEW_FEEDS_SUCCESSFULLY,
+    result: {
+      tweets: result.tweets,
+      limit,
+      page,
+      total_page: Math.ceil(result.total / limit)
+    }
+  })
+}

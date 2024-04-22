@@ -3,7 +3,7 @@ import databaseService from './database.services'
 import Tweet from '~/models/schemas/Tweet.schema'
 import { ObjectId, WithId } from 'mongodb'
 import Hashtag from '~/models/schemas/Hashtag.schema'
-import { TweetType } from '~/constants/enums'
+import { TweetAudience, TweetType } from '~/constants/enums'
 
 class TweetsService {
   async checkAndCreateHashtags(hashtag: string[]) {
@@ -634,6 +634,194 @@ class TweetsService {
     }
   }
 
+  async getHomeFeeds({ limit, page }: { limit: number; page: number }) {
+    const [tweets, total] = await Promise.all([
+      databaseService.tweets
+        .aggregate([
+          {
+            $match: {
+              audience: TweetAudience.Everyone,
+              parent_id: null
+            }
+          },
+          {
+            $skip: limit * (page - 1)
+          },
+          {
+            $limit: limit
+          },
+          {
+            $sort: {
+              created_at: -1
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user'
+            }
+          },
+          {
+            $lookup: {
+              from: 'hashtags',
+              localField: 'hashtags',
+              foreignField: '_id',
+              as: 'hashtags'
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'mentions',
+              foreignField: '_id',
+              as: 'mentions'
+            }
+          },
+          {
+            $addFields: {
+              mentions: {
+                $map: {
+                  input: '$mentions',
+                  as: 'mention',
+                  in: {
+                    _id: '$$mention._id',
+                    name: '$$mention.name',
+                    username: '$$mention.username',
+                    email: '$$mention.email'
+                  }
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'bookmarks',
+              localField: '_id',
+              foreignField: 'tweet_id',
+              as: 'bookmarks'
+            }
+          },
+          {
+            $lookup: {
+              from: 'likes',
+              localField: '_id',
+              foreignField: 'tweet_id',
+              as: 'likes'
+            }
+          },
+          {
+            $lookup: {
+              from: 'tweets',
+              localField: '_id',
+              foreignField: 'parent_id',
+              as: 'tweet_children'
+            }
+          },
+          {
+            $addFields: {
+              retweet: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.Retweet]
+                  }
+                }
+              },
+              comment: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.Comment]
+                  }
+                }
+              },
+              quote: {
+                $filter: {
+                  input: '$tweet_children',
+                  as: 'item',
+                  cond: {
+                    $eq: ['$$item.type', TweetType.QuoteTweet]
+                  }
+                }
+              }
+            }
+          },
+          {
+            $project: {
+              tweet_children: 0,
+              user: {
+                password: 0,
+                email_verify_token: 0,
+                forgot_password_token: 0,
+                twitter_circle: 0,
+                date_of_birth: 0,
+                bio: 0,
+                created_at: 0,
+                updated_at: 0,
+                verify: 0,
+                location: 0,
+                website: 0
+              }
+            }
+          }
+        ])
+        .toArray(),
+
+      // Tìm và tăng view
+      await databaseService.tweets
+        .aggregate([
+          {
+            $match: {
+              audience: TweetAudience.Everyone,
+              parent_id: null
+            }
+          },
+          {
+            $skip: limit * (page - 1)
+          },
+          {
+            $limit: limit
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+    // const tweet_ids = tweets.map((tweet) => tweet._id as ObjectId)
+    // const date = new Date()
+    // await databaseService.tweets.updateMany(
+    //   {
+    //     _id: {
+    //       $in: tweet_ids // tìm các id có trong mãng tweet_ids
+    //     }
+    //   },
+    //   {
+    //     $inc: { user_views: 1 },
+    //     $set: {
+    //       updated_at: date
+    //     }
+    //   }
+    // )
+    // tweets.forEach((tweet) => {
+    //   tweet.updated_at = date
+    //   tweet.user_views += 1
+    // })
+    return {
+      tweets,
+      total: total[0]?.total || 0
+    }
+  }
+
   async getUserWithTweetId(tweet_id: string) {
     const users = await databaseService.tweets
       .aggregate([
@@ -657,7 +845,6 @@ class TweetsService {
               email_verify_token: 0,
               forgot_password_token: 0,
               twitter_circle: 0,
-              date_of_bỉth: 0,
               bio: 0,
               date_of_birth: 0,
               created_at: 0,

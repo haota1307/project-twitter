@@ -2,7 +2,6 @@ import classNames from 'classnames'
 import { useCallback, useState } from 'react'
 import SearchUserItem from './SearchUserItem'
 import SearchTweetItem from './SearchTweetItem'
-import { useLocation } from 'react-router-dom'
 
 interface SearchResultProps {
   dataTweet?: string[]
@@ -12,9 +11,6 @@ interface SearchResultProps {
 export default function SearchResult({ dataTweet, dataUser }: SearchResultProps) {
   const [isActiveTweetBtn, setIsActiveTweet] = useState<Boolean>(true)
   const [isActiveUserBtn, setIsActiveUserBtn] = useState<Boolean>(false)
-
-  const location = useLocation()
-  const isExplore = location.pathname === '/explore'
 
   const activeTweetBtn = useCallback(() => {
     if (!isActiveTweetBtn) {
@@ -32,37 +28,31 @@ export default function SearchResult({ dataTweet, dataUser }: SearchResultProps)
 
   return (
     <>
-      {isExplore ? (
-        <div className='mt-2'>
-          <div className='text-xl font-semibold px-8 py-2.5 text-gray-400 flex justify-evenly border-b border-t'>
-            <button
-              onClick={activeTweetBtn}
-              className={classNames('cursor-pointer w-full', {
-                'text-blue-400 cursor-default': isActiveTweetBtn,
-                'text-gray-400': !isActiveTweetBtn
-              })}
-            >
-              Tweet
-            </button>
-            <div className='border-l'></div>
-            <button
-              onClick={activeUserBtn}
-              className={classNames('cursor-pointer w-full', {
-                'text-blue-400 cursor-default': isActiveUserBtn,
-                'text-gray-400': !isActiveUserBtn
-              })}
-            >
-              User
-            </button>
-          </div>
-
-          {isActiveTweetBtn ? <SearchTweetItem data={dataTweet} /> : <SearchUserItem data={dataUser as string[]} />}
-          {/* <SearchTweetItem data={dataTweet} />
-          <SearchUserItem data={dataUser as string[]} /> */}
+      <div className='mt-2'>
+        <div className='text-xl font-semibold px-8 py-2.5 text-gray-400 flex justify-evenly border-b border-t'>
+          <button
+            onClick={activeTweetBtn}
+            className={classNames('cursor-pointer w-full', {
+              'text-blue-400 cursor-default': isActiveTweetBtn,
+              'text-gray-400': !isActiveTweetBtn
+            })}
+          >
+            Tweet
+          </button>
+          <div className='border-l'></div>
+          <button
+            onClick={activeUserBtn}
+            className={classNames('cursor-pointer w-full', {
+              'text-blue-400 cursor-default': isActiveUserBtn,
+              'text-gray-400': !isActiveUserBtn
+            })}
+          >
+            User
+          </button>
         </div>
-      ) : (
-        <SearchTweetItem data={dataTweet} borderTop />
-      )}
+
+        {isActiveTweetBtn ? <SearchTweetItem data={dataTweet} /> : <SearchUserItem data={dataUser as string[]} />}
+      </div>
     </>
   )
 }

@@ -39,5 +39,6 @@ _Bug_
 - Register ✔️
 - Giao diện
 - Hết hạn access token -> logout -> bugggggggggggg
+- callapi 2 lần khi ấn hashtag
   - Token bị xóa ở database -> ko tìm ko tồn tại -> sai...
 - ...
