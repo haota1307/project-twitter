@@ -25,6 +25,7 @@ interface PostItemProps {
 
 export default function PostItem({ data, user }: PostItemProps) {
   const { profile, isAuthenticated } = useContext(AppContext)
+  const loginModal = useLoginModal()
 
   const [isLikedByUser, setIsLikedByUser] = useState(
     data?.likes?.some(async (like: any) => (await like.user_id) === profile?._id) || false
@@ -44,7 +45,15 @@ export default function PostItem({ data, user }: PostItemProps) {
     }
   }, [])
 
+  const isToggle = useCallback(() => {
+    if (!isAuthenticated) {
+      loginModal.onOpen()
+      return
+    }
+  }, [isAuthenticated, loginModal])
+
   const handleLikeByUser = async (tweetId: string) => {
+    if (!isAuthenticated) isToggle()
     if (isAuthenticated && tweetId)
       await interactApi
         .likeTweet(tweetId)
@@ -71,6 +80,7 @@ export default function PostItem({ data, user }: PostItemProps) {
   }
 
   const handleBookmarkByUser = async (tweetId: string) => {
+    if (!isAuthenticated) isToggle()
     if (isAuthenticated && tweetId)
       await interactApi
         .bookmarkTweet(tweetId)
@@ -95,14 +105,6 @@ export default function PostItem({ data, user }: PostItemProps) {
           console.log(err)
         })
   }
-
-  const loginModal = useLoginModal()
-  const isToggle = useCallback(() => {
-    if (!isAuthenticated) {
-      loginModal.onOpen()
-      return
-    }
-  }, [isAuthenticated, loginModal])
 
   const Content = () => (
     <>
@@ -167,18 +169,31 @@ export default function PostItem({ data, user }: PostItemProps) {
             )}
           </div>
           <div className='flex flex-row justify-between items-center mt-3 gap-10'>
-            <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500 break-words'>
-              <IoChatboxOutline size={20} />
-              <p>{data?.comment?.length}</p>
-            </div>
-            {isLikedByUser ? (
+            {!isAuthenticated ? (
               <button
+                onClick={isToggle}
+                className='flex flex-row items-center gap-2 hover:text-sky-500 cursor-pointer hover:bg-sky-50 rounded-full p-2 transform active:scale-50 transition-transform'
+              >
+                <IoChatboxOutline size={20} />
+                <p>{data?.comment?.length}</p>
+              </button>
+            ) : (
+              <Link
+                to={`/tweets/${data?._id}`}
+                className='flex flex-row items-center gap-2 hover:text-sky-500 cursor-pointer hover:bg-sky-50 rounded-full p-2 transform active:scale-50 transition-transform'
+              >
+                <IoChatboxOutline size={20} />
+                <p>{data?.comment?.length}</p>
+              </Link>
+            )}
+            {isLikedByUser ? (
+              <div
                 className='flex flex-row items-center gap-2 text-red-500 cursor-pointer hover:bg-red-50 rounded-full p-2 transform active:scale-50 transition-transform'
                 onClick={() => handleUnLikeByUser(data._id as string)}
               >
                 <IoHeartSharp size={20} color='ff2323' />
                 <p className=' transition-opacity '>{likesCount}</p>
-              </button>
+              </div>
             ) : (
               <button
                 className='flex flex-row items-center gap-2 cursor-pointer text-neutral-500 hover:text-red-500 hover:bg-red-50 rounded-full p-2 transform active:scale-50 transition-transform'

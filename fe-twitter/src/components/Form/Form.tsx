@@ -52,8 +52,6 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
     const isWhitespace = /^\s*$/.test(debouncedContent)
     if (!debouncedContent || debouncedContent.trim() === '') return
     if (isWhitespace) return
-
-    // setHashtags((body.content.match(/#[^\s#]+/g) || []).map((tag) => tag.substring(1)))
     const uniqueHashtags = new Set<string>()
     const matches = body.content.match(/#[^\s#]+/g) || []
     matches.forEach((tag) => uniqueHashtags.add(tag.substring(1)))
