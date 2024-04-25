@@ -134,6 +134,7 @@ export default function LoginModal() {
         value={email}
         disabled={loginMutation.isPending}
         errorMessage={errors.email?.message}
+        type='email'
       />
       <Input
         name='password'
@@ -143,6 +144,7 @@ export default function LoginModal() {
         value={password}
         disabled={loginMutation.isPending}
         errorMessage={errors.password?.message}
+        type='password'
       />
     </div>
   )

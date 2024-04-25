@@ -140,6 +140,8 @@ export default function RegisterModal() {
           value={password}
           disabled={registerMutation.isPending}
           errorMessage={errors.password?.message}
+          type='password'
+          classNameEye='absolute bottom-[16px] left-[295px] h-5 w-5 cursor-pointer text-slate-600'
         />
         <Input
           name='confirm_password'
@@ -149,6 +151,7 @@ export default function RegisterModal() {
           value={confirmPassword}
           disabled={registerMutation.isPending}
           errorMessage={errors.confirm_password?.message}
+          type='password'
         />
       </div>
     </div>
