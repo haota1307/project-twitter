@@ -34,7 +34,7 @@ export default function TweetDetail({ data }: PostItemProps) {
             <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
           </div>
           <div className='text-black my-2'>
-            {data.content.split(' ').map((str, index) => {
+            {data?.content.split(' ').map((str, index) => {
               if (str.startsWith('#')) {
                 return (
                   <Link

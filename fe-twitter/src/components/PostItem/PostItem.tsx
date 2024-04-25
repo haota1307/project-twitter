@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import {
   IoBookmarkOutline,
   IoBookmarkSharp,
@@ -15,6 +15,8 @@ import { formatDate } from 'src/utils/date'
 import interactApi from 'src/apis/interact.api'
 import { Link, useLocation } from 'react-router-dom'
 import { User } from 'src/types/user.type'
+import useLoginModal from 'src/hooks/useLoginModal'
+import useLogoutModal from 'src/hooks/useLogoutModal'
 
 interface PostItemProps {
   data: Tweet
@@ -94,54 +96,76 @@ export default function PostItem({ data, user }: PostItemProps) {
         })
   }
 
+  const loginModal = useLoginModal()
+  const isToggle = useCallback(() => {
+    if (!isAuthenticated) {
+      loginModal.onOpen()
+      return
+    }
+  }, [isAuthenticated, loginModal])
+
+  const Content = () => (
+    <>
+      <div className='text-black whitespace-pre-line break-words py-2.5'>
+        {data.content.split(' ').map((str, index) => {
+          if (str.startsWith('#')) {
+            return (
+              <Link
+                to={`/explore`}
+                state={{ searchHashtag: str.substring(1) }}
+                key={index}
+                className='text-blue-500 font-bold italic hover:opacity-80'
+              >
+                {str}{' '}
+              </Link>
+            )
+          }
+          return str + ' '
+        })}
+      </div>
+      {data?.medias[0]?.type === MediaType.Image && (
+        <div className='w-full pt-[100%] relative'>
+          <img
+            className='block absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
+            src={data.medias[0]?.url}
+          ></img>
+        </div>
+      )}
+      {data?.medias[0]?.type === MediaType.Video && (
+        <div className='w-full pt-[100%] relative'>
+          <video
+            className='block absolute top-0 left-0 w-full h-full bg-black rounded-2xl object-cover'
+            src={data.medias[0]?.url}
+            controls
+            ref={videoRef}
+          />
+        </div>
+      )}
+    </>
+  )
+
   return (
     <article className='border-b px-5 p-2'>
       <div className='flex flex-row max-w-full gap-4'>
         <Avatar url={user?.avatar || data?.user[0]?.avatar || data?.user?.avatar || profile?.avatar || ''} />
         <div>
-          <Link to={`/tweets/${data?._id}`}>
+          <div>
             <div className='flex flex-row items-center gap-2'>
               <p className='text-black font-semibold cursor-pointer hover:underline'>
                 {data?.user?.name || user?.name || profile?.name}
               </p>
               <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
             </div>
-            <div className='text-black my-2 whitespace-pre-line break-words'>
-              {data.content.split(' ').map((str, index) => {
-                if (str.startsWith('#')) {
-                  return (
-                    <Link
-                      to={`/explore`}
-                      state={{ searchHashtag: str.substring(1) }}
-                      key={index}
-                      className='text-blue-500 font-bold italic hover:opacity-80'
-                    >
-                      {str}{' '}
-                    </Link>
-                  )
-                }
-                return str + ' '
-              })}
-            </div>
-            {data?.medias[0]?.type === MediaType.Image && (
-              <div className='w-full pt-[100%] relative'>
-                <img
-                  className='block absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
-                  src={data.medias[0]?.url}
-                ></img>
-              </div>
+            {!isAuthenticated ? (
+              <button onClick={isToggle}>
+                <Content />
+              </button>
+            ) : (
+              <Link to={`/tweets/${data?._id}`}>
+                <Content />
+              </Link>
             )}
-            {data?.medias[0]?.type === MediaType.Video && (
-              <div className='w-full pt-[100%] relative'>
-                <video
-                  className='block absolute top-0 left-0 w-full h-full bg-black rounded-2xl object-cover'
-                  src={data.medias[0]?.url}
-                  controls
-                  ref={videoRef}
-                />
-              </div>
-            )}
-          </Link>
+          </div>
           <div className='flex flex-row justify-between items-center mt-3 gap-10'>
             <div className='flex flex-row items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-sky-500 break-words'>
               <IoChatboxOutline size={20} />
