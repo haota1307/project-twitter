@@ -13,7 +13,7 @@ export default function Message() {
     })
 
     return () => {
-      socket.disconnect()
+      socket.disconnect() // ngắt kết nối khi về trang home
     }
   }, [])
   return <div>message</div>
