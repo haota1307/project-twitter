@@ -8,10 +8,10 @@ _Cần làm_
     - Quên tài khoản lúc đăng nhập ✔️
   - Đổi mật khẩu ✔️
 
-- Main feed
+- Main feed ✔️
 
-  - For you
-  - random tweet <-> ngày tạo
+  - For you ✔️
+  - random tweet <-> ngày tạo ✔️
 
 - Tweet
 
@@ -25,13 +25,13 @@ _Cần làm_
 
 - Edit
 
-  -
+  - Thông tin cá nhân
   - Thay đổi img avatar, cover photo ✔️
   - Hiển thị ngày sinh ✔️
 
 - Conversation
 
-- Button back trang
+- Button back trang ✔️
   - history page(goback) ✔️(tạm)
 
 _Bug_
