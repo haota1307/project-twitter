@@ -14,6 +14,8 @@ import likeRouter from './routes/likes.routes'
 import conversationsRouter from './routes/conversations.routes'
 import searchRouter from './routes/search.routes'
 import randomRouter from './routes/randoms.routes'
+import { createServer } from 'http'
+import initSocket from './utils/socket'
 
 dotenv.config()
 
@@ -26,6 +28,11 @@ const corsOptions: CorsOptions = {
   // origin: isProduction ? envConfig.clientUrl : '*'
   origin: '*'
 }
+
+// tạo server socket
+const httpServer = createServer(app)
+initSocket(httpServer)
+
 app.use(cors(corsOptions)) // Cho phép các host nào được truy cập vào
 
 // Kết nối tới database
@@ -54,6 +61,6 @@ app.use('/random', randomRouter)
 // Dùng middlewares để xử lý lỗi - Khi app lỗi sẽ nhãy vào đây  <<Default handler>>
 app.use(defaultErrorHandler)
 
-app.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`Server Twitter clone đang chạy trên ${port}`)
 })
