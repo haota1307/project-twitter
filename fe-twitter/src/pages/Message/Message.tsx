@@ -1,20 +1,26 @@
-import React, { useEffect } from 'react'
-import { io } from 'socket.io-client'
+import { useContext, useEffect } from 'react'
+import Header from 'src/components/Header'
+import { AppContext } from 'src/contexts/app.context'
+import socket from 'src/utils/socket'
+import MessageItem from './Component/MessageItem'
+import MessageContainer from './Component/MessageContainer'
 
 export default function Message() {
+  const { isAuthenticated, profile } = useContext(AppContext)
   useEffect(() => {
-    const socket = io('http://localhost:4000')
-    socket.on('connect', () => {
-      console.log(socket.id)
-    })
-
-    socket.on('disconnect', () => {
-      console.log(socket.id) // undefined
-    })
+    socket.auth = {
+      _id: profile?._id
+    }
+    socket.connect()
 
     return () => {
       socket.disconnect() // ngắt kết nối khi về trang home
     }
   }, [])
-  return <div>message</div>
+  return (
+    <>
+      <Header label='Message' showBackArrow />
+      <MessageContainer />
+    </>
+  )
 }

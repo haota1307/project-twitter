@@ -14,11 +14,17 @@ const initSocket = (httpServer: ServerHttp) => {
     }
   } = {}
   // middleware
+  io.on('connection', (socket) => {
+    const user_id = socket.handshake.auth._id
+    users[user_id] = {
+      socket_id: socket.id
+    }
 
-  io.on('connection', (socket: any) => {
-    console.log(`${socket.id} connect`)
+    console.log(users)
+
     socket.on('disconnect', () => {
-      console.log(`${socket.id} disconnect`) //Check disconnect
+      delete users[user_id]
+      console.log(users)
     })
   })
 }
