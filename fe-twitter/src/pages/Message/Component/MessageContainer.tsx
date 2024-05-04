@@ -75,25 +75,43 @@ export default function MessageContainer() {
       </div>
     )
   }
+
+  const fakedata = {
+    _id: '657c5db41d1c1f9d58527791',
+    sender_id: '65842e67cbac563602cbd251',
+    receiver_id: '657c5db41d1c1f9d58527796',
+    content: 'T la hao sssss ssssssssssssssss sssss ssssssssssss'
+  }
+  const fakedata2 = {
+    _id: '657c5db41d1c1f9d58527792',
+    sender_id: '657c5db41d1c1f9d58527796',
+    receiver_id: '65842e67cbac563602cbd251',
+    content: 'string 2'
+  }
   return (
     <>
-      <InfiniteScroll
-        hasMore={pagination.page < pagination.total_page}
-        next={fetchMoreData}
-        dataLength={data.length}
-        loader={<h4>Loading...</h4>}
-      >
-        {/* <NoChatSelected /> */}
-        {/* {data?.map((post: Record<string, any>, index: any) => { */}
-        {data?.map((post: any, index: any) => {
-          return (
-            <>
-              <MessageItem key={index} />
-              <MessageItem key={index} />
-            </>
-          )
-        })}
-      </InfiniteScroll>
+      <MessageItem data={fakedata} />
+      <MessageItem data={fakedata2} />
     </>
+
+    // <>
+    //   <InfiniteScroll
+    //     hasMore={pagination.page < pagination.total_page}
+    //     next={fetchMoreData}
+    //     dataLength={data.length}
+    //     loader={<h4>Loading...</h4>}
+    //   >
+    //     {/* <NoChatSelected /> */}
+    //     {/* {data?.map((post: Record<string, any>, index: any) => { */}
+    //     {data?.map((post: any, index: any) => {
+    //       return (
+    //         <>
+    //           <MessageItem key={index} data={fakedata} />
+    //           <MessageItem key={index} data={fakedata2} />
+    //         </>
+    //       )
+    //     })}
+    //   </InfiniteScroll>
+    // </>
   )
 }
