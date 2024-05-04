@@ -17,23 +17,25 @@ export default function MessageItem({ data }: MessageItemProps) {
   const { profile } = useContext(AppContext)
   const isSender = data.sender_id === profile?._id
   return (
-    <div className={`flex items-start gap-2.5 mx-6 my-4 ${isSender && 'justify-end'}`}>
-      {!isSender && <Avatar />}
-      <div className='flex flex-col gap-1 w-full max-w-[320px]'>
-        <div className={`flex items-center space-x-2 ${isSender && 'justify-end '}`}>
-          <span className='text-sm font-semibold text-gray-900 '>{isSender ? 'You' : 'Bonnie Green'}</span>
+    <>
+      <div className={`flex items-start gap-2.5 mx-6 my-4 ${isSender && 'justify-end'}`}>
+        {!isSender && <Avatar />}
+        <div className='flex flex-col gap-1 w-full max-w-[320px]'>
+          <div className={`flex items-center space-x-2 ${isSender && 'justify-end '}`}>
+            <span className='text-sm font-semibold text-gray-900 '>{isSender ? 'You' : 'Bonnie Green'}</span>
+          </div>
+          <div
+            className={`flex flex-col p-4 border-gray-200 bg-gray-100  ${
+              isSender ? 'rounded-s-xl rounded-ee-xl' : 'rounded-e-xl rounded-es-xl'
+            }`}
+          >
+            <p className='text-sm font-normal text-gray-900'> {data.content}</p>
+            <span className='text-sm font-normal text-gray-400 ml-auto'>11:46</span>
+          </div>
+          <span className='text-sm font-normal text-gray-500'>Delivered</span>
         </div>
-        <div
-          className={`flex flex-col p-4 border-gray-200 bg-gray-100  ${
-            isSender ? 'rounded-s-xl rounded-ee-xl' : 'rounded-e-xl rounded-es-xl'
-          }`}
-        >
-          <p className='text-sm font-normal text-gray-900'> {data.content}</p>
-          <span className='text-sm font-normal text-gray-400 ml-auto'>11:46</span>
-        </div>
-        <span className='text-sm font-normal text-gray-500'>Delivered</span>
       </div>
-    </div>
+    </>
   )
 }
 

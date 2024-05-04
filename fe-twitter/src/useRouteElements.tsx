@@ -16,11 +16,12 @@ const Users = lazy(() => import('./pages/Users'))
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'))
 const VerifyForgotPasswordToken = lazy(() => import('./pages/VerifyForgotPasswordToken'))
 const ResetPassword = lazy(() => import('./pages/ResetPassword'))
+const Conversation = lazy(() => import('./pages/Message/Page/Conversation'))
 
 //redirect
 function RedirectRoute() {
   const { isAuthenticated } = useContext(AppContext) // Check login: đã đăng nhập(true)
-  // Chưa đăng nhập thì chuyển sang trang đăng nhập
+  // Chưa đăng nhập thì chuyển sang trang home
   return isAuthenticated ? <Outlet /> : <Navigate to='/' />
 }
 
@@ -97,6 +98,16 @@ export default function useRouteElement() {
             <MainLayout>
               <Suspense>
                 <Message />
+              </Suspense>
+            </MainLayout>
+          )
+        },
+        {
+          path: '/Messages/:user_id',
+          element: (
+            <MainLayout>
+              <Suspense>
+                <Conversation />
               </Suspense>
             </MainLayout>
           )
