@@ -80,7 +80,7 @@ export default function MessageContainer() {
   const UserItem = () => {
     const { profile } = useContext(AppContext)
     return profile?.following?.map((user: any) => (
-      <Link to={`/messages/${user._id}`} key={user._id}>
+      <Link to={`/messages/${user.username}`} key={user._id}>
         <div className='flex flex-row items-start gap-2 px-2 py-4 hover:bg-slate-200 border-b'>
           <div>
             <Avatar url={user?.avatar} />

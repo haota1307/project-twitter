@@ -1,24 +1,157 @@
 import Header from 'src/components/Header'
 import MessageItem from '../../Component/MessageItem'
+import InputChat from '../../Component/InputChat'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { useContext, useEffect, useState } from 'react'
+import http from 'src/utils/http'
+import { AppContext } from 'src/contexts/app.context'
+import socket from 'src/utils/socket'
+
+const LIMIT = 10
+const PAGE = 1
 
 export default function Conversation() {
-  const fakedata = {
-    _id: '657c5db41d1c1f9d58527791',
-    sender_id: '65842e67cbac563602cbd251',
-    receiver_id: '657c5db41d1c1f9d58527796',
-    content: 'T la hao sssss ssssssssssssssss sssss ssssssssssss'
+  const { profile } = useContext(AppContext)
+  const [value, setValue] = useState('')
+  const [conversations, setConversations] = useState<any>([])
+  const [receiver, setReceiver] = useState('657c5db41d1c1f9d58527793')
+  const [pagination, setPagination] = useState({
+    page: PAGE,
+    total_page: 0
+  })
+
+  useEffect(() => {
+    // socket.connect()
+    socket.on('receive_message', (data) => {
+      const { payload } = data
+      setConversations((conversations: any) => [payload, ...conversations])
+    })
+    socket.on('connect_error', (err: any) => {
+      console.log(err.data)
+    })
+    socket.on('disconnect', (reason) => {
+      console.log(reason)
+    })
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
+
+  // Lấy ra list tin nhắn
+  useEffect(() => {
+    if (receiver) {
+      http
+        .get(`/conversations/receivers/${receiver}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          },
+          params: {
+            limit: LIMIT,
+            page: PAGE
+          }
+        })
+        .then((res) => {
+          const { conversations, page, total_page } = res.data.result
+          setConversations(conversations)
+          setPagination({
+            page,
+            total_page
+          })
+        })
+    }
+  }, [receiver])
+
+  const fetchMoreConversations = () => {
+    if (receiver && pagination.page < pagination.total_page) {
+      http
+        .get(`/conversations/receivers/${receiver}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          },
+          params: {
+            limit: LIMIT,
+            page: pagination.page + 1
+          }
+        })
+        .then((res) => {
+          const { conversations, page, total_page } = res.data.result
+          setConversations((prev: any) => [...prev, ...conversations])
+          setPagination({
+            page,
+            total_page
+          })
+        })
+    }
   }
-  const fakedata2 = {
-    _id: '657c5db41d1c1f9d58527792',
-    sender_id: '657c5db41d1c1f9d58527796',
-    receiver_id: '65842e67cbac563602cbd251',
-    content: 'string 2'
+
+  const send = (e: any) => {
+    e.preventDefault()
+    setValue('')
+    const conversation = {
+      content: value,
+      sender_id: profile?._id,
+      receiver_id: receiver
+    }
+    socket.emit('send_message', {
+      payload: conversation
+    })
+    setConversations((conversations: any) => [
+      {
+        ...conversation,
+        _id: new Date().getTime()
+      },
+      ...conversations
+    ])
   }
   return (
     <div>
       <Header label={`Chat with @....`} showBackArrow />
-      <MessageItem data={fakedata} />
-      <MessageItem data={fakedata2} />
+      <div id='scrollableDiv' className='h-[560px]'>
+        {/*Put the scroll bar always on the bottom*/}
+        <InfiniteScroll
+          dataLength={conversations.length}
+          next={fetchMoreConversations}
+          style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
+          inverse={true} //
+          hasMore={pagination.page < pagination.total_page}
+          loader={<h4>Loading...</h4>}
+          scrollableTarget='scrollableDiv'
+        >
+          {conversations.map((conversation: any, index: any) => (
+            <MessageItem data={conversation} key={index} />
+          ))}
+        </InfiniteScroll>
+      </div>
+      <div className='w-full'>
+        <form onSubmit={send}>
+          <div className='flex items-center px-3 py-2 rounded-lg bg-gray-50'>
+            <input
+              className='block mx-4 p-2.5 w-full text-sm bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+              placeholder='Your message...'
+              type='text'
+              onChange={(e) => {
+                setValue(e.target.value)
+              }}
+              value={value}
+            />
+            <button
+              type='submit'
+              className='inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100'
+            >
+              <svg
+                className='w-5 h-5 rotate-90 rtl:-rotate-90'
+                aria-hidden='true'
+                xmlns='http://www.w3.org/2000/svg'
+                fill='currentColor'
+                viewBox='0 0 18 20'
+              >
+                <path d='m17.914 18.594-8-18a1 1 0 0 0-1.828 0l-8 18a1 1 0 0 0 1.157 1.376L8 18.281V9a1 1 0 0 1 2 0v9.281l6.758 1.689a1 1 0 0 0 1.156-1.376Z' />
+              </svg>
+              <span className='sr-only'>Send message</span>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

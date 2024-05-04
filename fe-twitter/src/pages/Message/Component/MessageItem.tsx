@@ -18,7 +18,7 @@ export default function MessageItem({ data }: MessageItemProps) {
   const isSender = data.sender_id === profile?._id
   return (
     <>
-      <div className={`flex items-start gap-2.5 mx-6 my-4 ${isSender && 'justify-end'}`}>
+      <div className={`flex items-start  gap-2.5 mx-6 my-4 ${isSender && 'justify-end'}`}>
         {!isSender && <Avatar />}
         <div className='flex flex-col gap-1 w-full max-w-[320px]'>
           <div className={`flex items-center space-x-2 ${isSender && 'justify-end '}`}>
