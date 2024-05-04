@@ -6,22 +6,37 @@ import { useContext, useEffect, useState } from 'react'
 import http from 'src/utils/http'
 import { AppContext } from 'src/contexts/app.context'
 import socket from 'src/utils/socket'
+import { useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import userApi from 'src/apis/user.api'
+import { User } from 'src/types/user.type'
 
 const LIMIT = 10
 const PAGE = 1
 
 export default function Conversation() {
+  const { user_name } = useParams()
   const { profile } = useContext(AppContext)
   const [value, setValue] = useState('')
   const [conversations, setConversations] = useState<any>([])
-  const [receiver, setReceiver] = useState('657c5db41d1c1f9d58527793')
+  const [receiver, setReceiver] = useState('')
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0
   })
 
+  const { data: userData } = useQuery({
+    queryKey: ['userProfile', user_name],
+    queryFn: () => userApi.getUserProfile(user_name as string)
+  })
+  const dataUser = userData?.data.result[0] as User
+
   useEffect(() => {
-    // socket.connect()
+    if (dataUser) setReceiver(dataUser?._id as string)
+  }, [dataUser])
+
+  useEffect(() => {
+    socket.connect()
     socket.on('receive_message', (data) => {
       const { payload } = data
       setConversations((conversations: any) => [payload, ...conversations])

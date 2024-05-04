@@ -103,7 +103,7 @@ export default function useRouteElement() {
           )
         },
         {
-          path: '/Messages/:user_id',
+          path: '/Messages/:user_name',
           element: (
             <MainLayout>
               <Suspense>
