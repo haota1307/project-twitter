@@ -73,6 +73,12 @@ export class Http {
           this.refreshToken = ''
           this.profile = ''
           clearLS()
+        } else if (url === URL_REFRESH_TOKEN) {
+          const data = response.data as AuthResponse
+          this.accessToken = data.result.access_token
+          this.refreshToken = data.result.refresh_token
+          setAccessTokenToLS(this.accessToken)
+          setRefreshTokenToLS(this.refreshToken)
         }
         return response
       },
