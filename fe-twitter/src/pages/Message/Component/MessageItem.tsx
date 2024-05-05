@@ -19,7 +19,7 @@ interface MessageItemProps {
 export default function MessageItem({ data, user }: MessageItemProps) {
   const { profile } = useContext(AppContext)
   const isSender = data.sender_id === profile?._id
-  console.log(data.created_at)
+
   return (
     <>
       <div className={`flex items-start  gap-2.5 mx-6 my-4 ${isSender && 'justify-end'}`}>

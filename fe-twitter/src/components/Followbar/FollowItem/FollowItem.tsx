@@ -42,7 +42,6 @@ export default function FollowItem({ data, followingArrId }: FollowItemInterface
         }
       )
       .then((res) => {
-        console.log(res)
         setIsFollow(true)
       })
       .catch((err) => {
@@ -54,7 +53,6 @@ export default function FollowItem({ data, followingArrId }: FollowItemInterface
     http
       .delete(`users/follow/${data._id}`)
       .then((res) => {
-        console.log(res)
         setIsFollow(false)
       })
       .catch((err) => {

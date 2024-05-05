@@ -13,10 +13,9 @@ import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 import interactApi from 'src/apis/interact.api'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { User } from 'src/types/user.type'
 import useLoginModal from 'src/hooks/useLoginModal'
-import useLogoutModal from 'src/hooks/useLogoutModal'
 
 interface PostItemProps {
   data: Tweet
@@ -28,12 +27,13 @@ export default function PostItem({ data, user }: PostItemProps) {
   const loginModal = useLoginModal()
 
   const [isLikedByUser, setIsLikedByUser] = useState(
-    data?.likes?.some(async (like: any) => (await like.user_id) === profile?._id) || false
+    data?.likes?.some(async (like: any) => (await like.user_id) === profile?._id && isAuthenticated) || false
   )
   const [likesCount, setLikesCount] = useState(data?.likes?.length || 0)
 
   const [isBookmarkByUser, setIsBookmarkByUser] = useState(
-    data?.bookmarks?.some(async (bookmark: any) => (await bookmark.user_id) === profile?._id) || false
+    data?.bookmarks?.some(async (bookmark: any) => (await bookmark.user_id) === profile?._id && isAuthenticated) ||
+      false
   )
   const [bookmarkCount, setBookmarkCount] = useState(data?.bookmarks?.length || 0)
 
@@ -186,7 +186,7 @@ export default function PostItem({ data, user }: PostItemProps) {
                 <p>{data?.comment?.length}</p>
               </Link>
             )}
-            {isLikedByUser ? (
+            {isLikedByUser && isAuthenticated ? (
               <div
                 className='flex flex-row items-center gap-2 text-red-500 cursor-pointer hover:bg-red-50 rounded-full p-2 transform active:scale-50 transition-transform'
                 onClick={() => handleUnLikeByUser(data._id as string)}
@@ -207,7 +207,7 @@ export default function PostItem({ data, user }: PostItemProps) {
               <IoEyeOutline size={20} />
               <p>{data?.user_views}</p>
             </div>
-            {isBookmarkByUser ? (
+            {isBookmarkByUser && isAuthenticated ? (
               <div
                 onClick={() => handleUnBookmarkByUser(data._id as string)}
                 className='flex flex-row items-center text-yellow-400 gap-2 cursor-pointer hover:text-yellow-400 hover:bg-yellow-50 rounded-full p-2 transform active:scale-50 transition-transform'
