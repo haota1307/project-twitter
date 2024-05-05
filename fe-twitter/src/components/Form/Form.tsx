@@ -67,7 +67,7 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
     const fd = new FormData()
     fd.append('image', file as File) //key, value
     ;(toastId.current as any) = toast.loading('Tweet uploading...')
-    mediaApi
+    await mediaApi
       .uploadImg(fd)
       .then((res) => {
         toast.update(toastId.current as any, {
@@ -95,7 +95,7 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
     fd.append('video', file as File) //key, value
     ;(toastId.current as any) = toast.loading('Tweet uploading...')
 
-    mediaApi
+    await mediaApi
       .uploadVideo(fd)
       .then((res) => {
         toast.update(toastId.current as any, {
@@ -119,13 +119,18 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
   }
 
   const createTweet = () =>
-    tweetApi.createTweet({ ...body }).then(() => {
-      toast.success('Create success', { autoClose: 1000 })
-      setBody(initialBody)
-      if (refreshFeed) {
-        refreshFeed()
-      }
-    })
+    tweetApi
+      .createTweet({ ...body })
+      .then(() => {
+        toast.success('Create success', { autoClose: 1000 })
+        if (refreshFeed) {
+          refreshFeed()
+        }
+      })
+      .finally(() => {
+        setBody(initialBody)
+        setFile(undefined)
+      })
 
   const onSubmit = useCallback(async () => {
     setIsLoading(true)
@@ -155,7 +160,7 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
   }, [])
 
   useEffect(() => {
-    if (file) createTweet()
+    if (file && body.content.trim() !== '') createTweet()
   }, [body.medias])
 
   const handleHashtag = (value: string) => {
