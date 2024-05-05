@@ -76,12 +76,6 @@ export default function Home() {
     fetchData()
   }
 
-  if (data.length === 0)
-    return (
-      <>
-        <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>The user has no tweet yet</div>
-      </>
-    )
   return (
     <>
       <Header isHomePage />

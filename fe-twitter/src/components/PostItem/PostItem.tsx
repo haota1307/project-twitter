@@ -145,11 +145,13 @@ export default function PostItem({ data, user }: PostItemProps) {
       )}
     </>
   )
-
+  console.log(data)
   return (
     <article className='border-b px-5 p-2'>
       <div className='flex flex-row max-w-full gap-4'>
-        <Avatar url={user?.avatar || data?.user[0]?.avatar || data?.user?.avatar || profile?.avatar || ''} />
+        <Link to={profile?._id === data?.user?._id ? `/profile` : `/users/${data?.user?.username}`}>
+          <Avatar url={user?.avatar || data?.user?.avatar || data?.user[0]?.avatar || ''} />
+        </Link>
         <div>
           <div>
             <div className='flex flex-row items-center gap-2'>
