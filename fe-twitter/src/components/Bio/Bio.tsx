@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from '../Button'
 import { IoCalendarOutline } from 'react-icons/io5'
@@ -11,10 +11,19 @@ import http from 'src/utils/http'
 import { toast } from 'react-toastify'
 import useChangePasswordModal from 'src/hooks/useChangePasswordModal'
 import userApi from 'src/apis/user.api'
+import config from 'src/constants/config'
+import useLoginModal from 'src/hooks/useLoginModal'
 
 export default function Bio({ data }: User | any) {
-  const { profile } = useContext(AppContext)
+  const { profile, isAuthenticated } = useContext(AppContext)
   const [disabled, setDisabled] = useState(false)
+  const [isFollow, setIsFollow] = useState(false)
+
+  const followingArrId = profile?.following as string[]
+
+  useEffect(() => {
+    setIsFollow(followingArrId?.some((id) => id === data?._id || false))
+  }, [data])
 
   const location = useLocation()
   const isMyProfilePage = location.pathname === '/profile'
@@ -50,12 +59,51 @@ export default function Bio({ data }: User | any) {
       })
   }
 
+  const handleFollowByUser = () => {
+    http
+      .post(
+        'users/follow',
+        { followed_user_id: data._id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          },
+          baseURL: config.baseUrl
+        }
+      )
+      .then((res) => {
+        setIsFollow(true)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  const handleUnfollowByUser = () => {
+    http
+      .delete(`users/follow/${data._id}`)
+      .then((res) => {
+        setIsFollow(false)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   const toggleChangePasswordModal = () => {
     if (changePasswordModal.isOpen) {
       return
     }
     changePasswordModal.onOpen()
   }
+
+  const loginModal = useLoginModal()
+  const isToggle = useCallback(() => {
+    if (isAuthenticated) {
+      return
+    }
+    loginModal.onOpen()
+  }, [isAuthenticated, loginModal])
 
   const itemPopover = [
     {
@@ -76,8 +124,10 @@ export default function Bio({ data }: User | any) {
           {isMyProfilePage && <Popover item={itemPopover} />}
           {isMyProfilePage ? (
             <Button secondary label='Edit' onClick={editModal.onOpen} />
+          ) : !isFollow ? (
+            <Button label='Follow' secondary onClick={isAuthenticated ? handleFollowByUser : isToggle} />
           ) : (
-            <Button secondary label='Follow' onClick={() => console.log('Chưa làm')} />
+            <Button label='Following' secondary onClick={isAuthenticated ? handleUnfollowByUser : isToggle} />
           )}
         </div>
         <div className='mt-8 px-4'>
