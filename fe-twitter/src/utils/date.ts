@@ -7,3 +7,12 @@ export const formatDate = (createdAt: string): string => {
 
   return `${day}/${month}/${year}`
 }
+
+export const formatTime = (createdAt: string): string => {
+  const time = new Date(createdAt)
+
+  const hour = time.getHours()
+  const minute = time.getMinutes()
+
+  return `${hour}:${minute < 10 ? '0' + minute : minute}`
+}

@@ -1,6 +1,5 @@
 import Header from 'src/components/Header'
 import MessageItem from '../../Component/MessageItem'
-import InputChat from '../../Component/InputChat'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useContext, useEffect, useState } from 'react'
 import http from 'src/utils/http'
@@ -36,7 +35,6 @@ export default function Conversation() {
   }, [dataUser])
 
   useEffect(() => {
-    socket.connect()
     socket.on('receive_message', (data) => {
       const { payload } = data
       setConversations((conversations: any) => [payload, ...conversations])
@@ -47,9 +45,6 @@ export default function Conversation() {
     socket.on('disconnect', (reason) => {
       console.log(reason)
     })
-    return () => {
-      socket.disconnect()
-    }
   }, [])
 
   // Lấy ra list tin nhắn
@@ -102,10 +97,12 @@ export default function Conversation() {
   const send = (e: any) => {
     e.preventDefault()
     setValue('')
+    if (value.trim() === '') return
     const conversation = {
       content: value,
       sender_id: profile?._id,
-      receiver_id: receiver
+      receiver_id: receiver,
+      created_at: new Date()
     }
     socket.emit('send_message', {
       payload: conversation
@@ -120,20 +117,20 @@ export default function Conversation() {
   }
   return (
     <div>
-      <Header label={`Chat with @....`} showBackArrow />
-      <div id='scrollableDiv' className='h-[560px]'>
+      <Header label={`Chat with ${dataUser?.name}`} showBackArrow />
+      <div id='scrollableDiv' className='h-[570px] w-full flex flex-col-reverse overflow-auto'>
         {/*Put the scroll bar always on the bottom*/}
         <InfiniteScroll
           dataLength={conversations.length}
           next={fetchMoreConversations}
-          style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
+          style={{ display: 'flex', flexDirection: 'column-reverse', width: 'auto' }}
           inverse={true} //
           hasMore={pagination.page < pagination.total_page}
           loader={<h4>Loading...</h4>}
           scrollableTarget='scrollableDiv'
         >
           {conversations.map((conversation: any, index: any) => (
-            <MessageItem data={conversation} key={index} />
+            <MessageItem user={dataUser} data={conversation} key={index} />
           ))}
         </InfiniteScroll>
       </div>
