@@ -145,7 +145,7 @@ export default function PostItem({ data, user }: PostItemProps) {
       )}
     </>
   )
-  console.log(data)
+
   return (
     <article className='border-b px-5 p-2'>
       <div className='flex flex-row max-w-full gap-4'>

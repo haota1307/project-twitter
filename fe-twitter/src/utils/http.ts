@@ -33,7 +33,7 @@ export class Http {
       baseURL: config.baseUrl,
       headers: {
         'Content-Type': 'application/json',
-        'expire-access-token': 60 * 60 * 24, //1 ngay
+        'expire-access-token': 60 * 5, // 5 phut
         'expire-refresh-token': 60 * 60 * 24 * 100 //100 ngay
       },
       signal: controller.signal
@@ -73,12 +73,6 @@ export class Http {
           this.refreshToken = ''
           this.profile = ''
           clearLS()
-        } else if (url === URL_REFRESH_TOKEN) {
-          const data = response.data as AuthResponse
-          this.accessToken = data.result.access_token
-          this.refreshToken = data.result.refresh_token
-          setAccessTokenToLS(this.accessToken)
-          setRefreshTokenToLS(this.refreshToken)
         }
         return response
       },
@@ -108,17 +102,16 @@ export class Http {
                   }, 10000)
                 })
             return this.refreshTokenRequest.then((access_token) => {
-              // Nghĩa là chúng ta tiếp tục gọi lại request cũ vừa bị lỗi
               return this.instance({
                 ...config,
                 headers: { ...config.headers, authorization: access_token }
               })
             })
           }
-          // clearLS()
-          // this.accessToken = ''
-          // this.refreshToken = ''
-          // this.profile = ''
+          clearLS()
+          this.accessToken = ''
+          this.refreshToken = ''
+          this.profile = ''
         }
         return Promise.reject(error)
       }
@@ -131,11 +124,12 @@ export class Http {
         refresh_token: this.refreshToken
       })
       .then((res) => {
-        const { access_token } = res.data.result
+        const { access_token, refresh_token } = res.data.result as any
         setAccessTokenToLS(access_token)
+        setRefreshTokenToLS(refresh_token)
         this.accessToken = access_token
+        this.refreshToken = refresh_token
         console.log(res)
-
         return access_token
       })
       .catch((error) => {
