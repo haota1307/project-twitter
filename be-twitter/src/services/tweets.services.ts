@@ -867,6 +867,28 @@ class TweetsService {
     ])
     return result
   }
+
+  // Update Tweet
+  async updateTweet(tweet_id: string, body: any) {
+    // dùng findOneAndUpdate để sau khi người dùng cập nhật thì ta sẽ trả về luôn thông tin người dùng
+    const tweet = await databaseService.tweets.findOneAndUpdate(
+      {
+        _id: new ObjectId(tweet_id)
+      },
+      {
+        $set: {
+          ...body
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        returnDocument: 'after' // Trả về document sau khi update
+      }
+    )
+    return tweet
+  }
 }
 
 const tweetsService = new TweetsService()

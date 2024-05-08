@@ -12,6 +12,16 @@ export interface TweetRequestBody {
   medias: Media[]
 }
 
+export interface UpdateTweetRequestBody {
+  type?: TweetType
+  audience?: TweetAudience
+  content?: string
+  parent_id?: null | string
+  hashtags?: string[]
+  mentions?: string[]
+  medias?: Media[]
+}
+
 export interface TweetParam extends ParamsDictionary {
   tweet_id: string
 }

@@ -85,7 +85,8 @@ export const TWEETS_MESSAGES = {
   GET_TWEET_CHILDREN_SUCCESSFULLY: 'Get Tweet Children Successfully',
   GET_NEW_FEEDS_SUCCESSFULLY: 'Get new feeds Successfully',
   GET_TWEET_SUCCESSFULLY: 'Get Tweet Successfully',
-  DELETE_TWEET_SUCCESSFULLY: 'Delete Tweet Successfully'
+  DELETE_TWEET_SUCCESSFULLY: 'Delete Tweet Successfully',
+  UPDATE_TWEET_SUCCESS: 'Update Tweet Successfully'
 } as const
 
 export const QUERY_MESSAGES = {

@@ -1,12 +1,13 @@
 import { Router } from 'express'
 import {
   createTweetController,
-  deleteTweet,
+  deleteTweetController,
   getHomeFeedsController,
   getNewFeedsController,
   getTweetChildrenController,
   getTweetController,
-  getTweetOfUserController
+  getTweetOfUserController,
+  updateTweetController
 } from '~/controllers/tweets.controller'
 import { filterMiddlewares } from '~/middlewares/common.middlewares'
 import {
@@ -17,8 +18,7 @@ import {
   tweetIdValidator
 } from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, isUserLoggedInValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
-import { TweetRequestBody } from '~/models/requests/Tweet.requests'
-import { UpdateProfileReqBody } from '~/models/requests/User.requests'
+import { TweetRequestBody, UpdateTweetRequestBody } from '~/models/requests/Tweet.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const tweetsRouter = Router()
@@ -113,6 +113,36 @@ tweetsRouter.get(
   accessTokenValidator,
   verifiedUserValidator,
   wrapRequestHandler(getNewFeedsController)
+)
+
+/**
+ * Description: update tweet
+ * Path: /
+ * Method: DELETE
+ * Header: {Authorization?: Bear <access_token>}
+ */
+
+tweetsRouter.patch(
+  '/',
+  accessTokenValidator,
+  verifiedUserValidator,
+  tweetIdValidator,
+  wrapRequestHandler(deleteTweetController)
+)
+
+/**
+ * Description: update tweet
+ * Path: /
+ * Method: DELETE
+ * Header: {Authorization?: Bear <access_token>}
+ */
+
+tweetsRouter.patch(
+  '/update/:tweet_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  filterMiddlewares<UpdateTweetRequestBody>(['content', 'audience', 'hashtags', 'medias']),
+  wrapRequestHandler(updateTweetController)
 )
 
 export default tweetsRouter
