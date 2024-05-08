@@ -856,6 +856,17 @@ class TweetsService {
       .toArray()
     return users
   }
+
+  async deleteTweet(user_id: string, tweet_id: string) {
+    const result = await Promise.all([
+      databaseService.tweets.findOneAndDelete({
+        user_id: new ObjectId(user_id),
+        _id: new ObjectId(tweet_id)
+      }),
+      databaseService.likes.deleteMany({ tweet_id: new ObjectId(tweet_id) })
+    ])
+    return result
+  }
 }
 
 const tweetsService = new TweetsService()

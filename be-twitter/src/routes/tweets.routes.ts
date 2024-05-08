@@ -1,12 +1,14 @@
 import { Router } from 'express'
 import {
   createTweetController,
+  deleteTweet,
   getHomeFeedsController,
   getNewFeedsController,
   getTweetChildrenController,
   getTweetController,
   getTweetOfUserController
 } from '~/controllers/tweets.controller'
+import { filterMiddlewares } from '~/middlewares/common.middlewares'
 import {
   audiencevalidator,
   createTweetValidate,
@@ -15,6 +17,8 @@ import {
   tweetIdValidator
 } from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, isUserLoggedInValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
+import { TweetRequestBody } from '~/models/requests/Tweet.requests'
+import { UpdateProfileReqBody } from '~/models/requests/User.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const tweetsRouter = Router()

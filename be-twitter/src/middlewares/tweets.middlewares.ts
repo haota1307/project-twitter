@@ -294,6 +294,12 @@ export const audiencevalidator = wrapRequestHandler(async (req: Request, res: Re
   next() // Nếu trạng thái tweet là everyone => next
 })
 
+export const authorValidator = wrapRequestHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const authorId = ' '
+
+  next() // Nếu trạng thái tweet là everyone => next
+})
+
 export const getTweetChildrenValidator = validate(
   checkSchema(
     {

@@ -115,3 +115,12 @@ export const getHomeFeedsController = async (req: Request<ParamsDictionary, any,
     }
   })
 }
+
+export const deleteTweet = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const result = await tweetsService.deleteTweet(user_id, req.params.tweet_id)
+  return res.json({
+    message: TWEETS_MESSAGES.DELETE_TWEET_SUCCESSFULLY,
+    result
+  })
+}
