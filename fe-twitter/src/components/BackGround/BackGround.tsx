@@ -41,7 +41,7 @@ export default function BackGround({ data, edit }: any) {
         })
         setUrlImage(res.data.result[0].url)
       })
-      .catch((err) => {
+      .catch(() => {
         toast.update(toastId.current as any, {
           render: 'Upload image fail',
           type: 'error',

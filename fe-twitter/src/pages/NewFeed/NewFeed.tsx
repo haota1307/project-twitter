@@ -9,7 +9,6 @@ const PAGE = 1
 
 export default function NewFeed() {
   const [data, setData] = useState([])
-  const [userData, setUserData] = useState()
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0

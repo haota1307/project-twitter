@@ -6,7 +6,7 @@ import { useDebounce } from 'src/hooks/useDebounce'
 
 export default function SearchInput() {
   const [searchValue, setSearchValue] = useState<string>('')
-  const [searchResult, setSearchResult] = useState()
+  const [, setSearchResult] = useState()
   const debouncedSearch = useDebounce(searchValue)
 
   const onSearch = async () => {

@@ -9,8 +9,8 @@ interface SearchResultProps {
 }
 
 export default function SearchResult({ dataTweet, dataUser }: SearchResultProps) {
-  const [isActiveTweetBtn, setIsActiveTweet] = useState<Boolean>(true)
-  const [isActiveUserBtn, setIsActiveUserBtn] = useState<Boolean>(false)
+  const [isActiveTweetBtn, setIsActiveTweet] = useState<boolean>(true)
+  const [isActiveUserBtn, setIsActiveUserBtn] = useState<boolean>(false)
 
   const activeTweetBtn = useCallback(() => {
     if (!isActiveTweetBtn) {

@@ -31,7 +31,7 @@ export default function AlertVerify() {
         <div className='mt-2 mb-2 text-sm'>
           Your account is not verified, please verify now for a better experience.
         </div>
-        <div className='mt-1 mb-4 text-xs opacity-50'>If you don't see the email, please click "Resend".</div>
+        <div className='mt-1 mb-4 text-xs opacity-50'>{"If you don't see the email, please click 'Resend'."}</div>
         <div className='flex'>
           <Link
             target='_blank'

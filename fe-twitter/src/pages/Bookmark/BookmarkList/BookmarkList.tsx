@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import PostItem from 'src/components/PostItem'
 import config from 'src/constants/config'
-import { Tweet, TweetType } from 'src/types/tweet.type'
+import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
 
 interface BookmarkProps {
@@ -77,7 +77,7 @@ export default function BookmarkList({ userId }: BookmarkProps) {
     return (
       <>
         <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>
-          You haven't bookmarked any tweets yet
+          {"You haven't bookmarked any tweets yet"}
         </div>
       </>
     )

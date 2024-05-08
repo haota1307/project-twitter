@@ -2,11 +2,11 @@ import { useContext, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import userApi from 'src/apis/user.api'
 import { AppContext } from 'src/contexts/app.context'
-import { getAccessTokenFromLs, setAccessTokenToLS, setRefreshTokenToLS } from 'src/utils/auth'
+import { setAccessTokenToLS, setRefreshTokenToLS } from 'src/utils/auth'
 
 export default function Login() {
   const [params] = useSearchParams()
-  const { setIsAuthenticated, setProfile, setIsLoginOAuth } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile, setIsLoginOAuth, isAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
   useEffect(() => {
     const access_token = params.get('access_token')
@@ -15,8 +15,7 @@ export default function Login() {
     setRefreshTokenToLS(refresh_token as string)
     setIsAuthenticated(true)
     setIsLoginOAuth(true)
-    if (Boolean(getAccessTokenFromLs)) {
-      console.log('get')
+    if (isAuthenticated) {
       userApi
         .getProfile()
         .then((res) => {

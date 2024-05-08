@@ -71,7 +71,7 @@ export default function Bio({ data }: User | any) {
           baseURL: config.baseUrl
         }
       )
-      .then((res) => {
+      .then(() => {
         setIsFollow(true)
       })
       .catch((err) => {
@@ -82,7 +82,7 @@ export default function Bio({ data }: User | any) {
   const handleUnfollowByUser = () => {
     http
       .delete(`users/follow/${data._id}`)
-      .then((res) => {
+      .then(() => {
         setIsFollow(false)
       })
       .catch((err) => {

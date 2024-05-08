@@ -41,7 +41,7 @@ const SidebarLogged = ({ label, href, icon: Icon }: SidebarItemProps) => (
   </div>
 )
 
-const SidebarNotLogged = ({ label, href, icon: Icon, onClick }: SidebarItemProps) => (
+const SidebarNotLogged = ({ label, icon: Icon, onClick }: SidebarItemProps) => (
   <div onClick={onClick}>
     <div className='flex flex-row items-center'>
       <div

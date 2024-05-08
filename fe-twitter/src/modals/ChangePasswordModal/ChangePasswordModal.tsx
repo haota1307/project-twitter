@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import userApi from 'src/apis/user.api'
 import Input from 'src/components/Input'
@@ -15,7 +14,6 @@ type FormData = Pick<Schema, 'confirm_password' | 'password' | 'old_password'>
 const ChangePasswordSchema = schema.pick(['password', 'confirm_password', 'old_password'])
 
 export default function ChangePasswordModal() {
-  const navigate = useNavigate()
   const changePasswordModal = useChangePasswordModal()
 
   const [oldPassword, setOldPassword] = useState('')

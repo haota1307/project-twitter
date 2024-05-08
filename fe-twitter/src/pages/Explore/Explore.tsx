@@ -14,7 +14,7 @@ export default function Explore() {
   const [searchValue, setSearchValue] = useState<string>(searchHashtag || '')
   const [searchTweetResult, setSearchTweetResult] = useState()
   const [searchUserResult, setSearchUserResult] = useState()
-  const [isSearching, setIsSearching] = useState<Boolean>()
+  const [isSearching, setIsSearching] = useState<boolean>()
 
   const debouncedSearch = useDebounce(searchValue)
 

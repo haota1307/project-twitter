@@ -77,7 +77,7 @@ export default function Comment({ tweetParent }: CommentItemProps) {
   if (data.length === 0)
     return (
       <>
-        <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>Let's comment it</div>
+        <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>{"Let's comment it"}</div>
       </>
     )
   return (

@@ -29,10 +29,10 @@ export default function ForgotPasswordModal() {
   })
 
   const forgotPasswordMutation = useMutation({
-    mutationFn: (body: FormData) => userApi.forgotPassword({ email: email })
+    mutationFn: () => userApi.forgotPassword({ email: email })
   })
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit((data: any) => {
     forgotPasswordMutation.mutateAsync(data, {
       onSuccess: (data) => {
         toast.success(data.data.message, {

@@ -46,7 +46,7 @@ export default function Avatar({ isLarge, hasBorder, url, isMyProfile, edit }: A
         })
         setUrlImage(res.data.result[0].url)
       })
-      .catch((err) => {
+      .catch(() => {
         toast.update(toastId.current as any, {
           render: 'Upload image fail',
           type: 'error',

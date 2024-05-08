@@ -21,14 +21,14 @@ interface FormProps {
   refreshFeed?: () => void
 }
 
-export default function Form({ placeholder, isComment, postId, parentId, hiddenBtn, refreshFeed }: FormProps) {
+export default function Form({ placeholder, isComment, parentId, hiddenBtn, refreshFeed }: FormProps) {
   const { isAuthenticated, profile } = useContext(AppContext)
 
   const [file, setFile] = useState<File>()
   const [hashtags, setHashtags] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [type, setType] = useState(isComment ? TweetType.Comment : TweetType.Tweet)
-  const [tweetParentId, setTweetParentId] = useState<string | null>(parentId ? parentId : null)
+  const [type] = useState(isComment ? TweetType.Comment : TweetType.Tweet)
+  const [tweetParentId] = useState<string | null>(parentId ? parentId : null)
   const initialBody = {
     type,
     audience: TweetAudience.Everyone,
@@ -80,7 +80,7 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
           medias: [{ type: res.data.result[0].type, url: res.data.result[0].url }]
         })
       })
-      .catch((err) => {
+      .catch(() => {
         toast.update(toastId.current as any, {
           render: 'Upload image fail',
           type: 'error',
@@ -108,7 +108,7 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
           medias: [{ type: res.data.result[0].type, url: res.data.result[0].url }]
         })
       })
-      .catch((err) => {
+      .catch(() => {
         toast.update(toastId.current as any, {
           render: 'Upload video fail',
           type: 'error',
@@ -194,7 +194,7 @@ export default function Form({ placeholder, isComment, postId, parentId, hiddenB
             {hashtags.length > 0 && <p className='ml-1'>Hashtag: {handleHashtag(body.content)}</p>}
             {file?.type.startsWith('image/') && (
               <div className='w-full pt-[100%] relative'>
-                <img src={previewFile} className='absolute top-0 left-0 bg-white w-full h-full object-cover' />
+                <img alt='' src={previewFile} className='absolute top-0 left-0 bg-white w-full h-full object-cover' />
               </div>
             )}
             {file?.type.startsWith('video/') && (

@@ -1,5 +1,4 @@
 import config from 'src/constants/config'
-import ResetPassword from 'src/pages/ResetPassword'
 import http from 'src/utils/http'
 
 export const URL_GET_PROFILE = 'users/profile'

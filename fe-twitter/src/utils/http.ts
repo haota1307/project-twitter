@@ -6,7 +6,6 @@ import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN, URL_REGISTER } from 'src/apis
 import {
   clearLS,
   getAccessTokenFromLs,
-  getProfileFromLS,
   getRefreshTokenFromLs,
   setAccessTokenToLS,
   setProfileToLS,
@@ -22,12 +21,10 @@ export class Http {
   instance: AxiosInstance
   private accessToken: string
   private refreshToken: string
-  private profile: string
   private refreshTokenRequest: Promise<string> | null
   constructor() {
     this.accessToken = getAccessTokenFromLs()
     this.refreshToken = getRefreshTokenFromLs()
-    this.profile = getProfileFromLS()
     this.refreshTokenRequest = null
     this.instance = axios.create({
       baseURL: config.baseUrl,
@@ -71,7 +68,6 @@ export class Http {
           // Xóa access token && refresh token khi đăng xuất
           this.accessToken = ''
           this.refreshToken = ''
-          this.profile = ''
           clearLS()
         }
         return response
@@ -111,7 +107,6 @@ export class Http {
           clearLS()
           this.accessToken = ''
           this.refreshToken = ''
-          this.profile = ''
         }
         return Promise.reject(error)
       }
@@ -136,7 +131,6 @@ export class Http {
         clearLS()
         this.accessToken = ''
         this.refreshToken = ''
-        this.profile = ''
         console.log(error)
         throw error
       })

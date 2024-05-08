@@ -10,7 +10,6 @@ import { AppContext } from './contexts/app.context'
 import { LocalStorageEventTarget } from './utils/auth'
 import EditModal from './modals/EditModal'
 import PostModal from './modals/PostModal'
-import ResetPasswordModal from './modals/ResetPasswordModal'
 import ChangePasswordModal from './modals/ChangePasswordModal'
 import ForgotPasswordModal from './modals/ForgotPasswordModal'
 

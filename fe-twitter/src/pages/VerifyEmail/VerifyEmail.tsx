@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import userApi from 'src/apis/user.api'
 import { AppContext } from 'src/contexts/app.context'
@@ -12,6 +12,7 @@ export default function VerifyEmail() {
 
   const [message, setMessage] = useState()
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const getProfile = () => {
     userApi
       .getProfile()
@@ -51,7 +52,7 @@ export default function VerifyEmail() {
     return () => {
       controller.abort()
     }
-  }, [token])
+  }, [getProfile, navigate, token])
 
   return (
     <div className='flex justify-center h-full'>

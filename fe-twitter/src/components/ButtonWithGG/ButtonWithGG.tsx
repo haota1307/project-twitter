@@ -1,4 +1,4 @@
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { googleApi } from 'src/apis/auth.api'
 
 const getGoogleAuthURL = () => {

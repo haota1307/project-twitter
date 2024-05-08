@@ -14,7 +14,7 @@ interface FollowItemInterface {
 }
 
 export default function FollowItem({ data, followingArrId }: FollowItemInterface) {
-  const { isAuthenticated, profile } = useContext(AppContext)
+  const { isAuthenticated } = useContext(AppContext)
   const [isFollow, setIsFollow] = useState(false)
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function FollowItem({ data, followingArrId }: FollowItemInterface
           baseURL: config.baseUrl
         }
       )
-      .then((res) => {
+      .then(() => {
         setIsFollow(true)
       })
       .catch((err) => {
@@ -52,7 +52,7 @@ export default function FollowItem({ data, followingArrId }: FollowItemInterface
   const handleUnfollowByUser = () => {
     http
       .delete(`users/follow/${data._id}`)
-      .then((res) => {
+      .then(() => {
         setIsFollow(false)
       })
       .catch((err) => {
