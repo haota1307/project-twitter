@@ -95,7 +95,7 @@ export default function Feed({ user }: FeedProps) {
         if (post.type === TweetType.Tweet)
           return (
             <div className='w-full' key={index}>
-              <PostItem data={post as any} user={userData} />
+              <PostItem data={post as any} user={userData} option />
             </div>
           )
       })}

@@ -6,7 +6,8 @@ import {
   IoCreateOutline,
   IoEyeOutline,
   IoHeartOutline,
-  IoHeartSharp
+  IoHeartSharp,
+  IoTrashOutline
 } from 'react-icons/io5'
 
 import Avatar from '../Avatar'
@@ -14,16 +15,17 @@ import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 import interactApi from 'src/apis/interact.api'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { User } from 'src/types/user.type'
 import useLoginModal from 'src/hooks/useLoginModal'
 
 interface PostItemProps {
   data: Tweet
   user?: User
+  option?: boolean
 }
 
-export default function PostItem({ data, user }: PostItemProps) {
+export default function PostItem({ data, user, option }: PostItemProps) {
   const { profile, isAuthenticated } = useContext(AppContext)
   const loginModal = useLoginModal()
 
@@ -130,45 +132,56 @@ export default function PostItem({ data, user }: PostItemProps) {
     </div>
   )
 
-  const Content = () => (
-    <div className='text-black whitespace-pre-line break-words py-2.5'>
-      {data.content.split(' ').map((str, index) => {
-        if (str.startsWith('#')) {
-          return (
-            <Link
-              to={`/explore`}
-              state={{ searchHashtag: str.substring(1) }}
-              key={index}
-              className='text-blue-500 font-bold italic hover:opacity-80'
-            >
-              {str}{' '}
-            </Link>
-          )
-        }
-        return str + ' '
-      })}
-    </div>
-  )
+  const Content = () => {
+    const navigate = useNavigate()
+    const handleOnclick = (str: string) => {
+      navigate('/explore', { state: { searchHashtag: str.substring(1) } })
+    }
+    return (
+      <div className='text-black whitespace-pre-line break-words py-2.5'>
+        {data.content.split(' ').map((str, index) => {
+          if (str.startsWith('#')) {
+            return (
+              <button
+                key={index}
+                className='text-blue-500 font-bold italic hover:opacity-80'
+                onClick={() => handleOnclick(str)}
+              >
+                {str}{' '}
+              </button>
+            )
+          }
+          return str + ' '
+        })}
+      </div>
+    )
+  }
 
   return (
     <div className='border-b w-full'>
-      <div className='px-6 p-2 gap-4'>
-        <div className='flex gap-4'>
+      <div className='px-6 p-2'>
+        <div className='flex'>
           <Link to={profile?._id === data?.user?._id ? `/profile` : `/users/${data?.user?.username}`}>
             <Avatar url={user?.avatar || data?.user?.avatar || data?.user[0]?.avatar || ''} />
           </Link>
-          <div className='w-full items-center'>
-            <div className='flex items-center'>
-              <div className='flex gap-3 items-center'>
+          <div className='w-full items-center ml-3'>
+            <div className='flex items-center w-full justify-between'>
+              <div className='flex items-center'>
                 <p className='text-black font-semibold cursor-pointer hover:underline'>
                   {data?.user?.name || user?.name || profile?.name}
                 </p>
-                <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
+                <span className='text-neutral-500 text-sm ml-2'>{formatDate(data?.created_at)}</span>
               </div>
-
-              <div className='flex '>
-                <IoCreateOutline />
-              </div>
+              {option && (
+                <div className='flex justify-center items-center mr-1'>
+                  <button className='mr-3'>
+                    <IoCreateOutline />
+                  </button>
+                  <button>
+                    <IoTrashOutline />
+                  </button>
+                </div>
+              )}
             </div>
             {!isAuthenticated ? (
               <button onClick={isToggle}>
