@@ -3,6 +3,7 @@ import {
   IoBookmarkOutline,
   IoBookmarkSharp,
   IoChatboxOutline,
+  IoCreateOutline,
   IoEyeOutline,
   IoHeartOutline,
   IoHeartSharp
@@ -106,25 +107,8 @@ export default function PostItem({ data, user }: PostItemProps) {
         })
   }
 
-  const Content = () => (
-    <>
-      <div className='text-black whitespace-pre-line break-words py-2.5'>
-        {data.content.split(' ').map((str, index) => {
-          if (str.startsWith('#')) {
-            return (
-              <Link
-                to={`/explore`}
-                state={{ searchHashtag: str.substring(1) }}
-                key={index}
-                className='text-blue-500 font-bold italic hover:opacity-80'
-              >
-                {str}{' '}
-              </Link>
-            )
-          }
-          return str + ' '
-        })}
-      </div>
+  const Media = () => (
+    <div className='w-[65%] my-4 mx-16'>
       {data?.medias[0]?.type === MediaType.Image && (
         <div className='w-full pt-[100%] relative'>
           <img
@@ -143,22 +127,48 @@ export default function PostItem({ data, user }: PostItemProps) {
           />
         </div>
       )}
-    </>
+    </div>
+  )
+
+  const Content = () => (
+    <div className='text-black whitespace-pre-line break-words py-2.5'>
+      {data.content.split(' ').map((str, index) => {
+        if (str.startsWith('#')) {
+          return (
+            <Link
+              to={`/explore`}
+              state={{ searchHashtag: str.substring(1) }}
+              key={index}
+              className='text-blue-500 font-bold italic hover:opacity-80'
+            >
+              {str}{' '}
+            </Link>
+          )
+        }
+        return str + ' '
+      })}
+    </div>
   )
 
   return (
-    <article className='border-b px-5 p-2'>
-      <div className='flex flex-row max-w-full gap-4'>
-        <Link to={profile?._id === data?.user?._id ? `/profile` : `/users/${data?.user?.username}`}>
-          <Avatar url={user?.avatar || data?.user?.avatar || data?.user[0]?.avatar || ''} />
-        </Link>
-        <div>
-          <div>
-            <div className='flex flex-row items-center gap-2'>
-              <p className='text-black font-semibold cursor-pointer hover:underline'>
-                {data?.user?.name || user?.name || profile?.name}
-              </p>
-              <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
+    <div className='border-b w-full'>
+      <div className='px-6 p-2 gap-4'>
+        <div className='flex gap-4'>
+          <Link to={profile?._id === data?.user?._id ? `/profile` : `/users/${data?.user?.username}`}>
+            <Avatar url={user?.avatar || data?.user?.avatar || data?.user[0]?.avatar || ''} />
+          </Link>
+          <div className='w-full items-center'>
+            <div className='flex items-center'>
+              <div className='flex gap-3 items-center'>
+                <p className='text-black font-semibold cursor-pointer hover:underline'>
+                  {data?.user?.name || user?.name || profile?.name}
+                </p>
+                <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
+              </div>
+
+              <div className='flex '>
+                <IoCreateOutline />
+              </div>
             </div>
             {!isAuthenticated ? (
               <button onClick={isToggle}>
@@ -170,7 +180,20 @@ export default function PostItem({ data, user }: PostItemProps) {
               </Link>
             )}
           </div>
-          <div className='flex flex-row justify-between items-center mt-3 gap-10'>
+        </div>
+        <div>
+          <div className='w-full'>
+            {!isAuthenticated ? (
+              <button onClick={isToggle}>
+                <Media />
+              </button>
+            ) : (
+              <Link to={`/tweets/${data?._id}`}>
+                <Media />
+              </Link>
+            )}
+          </div>
+          <div className='flex flex-row justify-between items-center mt-3'>
             {!isAuthenticated ? (
               <button
                 onClick={isToggle}
@@ -229,6 +252,6 @@ export default function PostItem({ data, user }: PostItemProps) {
           </div>
         </div>
       </div>
-    </article>
+    </div>
   )
 }

@@ -118,57 +118,53 @@ export default function Bio({ data }: User | any) {
   ]
 
   return (
-    <>
-      <div className='border-b pb-4'>
-        <div className='flex justify-end p-2 items-center gap-4'>
-          {isMyProfilePage && <Popover item={itemPopover} />}
-          {isMyProfilePage ? (
-            <Button secondary label='Edit' onClick={editModal.onOpen} />
-          ) : !isFollow ? (
-            <Button label='Follow' secondary onClick={isAuthenticated ? handleFollowByUser : isToggle} />
-          ) : (
-            <Button label='Following' secondary onClick={isAuthenticated ? handleUnfollowByUser : isToggle} />
-          )}
+    <div className='border-b pb-4'>
+      <div className='flex justify-end p-2 items-center gap-4'>
+        {isMyProfilePage && <Popover item={itemPopover} />}
+        {isMyProfilePage ? (
+          <Button secondary label='Edit' onClick={editModal.onOpen} />
+        ) : !isFollow ? (
+          <Button label='Follow' secondary onClick={isAuthenticated ? handleFollowByUser : isToggle} />
+        ) : (
+          <Button label='Following' secondary onClick={isAuthenticated ? handleUnfollowByUser : isToggle} />
+        )}
+      </div>
+      <div className='mt-8 px-4'>
+        <div className='flex flex-col'>
+          <p className='text-black text-2xl font-semibold'>{isMyProfilePage ? profile?.name : data?.name}</p>
+          <p className='text-black/50 text-md'>@{isMyProfilePage ? profile?.username : data?.username}</p>
         </div>
-        <div className='mt-8 px-4'>
-          <div className='flex flex-col'>
-            <p className='text-black text-2xl font-semibold'>{isMyProfilePage ? profile?.name : data?.name}</p>
-            <p className='text-black/50 text-md'>@{isMyProfilePage ? profile?.username : data?.username}</p>
+        {(profile?.bio !== '' && isMyProfilePage) || (data?.bio !== '' && !isMyProfilePage) ? (
+          <div className='flex flex-col mt-2.5'>
+            <p className='text-black'>{isMyProfilePage ? profile?.bio : data?.bio}</p>
           </div>
-          {(profile?.bio !== '' && isMyProfilePage) || (data?.bio !== '' && !isMyProfilePage) ? (
-            <div className='flex flex-col mt-2.5'>
-              <p className='text-black'>{isMyProfilePage ? profile?.bio : data?.bio}</p>
-            </div>
-          ) : (
-            <div className='flex flex-col mt-2.5'>
-              <p className='text-black'>Have a nice day 💕💕</p>
-            </div>
-          )}
-          <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
-            <IoCalendarOutline size={20} />
-            <p>
-              Birthday{' '}
-              {isMyProfilePage ? formatDate(profile?.date_of_birth as any) : formatDate(data?.date_of_birth as any)}
-            </p>
+        ) : (
+          <div className='flex flex-col mt-2.5'>
+            <p className='text-black'>Have a nice day 💕💕</p>
           </div>
-          <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
-            <IoCalendarOutline size={20} />
-            <p>
-              Joined {isMyProfilePage ? formatDate(profile?.created_at as any) : formatDate(data?.created_at as any)}
-            </p>
-          </div>
+        )}
+        <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
+          <IoCalendarOutline size={20} />
+          <p>
+            Birthday{' '}
+            {isMyProfilePage ? formatDate(profile?.date_of_birth as any) : formatDate(data?.date_of_birth as any)}
+          </p>
         </div>
-        <div className='flex flex-row items-center mt-2.5 gap-6 px-4'>
-          <div className='flex flex-row items-center gap-1'>
-            <p className='text-black'>{isMyProfilePage ? profile?.following?.length : data?.following_count}</p>
-            <p className='text-black/50'>Following</p>
-          </div>
-          <div className='flex flex-row items-center gap-1'>
-            <p className='text-black'>{isMyProfilePage ? profile?.followed?.length : data?.followed_count}</p>
-            <p className='text-black/50'>Followed</p>
-          </div>
+        <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
+          <IoCalendarOutline size={20} />
+          <p>Joined {isMyProfilePage ? formatDate(profile?.created_at as any) : formatDate(data?.created_at as any)}</p>
         </div>
       </div>
-    </>
+      <div className='flex flex-row items-center mt-2.5 gap-6 px-4'>
+        <div className='flex flex-row items-center gap-1'>
+          <p className='text-black'>{isMyProfilePage ? profile?.following?.length : data?.following_count}</p>
+          <p className='text-black/50'>Following</p>
+        </div>
+        <div className='flex flex-row items-center gap-1'>
+          <p className='text-black'>{isMyProfilePage ? profile?.followed?.length : data?.followed_count}</p>
+          <p className='text-black/50'>Followed</p>
+        </div>
+      </div>
+    </div>
   )
 }

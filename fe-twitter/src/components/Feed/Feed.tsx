@@ -88,12 +88,13 @@ export default function Feed({ user }: FeedProps) {
       hasMore={pagination.page < pagination.total_page}
       next={fetchMoreData}
       dataLength={data.length}
+      style={{ width: 'unset' }}
       loader={<h4>Loading...</h4>}
     >
       {data?.map((post: Record<string, any>, index) => {
         if (post.type === TweetType.Tweet)
           return (
-            <div className='' key={index}>
+            <div className='w-full' key={index}>
               <PostItem data={post as any} user={userData} />
             </div>
           )
