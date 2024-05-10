@@ -18,6 +18,7 @@ import interactApi from 'src/apis/interact.api'
 import { Link, useNavigate } from 'react-router-dom'
 import { User } from 'src/types/user.type'
 import useLoginModal from 'src/hooks/useLoginModal'
+import useDeleteTweetModal from 'src/hooks/useDeleteTweet'
 
 interface PostItemProps {
   data: Tweet
@@ -39,6 +40,8 @@ export default function PostItem({ data, user, option }: PostItemProps) {
       false
   )
   const [bookmarkCount, setBookmarkCount] = useState(data?.bookmarks?.length || 0)
+
+  const [tweetIdDelete] = useState(data._id)
 
   const videoRef = useRef(null)
 
@@ -157,6 +160,13 @@ export default function PostItem({ data, user, option }: PostItemProps) {
     )
   }
 
+  const deleteTweetModal = useDeleteTweetModal()
+
+  const handleDeleteTweet = () => {
+    deleteTweetModal.setTweetId(tweetIdDelete as string)
+    deleteTweetModal.onOpen()
+  }
+
   return (
     <div className='border-b w-full'>
       <div className='px-6 p-2'>
@@ -177,7 +187,7 @@ export default function PostItem({ data, user, option }: PostItemProps) {
                   <button className='mr-3'>
                     <IoCreateOutline />
                   </button>
-                  <button>
+                  <button onClick={handleDeleteTweet}>
                     <IoTrashOutline />
                   </button>
                 </div>

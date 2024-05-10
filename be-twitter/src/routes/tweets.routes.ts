@@ -116,14 +116,14 @@ tweetsRouter.get(
 )
 
 /**
- * Description: update tweet
+ * Description: delete tweet
  * Path: /
  * Method: DELETE
  * Header: {Authorization?: Bear <access_token>}
  */
 
-tweetsRouter.patch(
-  '/',
+tweetsRouter.delete(
+  '/delete/:tweet_id',
   accessTokenValidator,
   verifiedUserValidator,
   tweetIdValidator,

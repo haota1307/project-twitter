@@ -12,6 +12,7 @@ import EditModal from './modals/EditModal'
 import PostModal from './modals/PostModal'
 import ChangePasswordModal from './modals/ChangePasswordModal'
 import ForgotPasswordModal from './modals/ForgotPasswordModal'
+import DeleteTweetModal from './modals/DeleteTweetModal'
 
 function App() {
   const routeElements = useRouteElements()
@@ -33,6 +34,8 @@ function App() {
       <PostModal />
       <ChangePasswordModal />
       <ForgotPasswordModal />
+      <EditModal />
+      <DeleteTweetModal />
       {routeElements}
       <ToastContainer />
     </>

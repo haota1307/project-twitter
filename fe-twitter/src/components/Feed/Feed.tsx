@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
 import { User } from 'src/types/user.type'
+import useDeleteTweetModal from 'src/hooks/useDeleteTweet'
 const LIMIT = 5
 const PAGE = 1
 
@@ -19,6 +20,7 @@ export default function Feed({ user }: FeedProps) {
     page: PAGE,
     total_page: 0
   })
+  const deleteTweetModal = useDeleteTweetModal()
 
   useEffect(() => {
     setUserData(user as any)
@@ -76,6 +78,13 @@ export default function Feed({ user }: FeedProps) {
   useEffect(() => {
     fetchData()
   }, [user?._id])
+
+  useEffect(() => {
+    if (deleteTweetModal.isSuccess === true) {
+      fetchData()
+      deleteTweetModal.setFalse()
+    }
+  }, [deleteTweetModal.isSuccess])
 
   if (data.length === 0)
     return (
