@@ -6,6 +6,7 @@ import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
 import { User } from 'src/types/user.type'
 import useDeleteTweetModal from 'src/hooks/useDeleteTweet'
+import { useLocation } from 'react-router-dom'
 const LIMIT = 5
 const PAGE = 1
 
@@ -14,6 +15,7 @@ interface FeedProps {
 }
 
 export default function Feed({ user }: FeedProps) {
+  const location = useLocation()
   const [data, setData] = useState([])
   const [userData, setUserData] = useState()
   const [pagination, setPagination] = useState({
@@ -21,7 +23,7 @@ export default function Feed({ user }: FeedProps) {
     total_page: 0
   })
   const deleteTweetModal = useDeleteTweetModal()
-
+  const isMyProfile = location.pathname === '/profile' ? true : false
   useEffect(() => {
     setUserData(user as any)
   }, [user?._id])
@@ -104,7 +106,7 @@ export default function Feed({ user }: FeedProps) {
         if (post.type === TweetType.Tweet)
           return (
             <div className='w-full' key={index}>
-              <PostItem data={post as any} user={userData} option />
+              <PostItem data={post as any} user={userData} option={isMyProfile} />
             </div>
           )
       })}

@@ -172,7 +172,7 @@ export default function PostItem({ data, user, option }: PostItemProps) {
       <div className='px-6 p-2'>
         <div className='flex'>
           <Link to={profile?._id === data?.user?._id ? `/profile` : `/users/${data?.user?.username}`}>
-            <Avatar url={user?.avatar || data?.user?.avatar || data?.user[0]?.avatar || ''} />
+            <Avatar url={user?.avatar || data?.user?.avatar || ''} />
           </Link>
           <div className='w-full items-center ml-3'>
             <div className='flex items-center w-full justify-between'>

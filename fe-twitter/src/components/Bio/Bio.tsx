@@ -16,14 +16,9 @@ import useLoginModal from 'src/hooks/useLoginModal'
 
 export default function Bio({ data }: User | any) {
   const { profile, isAuthenticated } = useContext(AppContext)
+  const [me, setMe] = useState<User>()
   const [disabled, setDisabled] = useState(false)
   const [isFollow, setIsFollow] = useState(false)
-
-  const followingArrId = profile?.following as string[]
-
-  useEffect(() => {
-    setIsFollow(followingArrId?.some((id) => id === data?._id || false))
-  }, [data])
 
   const location = useLocation()
   const isMyProfilePage = location.pathname === '/profile'
@@ -40,6 +35,24 @@ export default function Bio({ data }: User | any) {
       setDisabled(false)
     }, 60000) // 60 seconds
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      userApi.getProfile().then((res) => {
+        setMe(res.data.result[0])
+      })
+    }
+  }, [])
+
+  const idFollowArr = me?.following?.map((user: any) => user?._id) as string[]
+
+  useEffect(() => {
+    setIsFollow(
+      idFollowArr?.some((id: string) => {
+        return id === data?._id
+      })
+    )
+  }, [data?._id])
 
   const handleForgotPassword = () => {
     userApi
@@ -121,11 +134,11 @@ export default function Bio({ data }: User | any) {
     <div className='border-b pb-4'>
       <div className='flex justify-end p-2 items-center gap-4'>
         {isMyProfilePage && <Popover item={itemPopover} />}
-        {isMyProfilePage ? (
-          <Button secondary label='Edit' onClick={editModal.onOpen} />
-        ) : !isFollow ? (
+        {isMyProfilePage && <Button secondary label='Edit' onClick={editModal.onOpen} />}
+        {!isMyProfilePage && !isFollow && (
           <Button label='Follow' secondary onClick={isAuthenticated ? handleFollowByUser : isToggle} />
-        ) : (
+        )}
+        {!isMyProfilePage && isFollow && (
           <Button label='Following' secondary onClick={isAuthenticated ? handleUnfollowByUser : isToggle} />
         )}
       </div>

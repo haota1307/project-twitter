@@ -1,4 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
+import { useContext, useEffect, useState } from 'react'
+import { set } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import userApi from 'src/apis/user.api'
 import BackGround from 'src/components/BackGround'
@@ -13,7 +15,9 @@ export default function Users() {
     queryKey: ['userProfile', user_name],
     queryFn: () => userApi.getUserProfile(user_name as string)
   })
+
   const dataUser = userData?.data.result[0] as User
+
   return (
     <>
       <Header label={dataUser?.username} showBackArrow />
