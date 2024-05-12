@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { Link } from 'react-router-dom'
 import Avatar from 'src/components/Avatar'

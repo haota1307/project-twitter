@@ -17,8 +17,6 @@ export default function Message() {
     }
   }, [])
 
-  console.log(me)
-
   return (
     <>
       <Header label='Message' showBackArrow />
