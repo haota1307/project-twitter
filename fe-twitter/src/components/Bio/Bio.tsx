@@ -13,6 +13,7 @@ import useChangePasswordModal from 'src/hooks/useChangePasswordModal'
 import userApi from 'src/apis/user.api'
 import config from 'src/constants/config'
 import useLoginModal from 'src/hooks/useLoginModal'
+import useChangeUsernameModal from 'src/hooks/useChangeUsernameModal'
 
 export default function Bio({ data }: User | any) {
   const { isAuthenticated, profile } = useContext(AppContext)
@@ -25,6 +26,7 @@ export default function Bio({ data }: User | any) {
 
   const editModal = useEditModal()
   const changePasswordModal = useChangePasswordModal()
+  const changeUsernameModal = useChangeUsernameModal()
 
   const handleDisabled = () => {
     // Disable the button
@@ -147,7 +149,7 @@ export default function Bio({ data }: User | any) {
           <p className='text-black text-2xl font-semibold'>{isMyProfilePage ? profile?.name : data?.name}</p>
           <div className='flex items-center'>
             <p className='text-black/50 text-md mr-2'>@{isMyProfilePage ? profile?.username : data?.username}</p>
-            <button className='hover:bg-slate-200 rounded-full hover:p-1'>
+            <button className='hover:bg-slate-200 rounded-full hover:p-1' onClick={() => changeUsernameModal.onOpen()}>
               <IoCreateOutline />
             </button>
           </div>
