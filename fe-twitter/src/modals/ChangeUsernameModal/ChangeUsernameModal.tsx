@@ -9,6 +9,7 @@ import Modal from 'src/components/Modal'
 import { AppContext } from 'src/contexts/app.context'
 import useChangeUsernameModal from 'src/hooks/useChangeUsernameModal'
 import { ErrorResponseApi } from 'src/types/utils.type'
+import { setProfileToLS } from 'src/utils/auth'
 import { Schema, schema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 
@@ -43,6 +44,7 @@ export default function ChangeUsernameModal() {
           autoClose: 1500
         })
         setProfile(data.data.result)
+        setProfileToLS(data.data.result)
         changeUsernameModal.onClose()
       },
       // Show error
