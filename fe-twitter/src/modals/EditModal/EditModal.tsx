@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Input from 'src/components/Input'
 import Modal from 'src/components/Modal'
@@ -10,17 +10,18 @@ import userApi from 'src/apis/user.api'
 import { setProfileToLS } from 'src/utils/auth'
 import { toast } from 'react-toastify'
 
-type FormData = Pick<User, 'name' | 'username' | 'bio' | 'date_of_birth' | 'avatar' | 'cover_photo'>
+type FormData = Pick<User, 'name' | 'bio' | 'date_of_birth' | 'avatar' | 'cover_photo'>
 
 export default function EditModal() {
   const { setProfile, profile } = useContext(AppContext)
 
   const editModal = useEditModal()
+  const [loading, setLoading] = useState(false)
   const [name, setName] = useState(profile?.name)
-  const [username, setUserame] = useState(profile?.username)
   const [bio, setBio] = useState(profile?.bio)
   const [dateOfBirth, setDateOfBirth] = useState<any>({
-    startDate: profile?.date_of_birth as Date
+    startDate: profile?.date_of_birth as Date,
+    endDate: profile?.date_of_birth as Date
   })
 
   const {
@@ -29,10 +30,10 @@ export default function EditModal() {
   } = useForm<FormData>()
 
   const onSubmit = () => {
+    setLoading(true)
     userApi
       .updateUserProfile({
         name,
-        username,
         bio,
         dateOfBirth: dateOfBirth.startDate
       })
@@ -43,9 +44,13 @@ export default function EditModal() {
           autoClose: 1000,
           position: 'top-center'
         })
+        editModal.onClose()
       })
       .catch((err) => {
         console.log(err)
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }
 
@@ -60,14 +65,6 @@ export default function EditModal() {
         errorMessage={errors.name?.message}
       />
       <Input
-        onChange={(e) => setUserame(e.target.value)}
-        value={username}
-        register={register}
-        name='username'
-        placeholder='Username'
-        errorMessage={errors.username?.message}
-      />
-      <Input
         onChange={(e) => setBio(e.target.value)}
         value={bio}
         register={register}
@@ -77,7 +74,7 @@ export default function EditModal() {
       />
       <Datepicker
         containerClassName='mx-1 relative'
-        inputClassName='h-auto lg:p-2 text-lg border-2 rounded-sm outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition w-full'
+        inputClassName='h-auto p-1 text-lg border-2 rounded-sm outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition w-full'
         value={dateOfBirth}
         useRange={false}
         asSingle={true}
@@ -90,14 +87,13 @@ export default function EditModal() {
 
   return (
     <Modal
-      // disable={loginMutation.isPending}
+      disable={loading}
       isOpen={editModal.isOpen}
       title='Edit your profile'
       actionLabel='Edit'
       onClose={editModal.onClose}
       onSubmit={onSubmit}
       body={bodyContent}
-      // footer={footerContent}
     />
   )
 }

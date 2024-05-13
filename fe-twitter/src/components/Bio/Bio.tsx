@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from '../Button'
-import { IoCalendarOutline } from 'react-icons/io5'
+import { IoCalendarOutline, IoCreateOutline } from 'react-icons/io5'
 import { formatDate } from 'src/utils/date'
 import useEditModal from 'src/hooks/useEditModal'
 import { useLocation } from 'react-router-dom'
@@ -15,7 +15,7 @@ import config from 'src/constants/config'
 import useLoginModal from 'src/hooks/useLoginModal'
 
 export default function Bio({ data }: User | any) {
-  const { profile, isAuthenticated } = useContext(AppContext)
+  const { isAuthenticated, profile } = useContext(AppContext)
   const [me, setMe] = useState<User>()
   const [disabled, setDisabled] = useState(false)
   const [isFollow, setIsFollow] = useState(false)
@@ -56,7 +56,7 @@ export default function Bio({ data }: User | any) {
 
   const handleForgotPassword = () => {
     userApi
-      .forgotPassword({ email: profile?.email || '' })
+      .forgotPassword({ email: me?.email || '' })
       .then((data) => {
         toast.success(data.data.message, {
           position: 'top-right',
@@ -145,9 +145,14 @@ export default function Bio({ data }: User | any) {
       <div className='mt-8 px-4'>
         <div className='flex flex-col'>
           <p className='text-black text-2xl font-semibold'>{isMyProfilePage ? profile?.name : data?.name}</p>
-          <p className='text-black/50 text-md'>@{isMyProfilePage ? profile?.username : data?.username}</p>
+          <div className='flex items-center'>
+            <p className='text-black/50 text-md mr-2'>@{isMyProfilePage ? profile?.username : data?.username}</p>
+            <button className='hover:bg-slate-200 rounded-full hover:p-1'>
+              <IoCreateOutline />
+            </button>
+          </div>
         </div>
-        {(profile?.bio !== '' && isMyProfilePage) || (data?.bio !== '' && !isMyProfilePage) ? (
+        {(me?.bio !== '' && isMyProfilePage) || (data?.bio !== '' && !isMyProfilePage) ? (
           <div className='flex flex-col mt-2.5'>
             <p className='text-black'>{isMyProfilePage ? profile?.bio : data?.bio}</p>
           </div>
@@ -170,11 +175,11 @@ export default function Bio({ data }: User | any) {
       </div>
       <div className='flex flex-row items-center mt-2.5 gap-6 px-4'>
         <div className='flex flex-row items-center gap-1'>
-          <p className='text-black'>{isMyProfilePage ? profile?.following?.length : data?.following_count}</p>
+          <p className='text-black'>{isMyProfilePage ? me?.following?.length : data?.following_count}</p>
           <p className='text-black/50'>Following</p>
         </div>
         <div className='flex flex-row items-center gap-1'>
-          <p className='text-black'>{isMyProfilePage ? profile?.followed?.length : data?.followed_count}</p>
+          <p className='text-black'>{isMyProfilePage ? me?.followed?.length : data?.followed_count}</p>
           <p className='text-black/50'>Followed</p>
         </div>
       </div>
