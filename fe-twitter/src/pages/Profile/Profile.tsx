@@ -7,7 +7,7 @@ import { AppContext } from 'src/contexts/app.context'
 import userApi from 'src/apis/user.api'
 
 export default function Profile() {
-  const { profile, isAuthenticated } = useContext(AppContext)
+  const { isAuthenticated } = useContext(AppContext)
   const [me, setMe] = useState()
   useEffect(() => {
     if (isAuthenticated) {

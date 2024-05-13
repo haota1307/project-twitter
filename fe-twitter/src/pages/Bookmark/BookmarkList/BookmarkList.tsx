@@ -72,7 +72,6 @@ export default function BookmarkList({ userId }: BookmarkProps) {
     if (userId) fetchData()
   }, [userId])
 
-  console.log(data)
   if (data.length === 0)
     return (
       <>
