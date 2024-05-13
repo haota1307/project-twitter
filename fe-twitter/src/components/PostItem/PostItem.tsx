@@ -19,6 +19,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { User } from 'src/types/user.type'
 import useLoginModal from 'src/hooks/useLoginModal'
 import useDeleteTweetModal from 'src/hooks/useDeleteTweet'
+import useEditTweetModal from 'src/hooks/useEditTweet'
 
 interface PostItemProps {
   data: Tweet
@@ -28,7 +29,10 @@ interface PostItemProps {
 
 export default function PostItem({ data, user, option }: PostItemProps) {
   const { profile, isAuthenticated } = useContext(AppContext)
+
   const loginModal = useLoginModal()
+  const deleteTweetModal = useDeleteTweetModal()
+  const editTweetModal = useEditTweetModal()
 
   const [isLikedByUser, setIsLikedByUser] = useState(
     data?.likes?.some(async (like: any) => (await like.user_id) === profile?._id && isAuthenticated) || false
@@ -160,11 +164,14 @@ export default function PostItem({ data, user, option }: PostItemProps) {
     )
   }
 
-  const deleteTweetModal = useDeleteTweetModal()
-
   const handleDeleteTweet = () => {
     deleteTweetModal.setTweetId(tweetIdDelete as string)
     deleteTweetModal.onOpen()
+  }
+
+  const handleEditTweet = () => {
+    editTweetModal.onOpen()
+    editTweetModal.setTweetEdit(data)
   }
 
   return (
@@ -181,10 +188,11 @@ export default function PostItem({ data, user, option }: PostItemProps) {
                   {data?.user?.name || user?.name || profile?.name}
                 </p>
                 <span className='text-neutral-500 text-sm ml-2'>{formatDate(data?.created_at)}</span>
+                {data?.created_at !== data?.updated_at && <span className='text-neutral-500 text-sm ml-2'>Edited</span>}
               </div>
               {option && (
                 <div className='flex justify-center items-center mr-1'>
-                  <button className='mr-3'>
+                  <button className='mr-3' onClick={handleEditTweet}>
                     <IoCreateOutline />
                   </button>
                   <button onClick={handleDeleteTweet}>

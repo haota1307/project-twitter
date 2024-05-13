@@ -99,8 +99,8 @@ export default function Feed({ user }: FeedProps) {
       hasMore={pagination.page < pagination.total_page}
       next={fetchMoreData}
       dataLength={data.length}
-      style={{ width: 'unset' }}
       loader={<h4>Loading...</h4>}
+      style={{ display: 'flex', flexDirection: 'column-reverse', width: 'auto' }}
     >
       {data?.map((post: Record<string, any>, index) => {
         if (post.type === TweetType.Tweet)

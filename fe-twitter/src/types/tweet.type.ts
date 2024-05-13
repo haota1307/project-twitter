@@ -31,9 +31,10 @@ export interface TweetBody {
 }
 
 export interface Tweet {
+  id: any
   user: any
-  _id?: string
   user_id: string
+  _id?: string
   type: TweetType
   audience: TweetAudience
   content: string

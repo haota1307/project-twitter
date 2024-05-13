@@ -19,7 +19,6 @@ export default function PostModal() {
       actionLabel='Tweet'
       noSubmit={true}
       body={bodyContent}
-      // footer={footerContent}
     />
   )
 }

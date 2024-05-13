@@ -149,9 +149,14 @@ export default function Bio({ data }: User | any) {
           <p className='text-black text-2xl font-semibold'>{isMyProfilePage ? profile?.name : data?.name}</p>
           <div className='flex items-center'>
             <p className='text-black/50 text-md mr-2'>@{isMyProfilePage ? profile?.username : data?.username}</p>
-            <button className='hover:bg-slate-200 rounded-full hover:p-1' onClick={() => changeUsernameModal.onOpen()}>
-              <IoCreateOutline />
-            </button>
+            {isMyProfilePage && (
+              <button
+                className='hover:bg-slate-200 rounded-full hover:p-1'
+                onClick={() => changeUsernameModal.onOpen()}
+              >
+                <IoCreateOutline />
+              </button>
+            )}
           </div>
         </div>
         {(me?.bio !== '' && isMyProfilePage) || (data?.bio !== '' && !isMyProfilePage) ? (

@@ -51,11 +51,13 @@ export default function TweetDetail({ data }: PostItemProps) {
             })}
           </div>
           {data?.medias[0]?.type === MediaType.Image && (
-            <div className='w-full pt-[100%] relative'>
-              <img
-                className='block absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
-                src={data.medias[0]?.url}
-              ></img>
+            <div className='w-full h-full'>
+              <div className='w-50% pt-[100%] relative'>
+                <img
+                  className='block absolute top-0 left-0 bg-white w-full h-full object-cover rounded-2xl'
+                  src={data.medias[0]?.url}
+                ></img>
+              </div>
             </div>
           )}
           {data?.medias[0]?.type === MediaType.Video && (
