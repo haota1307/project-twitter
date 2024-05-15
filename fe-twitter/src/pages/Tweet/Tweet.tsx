@@ -10,7 +10,7 @@ export default function Tweet() {
   const { tweet_id } = useParams()
   const { data: tweetDetailData } = useQuery({
     queryKey: ['tweetDetail', tweet_id],
-    queryFn: () => tweetApi.getTweetDetail(tweet_id)
+    queryFn: () => tweetApi.getTweetDetail(tweet_id as string)
   })
 
   return (

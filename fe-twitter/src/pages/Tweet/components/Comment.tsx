@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import PostItem from 'src/components/PostItem'
+import SkeletonLoading from 'src/components/SkeletonLoading'
 import config from 'src/constants/config'
 import { Tweet, TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
@@ -14,12 +15,14 @@ interface CommentItemProps {
 
 export default function Comment({ tweetParent }: CommentItemProps) {
   const [data, setData] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0
   })
 
   const fetchData = () => {
+    setIsLoading(true)
     if (tweetParent)
       http
         .get(`tweets/${tweetParent._id}/children`, {
@@ -43,6 +46,9 @@ export default function Comment({ tweetParent }: CommentItemProps) {
         })
         .catch((err) => {
           console.log(err)
+        })
+        .finally(() => {
+          setIsLoading(false)
         })
   }
 
@@ -74,27 +80,33 @@ export default function Comment({ tweetParent }: CommentItemProps) {
     if (tweetParent) fetchData()
   }, [tweetParent])
 
-  if (data.length === 0)
+  if (data.length === 0 && isLoading === false)
     return (
       <>
         <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>{"Let's comment it"}</div>
       </>
     )
   return (
-    <InfiniteScroll
-      hasMore={pagination.page < pagination.total_page}
-      next={fetchMoreData}
-      dataLength={data.length}
-      loader={<h4>Loading...</h4>}
-    >
-      {data?.map((post: Record<string, any>, index) => {
-        if (post.type === TweetType.Comment)
-          return (
-            <>
-              <PostItem key={index} data={post as any} />
-            </>
-          )
-      })}
-    </InfiniteScroll>
+    <>
+      {isLoading ? (
+        <SkeletonLoading />
+      ) : (
+        <InfiniteScroll
+          hasMore={pagination.page < pagination.total_page}
+          next={fetchMoreData}
+          dataLength={data.length}
+          loader={<h4>Loading...</h4>}
+        >
+          {data?.map((post: Record<string, any>, index) => {
+            if (post.type === TweetType.Comment)
+              return (
+                <>
+                  <PostItem key={index} data={post as any} />
+                </>
+              )
+          })}
+        </InfiniteScroll>
+      )}
+    </>
   )
 }
