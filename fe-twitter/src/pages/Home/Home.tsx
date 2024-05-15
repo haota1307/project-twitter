@@ -4,6 +4,7 @@ import AlertVerify from 'src/components/AlertVerify'
 import Form from 'src/components/Form'
 import Header from 'src/components/Header'
 import PostItem from 'src/components/PostItem'
+import SkeletonLoading from 'src/components/SkeletonLoading'
 import config from 'src/constants/config'
 import { AppContext } from 'src/contexts/app.context'
 import http from 'src/utils/http'
@@ -14,12 +15,14 @@ const PAGE = 1
 export default function Home() {
   const { profile, isAuthenticated } = useContext(AppContext)
   const [data, setData] = useState([])
+  const [isLoading, setIsloading] = useState(false)
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0
   })
 
   const fetchData = () => {
+    setIsloading(true)
     http
       .get('tweets/home-feed', {
         headers: {
@@ -42,6 +45,9 @@ export default function Home() {
       })
       .catch((err) => {
         console.log(err)
+      })
+      .finally(() => {
+        setIsloading(false)
       })
   }
 
@@ -84,20 +90,28 @@ export default function Home() {
       ) : (
         <AlertVerify />
       )}
-      <InfiniteScroll
-        hasMore={pagination.page < pagination.total_page}
-        next={fetchMoreData}
-        dataLength={data.length}
-        loader={<h4>Loading...</h4>}
-      >
-        {data?.map((post: Record<string, any>, index) => {
-          return (
-            <>
-              <PostItem key={index} data={post as any} />
-            </>
-          )
-        })}
-      </InfiniteScroll>
+      {isLoading ? (
+        <SkeletonLoading />
+      ) : (
+        <InfiniteScroll
+          hasMore={pagination.page < pagination.total_page}
+          next={fetchMoreData}
+          dataLength={data.length}
+          loader={
+            <h4>
+              <SkeletonLoading />
+            </h4>
+          }
+        >
+          {data?.map((post: Record<string, any>, index) => {
+            return (
+              <>
+                <PostItem key={index} data={post as any} />
+              </>
+            )
+          })}
+        </InfiniteScroll>
+      )}
     </>
   )
 }
