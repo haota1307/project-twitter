@@ -41,3 +41,10 @@ export const unbookmarkTweetController = async (req: Request, res: Response) => 
     result
   })
 }
+export const unbookmarkTweetDeletedController = async (req: Request, res: Response) => {
+  const result = await bookmarkService.unbookmarkTweetDeleted(req.params.bookmark_id)
+  return res.json({
+    message: BOOKMARK_MESSAGES.UNBOOKMARK_SUCCESSFULLY,
+    result
+  })
+}

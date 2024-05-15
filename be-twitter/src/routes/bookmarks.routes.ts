@@ -2,7 +2,8 @@ import { Router } from 'express'
 import {
   MyBookmarksController,
   bookmarkTweetController,
-  unbookmarkTweetController
+  unbookmarkTweetController,
+  unbookmarkTweetDeletedController
 } from '~/controllers/bookmarks.controller'
 import { tweetIdValidator } from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
@@ -52,6 +53,20 @@ bookmarksRouter.delete(
   verifiedUserValidator,
   tweetIdValidator,
   wrapRequestHandler(unbookmarkTweetController)
+)
+
+/**
+ * Description: Unbookmark tweet deleted
+ * Path: /tweets/:tweet_id
+ * Method: DELETE
+ * Body: { bookmark_id: string }
+ * Header: {Authorization: Bear <access_token>}
+ */
+bookmarksRouter.delete(
+  '/deleted/:bookmark_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(unbookmarkTweetDeletedController)
 )
 
 export default bookmarksRouter
