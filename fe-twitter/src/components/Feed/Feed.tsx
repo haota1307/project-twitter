@@ -7,6 +7,7 @@ import http from 'src/utils/http'
 import { User } from 'src/types/user.type'
 import useDeleteTweetModal from 'src/hooks/useDeleteTweet'
 import { useLocation } from 'react-router-dom'
+import SkeletonLoading from '../SkeletonLoading'
 const LIMIT = 5
 const PAGE = 1
 
@@ -18,6 +19,7 @@ export default function Feed({ user }: FeedProps) {
   const location = useLocation()
   const [data, setData] = useState([])
   const [userData, setUserData] = useState()
+  const [isLoading, setIsLoading] = useState(false)
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0
@@ -29,6 +31,7 @@ export default function Feed({ user }: FeedProps) {
   }, [user?._id])
 
   const fetchData = () => {
+    setIsLoading(true)
     if (user?._id)
       http
         .get(`tweets/list/${user?._id}`, {
@@ -51,6 +54,9 @@ export default function Feed({ user }: FeedProps) {
         })
         .catch((err) => {
           console.log(err)
+        })
+        .finally(() => {
+          setIsLoading(false)
         })
   }
 
@@ -95,21 +101,27 @@ export default function Feed({ user }: FeedProps) {
       </>
     )
   return (
-    <InfiniteScroll
-      hasMore={pagination.page < pagination.total_page}
-      next={fetchMoreData}
-      dataLength={data.length}
-      loader={<h4>Loading...</h4>}
-      style={{ display: 'flex', flexDirection: 'column-reverse', width: 'auto' }}
-    >
-      {data?.map((post: Record<string, any>, index) => {
-        if (post.type === TweetType.Tweet)
-          return (
-            <div className='w-full' key={index}>
-              <PostItem data={post as any} user={userData} option={isMyProfile} />
-            </div>
-          )
-      })}
-    </InfiniteScroll>
+    <>
+      {isLoading ? (
+        <SkeletonLoading />
+      ) : (
+        <InfiniteScroll
+          hasMore={pagination.page < pagination.total_page}
+          next={fetchMoreData}
+          dataLength={data.length}
+          loader={<SkeletonLoading />}
+          style={{ display: 'flex', flexDirection: 'column-reverse', width: 'auto' }}
+        >
+          {data?.map((post: Record<string, any>, index) => {
+            if (post.type === TweetType.Tweet)
+              return (
+                <div className='w-full' key={index}>
+                  <PostItem data={post as any} user={userData} option={isMyProfile} />
+                </div>
+              )
+          })}
+        </InfiniteScroll>
+      )}
+    </>
   )
 }
