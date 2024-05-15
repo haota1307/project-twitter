@@ -24,6 +24,14 @@ const interactApi = {
       baseURL: config.baseUrl
     })
   },
+  unbookmarkTweetDeleted(bookmark_id: string) {
+    return http.delete(`bookmarks/deleted/${bookmark_id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      },
+      baseURL: config.baseUrl
+    })
+  },
   likeTweet(tweet_id: string) {
     return http.post(
       'likes',

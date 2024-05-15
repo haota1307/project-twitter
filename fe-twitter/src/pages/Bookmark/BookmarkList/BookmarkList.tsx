@@ -79,7 +79,7 @@ export default function BookmarkList({ userId }: BookmarkProps) {
   const TweetDeleted = ({ id }: any) => {
     const handleUnBookmarkByUser = async (tweetId: string) => {
       await interactApi
-        .unbookmarkTweet(tweetId)
+        .unbookmarkTweetDeleted(tweetId)
         .then(() => {
           toast.success('unbookmark successfully')
         })
@@ -87,7 +87,6 @@ export default function BookmarkList({ userId }: BookmarkProps) {
           console.log(err)
         })
     }
-    console.log(id)
     return (
       <>
         <div className='border-b w-full'>
