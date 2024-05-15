@@ -98,10 +98,11 @@ export default function Comment({ tweetParent }: CommentItemProps) {
           loader={<h4>Loading...</h4>}
         >
           {data?.map((post: Record<string, any>, index) => {
+            console.log(post)
             if (post.type === TweetType.Comment)
               return (
                 <>
-                  <PostItem key={index} data={post as any} />
+                  <PostItem key={index} data={post as any} isComment={true} />
                 </>
               )
           })}

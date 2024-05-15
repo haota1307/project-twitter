@@ -15,21 +15,20 @@ import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 import interactApi from 'src/apis/interact.api'
-import { Link, useNavigate } from 'react-router-dom'
-import { User } from 'src/types/user.type'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useLoginModal from 'src/hooks/useLoginModal'
 import useDeleteTweetModal from 'src/hooks/useDeleteTweet'
 import useEditTweetModal from 'src/hooks/useEditTweet'
 
 interface PostItemProps {
   data: Tweet
-  user?: User
+  user?: any
   option?: boolean
+  isComment?: boolean
 }
 
-export default function PostItem({ data, user, option }: PostItemProps) {
+export default function PostItem({ data, user, option, isComment }: PostItemProps) {
   const { profile, isAuthenticated } = useContext(AppContext)
-
   const loginModal = useLoginModal()
   const deleteTweetModal = useDeleteTweetModal()
   const editTweetModal = useEditTweetModal()
@@ -179,7 +178,8 @@ export default function PostItem({ data, user, option }: PostItemProps) {
       <div className='px-6 p-2'>
         <div className='flex'>
           <Link to={profile?._id === data?.user?._id ? `/profile` : `/users/${data?.user?.username}`}>
-            <Avatar url={user?.avatar || data?.user?.avatar || ''} />
+            {isComment === true && <Avatar url={data?.user[0]?.avatar || ''} />}
+            {!isComment === true && <Avatar url={user?.avatar || data?.user?.avatar || ''} />}
           </Link>
           <div className='w-full items-center ml-3'>
             <div className='flex items-center w-full justify-between'>
@@ -188,7 +188,7 @@ export default function PostItem({ data, user, option }: PostItemProps) {
                   {data?.user?.name || user?.name || profile?.name}
                 </p>
                 <span className='text-neutral-500 text-sm ml-2'>{formatDate(data?.created_at)}</span>
-                {data?.created_at !== data?.updated_at && <span className='text-neutral-500 text-sm ml-2'>Edited</span>}
+                {/* {data?.created_at !== data?.updated_at && <span className='text-neutral-500 text-sm ml-2'>Edited</span>} */}
               </div>
               {option && (
                 <div className='flex justify-center items-center mr-1'>

@@ -18,10 +18,11 @@ interface FormProps {
   postId?: string
   parentId?: string
   hiddenBtn?: boolean
+  labelBtn?: string
   refreshFeed?: () => void
 }
 
-export default function Form({ placeholder, isComment, parentId, hiddenBtn, refreshFeed }: FormProps) {
+export default function Form({ placeholder, isComment, parentId, labelBtn, hiddenBtn, refreshFeed }: FormProps) {
   const { isAuthenticated, profile } = useContext(AppContext)
 
   const [file, setFile] = useState<File>()
@@ -219,7 +220,12 @@ export default function Form({ placeholder, isComment, parentId, hiddenBtn, refr
                 <InputFile isVideoFile onChange={handleChangeFile as any} Icon={IoVideocamOutline} />
               </div>
               {!hiddenBtn && (
-                <Button disabled={isLoading || body.content === ''} onClick={onSubmit} label='Tweet' secondary />
+                <Button
+                  disabled={isLoading || body.content === ''}
+                  onClick={onSubmit}
+                  label={labelBtn || 'Tweet'}
+                  secondary
+                />
               )}
             </div>
           </div>
