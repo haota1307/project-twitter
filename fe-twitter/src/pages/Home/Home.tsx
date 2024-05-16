@@ -9,7 +9,7 @@ import config from 'src/constants/config'
 import { AppContext } from 'src/contexts/app.context'
 import http from 'src/utils/http'
 
-const LIMIT = 5
+const LIMIT = 20
 const PAGE = 1
 
 export default function Home() {

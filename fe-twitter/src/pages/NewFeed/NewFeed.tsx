@@ -5,7 +5,7 @@ import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
 import PostItem from 'src/components/PostItem'
 import SkeletonLoading from 'src/components/SkeletonLoading'
-const LIMIT = 5
+const LIMIT = 20
 const PAGE = 1
 
 export default function NewFeed() {

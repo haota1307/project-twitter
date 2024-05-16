@@ -280,7 +280,7 @@ export const audiencevalidator = wrapRequestHandler(async (req: Request, res: Re
         message: USERS_MESSAGES.USER_NOT_FOUND
       })
     }
-    // Check người xem tweet có nằ trong tweet circle của tác giả hay không <=> some -> chỉ cần có 1 phần tử thỏa đk thì sẽ dừng lại
+    // Check người xem tweet có nằn trong tweet circle của tác giả hay không <=> some -> chỉ cần có 1 phần tử thỏa đk thì sẽ dừng lại
     const { user_id } = req.decoded_authorization
     const isInTweetterCircle = author.twitter_circle.some((user_circle_id) => user_circle_id.equals(user_id))
     // Check không là tác giả và không nằm trong tweet circle thì quăng lỗi
