@@ -23,3 +23,12 @@ export const getConversationsController = async (req: Request<GetConversationsPa
     message: 'Get conversations successfully'
   })
 }
+
+export const getListConversationsController = async (req: Request<GetConversationsParams>, res: Response) => {
+  const sender_id = req.decoded_authorization?.user_id as string
+  const result = await conversationService.getListConversations(sender_id)
+  return res.json({
+    message: 'Get list conversations successfully',
+    result
+  })
+}
