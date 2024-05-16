@@ -19,7 +19,7 @@ export default function ListConversation({ data }: { data: string[] | any }) {
                   {item?.user?.name}
                 </button>
                 <div className='text-neutral-500 cursor-pointer hidden md:block mx-4 mt-2'>
-                  {item?.lastMessage?.sender_id === profile?._id && <span>You:</span>}
+                  {item?.lastMessage?.sender_id === profile?._id && <span>{'You: '}</span>}
                   {item?.lastMessage?.content}
                 </div>
               </div>

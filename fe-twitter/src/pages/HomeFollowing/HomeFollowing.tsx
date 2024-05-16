@@ -5,7 +5,7 @@ import { AppContext } from 'src/contexts/app.context'
 import AlertVerify from 'src/components/AlertVerify'
 
 export default function HomeFollowing() {
-  const { profile, isAuthenticated } = useContext(AppContext)
+  const { profile } = useContext(AppContext)
 
   return (
     <>

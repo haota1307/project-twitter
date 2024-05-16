@@ -5,7 +5,7 @@ import useRegisterModal from 'src/hooks/useRegisterModal'
 
 import { AppContext } from 'src/contexts/app.context'
 
-import { Tweet, TweetAudience, TweetBody, TweetType } from 'src/types/tweet.type'
+import { Tweet } from 'src/types/tweet.type'
 
 import mediaApi from 'src/apis/media.api'
 import tweetApi from 'src/apis/tweet.api'
@@ -23,14 +23,12 @@ interface FormProps {
   refreshFeed?: () => void
 }
 
-export default function EditForm({ placeholder, isComment, parentId, data, refreshFeed }: FormProps) {
+export default function EditForm({ placeholder, data, refreshFeed }: FormProps) {
   const { isAuthenticated, profile } = useContext(AppContext)
 
   const [file, setFile] = useState<File>()
   const [hashtags, setHashtags] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [type] = useState(isComment ? TweetType.Comment : TweetType.Tweet)
-  const [tweetParentId] = useState<string | null>(parentId ? parentId : null)
   const initialBody = data
 
   const [body, setBody] = useState<Tweet>(initialBody)

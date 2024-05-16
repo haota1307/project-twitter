@@ -1,6 +1,6 @@
 import config from 'src/constants/config'
 import http from 'src/utils/http'
-import { Tweet, TweetBody } from 'src/types/tweet.type'
+import { TweetBody } from 'src/types/tweet.type'
 
 const tweetApi = {
   createTweet(body: TweetBody) {

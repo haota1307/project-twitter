@@ -1,6 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { useContext, useEffect, useState } from 'react'
-import { set } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import userApi from 'src/apis/user.api'
 import BackGround from 'src/components/BackGround'
