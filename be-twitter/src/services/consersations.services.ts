@@ -75,6 +75,18 @@ class ConversationService {
         },
         {
           $unwind: '$user'
+        },
+        {
+          $project: {
+            _id: 1,
+            lastMessage: 1,
+            user: {
+              _id: 1,
+              name: 1,
+              username: 1,
+              avatar: 1
+            }
+          }
         }
       ])
       .toArray()

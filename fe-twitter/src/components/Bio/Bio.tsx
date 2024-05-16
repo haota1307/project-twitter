@@ -1,10 +1,10 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from '../Button'
-import { IoCalendarOutline, IoCreateOutline } from 'react-icons/io5'
+import { IoCalendarOutline, IoChatbubbleEllipsesOutline, IoCreateOutline } from 'react-icons/io5'
 import { formatDate } from 'src/utils/date'
 import useEditModal from 'src/hooks/useEditModal'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { User } from 'src/types/user.type'
 import Popover from '../Popover'
 import http from 'src/utils/http'
@@ -137,6 +137,13 @@ export default function Bio({ data }: User | any) {
       <div className='flex justify-end p-2 items-center gap-4'>
         {isMyProfilePage && <Popover item={itemPopover} />}
         {isMyProfilePage && <Button secondary label='Edit' onClick={editModal.onOpen} />}
+        {!isMyProfilePage && (
+          <button className='p-2 hover:bg-blue-100 rounded-full'>
+            <Link to={`/messages/${data?.username}`} key={data?._id}>
+              <IoChatbubbleEllipsesOutline size={30} color='#3B82F6' />
+            </Link>
+          </button>
+        )}
         {!isMyProfilePage && !isFollow && (
           <Button label='Follow' secondary onClick={isAuthenticated ? handleFollowByUser : isToggle} />
         )}
@@ -144,7 +151,7 @@ export default function Bio({ data }: User | any) {
           <Button label='Following' secondary onClick={isAuthenticated ? handleUnfollowByUser : isToggle} />
         )}
       </div>
-      <div className='mt-8 px-4'>
+      <div className='mt-4 px-4'>
         <div className='flex flex-col'>
           <p className='text-black text-2xl font-semibold'>{isMyProfilePage ? profile?.name : data?.name}</p>
           <div className='flex items-center'>
