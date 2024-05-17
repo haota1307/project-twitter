@@ -1,44 +1,61 @@
-_Cần làm_
+Tổng hợp chức năng chính
 
-- Authen: ✔️
+# 1. Tài khoản người dùng
 
-  - Trang xác thực tài khoản ✔️
-  - Quên tài khoản mật khẩu ✔️
-    - Quên tài khoản trong profile ✔️
-    - Quên tài khoản lúc đăng nhập ✔️
-  - Đổi mật khẩu ✔️
+**1.1. Đăng nhập**
 
-- Main feed ✔️
+- 1.1.1. Đăng nhập với gmail và mật khẩu
 
-  - For you ✔️
-  - random tweet <-> ngày tạo ✔️
+  - Xác thực token: access token và refresh token
+  - Thực hiện refresh token khi access token hết hạn
 
-- Tweet
+- 1.1.2. Đăng nhập với google(Oauth 2.0)
 
-  - Hashtag ✔️
-  - Audian
-  - Sửa, xóa
+**1.2. Đăng ký**
 
-- Explore
+**1.3. Đổi mật khẩu**
 
-  - Search: user ✔️
+**1.4. Quên mật khẩu**
 
-- Edit
+**1.5. Đăng xuất**
 
-  - Thông tin cá nhân
-  - Thay đổi img avatar, cover photo ✔️
-  - Hiển thị ngày sinh ✔️
+**1.6. Xem thông tin người dùng**
 
-- Conversation
+**1.7. Thay đổi thông tin người dùng**
 
-- Button back trang ✔️
-  - history page(goback) ✔️(tạm)
+- Username
+- Thông tin cá nhân: name, bio, date of birth
+- Thay đổi avatar, cover photo
 
-_Bug_
+# 2. Tương tác người dùng
 
-- Register ✔️
-- Giao diện
-- Hết hạn access token -> logout -> bugggggggggggg
-- callapi 2 lần khi ấn hashtag
-  - Token bị xóa ở database -> ko tìm ko tồn tại -> sai...
-- ...
+**2.1. Tương tác với người khác**
+
+- Theo dõi
+- Hủy theo dõi
+- Nhắn tin
+
+**2.2 Bài viết**
+
+- Tạo bài viết(hashtag, image or video)
+- Xóa bài viết cá nhân
+- Like bài viết
+
+  - Tạo like
+  - Hủy like
+
+- Comment bài viết
+- Bookmark bài viết
+
+  - Tạo bookmark
+  - Hủy bookmark
+
+**2.3 Tìm kiếm**
+
+- Tìm kiếm bài viết
+- Tìm kiếm người dùng
+
+# 3. Khác
+
+- Send email xác thực tài khoản
+- Send email reset mật khẩu(Quên mật khẩu)
