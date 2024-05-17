@@ -3,10 +3,11 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import PostItem from 'src/components/PostItem'
 import SkeletonLoading from 'src/components/SkeletonLoading'
 import config from 'src/constants/config'
+import usePostModal from 'src/hooks/usePostModal'
 import { Tweet, TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
 
-const LIMIT = 5
+const LIMIT = 20
 const PAGE = 1
 
 interface CommentItemProps {
@@ -20,6 +21,8 @@ export default function Comment({ tweetParent }: CommentItemProps) {
     page: PAGE,
     total_page: 0
   })
+
+  const postModal = usePostModal()
 
   const fetchData = () => {
     setIsLoading(true)
@@ -77,8 +80,11 @@ export default function Comment({ tweetParent }: CommentItemProps) {
   }
 
   useEffect(() => {
-    if (tweetParent) fetchData()
-  }, [tweetParent])
+    if (tweetParent || (tweetParent && postModal.isRefreshData === true)) {
+      fetchData()
+      postModal.setIsRefreshDataFalse()
+    }
+  }, [tweetParent, postModal.isRefreshData])
 
   if (data.length === 0 && isLoading === false)
     return (
@@ -98,7 +104,6 @@ export default function Comment({ tweetParent }: CommentItemProps) {
           loader={<h4>Loading...</h4>}
         >
           {data?.map((post: Record<string, any>, index) => {
-            console.log(post)
             if (post.type === TweetType.Comment)
               return (
                 <>

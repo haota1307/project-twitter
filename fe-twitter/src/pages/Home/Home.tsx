@@ -7,6 +7,7 @@ import PostItem from 'src/components/PostItem'
 import SkeletonLoading from 'src/components/SkeletonLoading'
 import config from 'src/constants/config'
 import { AppContext } from 'src/contexts/app.context'
+import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
 
 const LIMIT = 20
@@ -104,11 +105,12 @@ export default function Home() {
           }
         >
           {data?.map((post: Record<string, any>, index) => {
-            return (
-              <>
-                <PostItem key={index} data={post as any} />
-              </>
-            )
+            if (post.type === TweetType.Tweet)
+              return (
+                <>
+                  <PostItem key={index} data={post as any} />
+                </>
+              )
           })}
         </InfiniteScroll>
       )}

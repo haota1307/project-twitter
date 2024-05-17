@@ -12,7 +12,7 @@ interface BookmarkProps {
   userId: string
 }
 
-const LIMIT = 5
+const LIMIT = 20
 const PAGE = 1
 
 export default function BookmarkList({ userId }: BookmarkProps) {

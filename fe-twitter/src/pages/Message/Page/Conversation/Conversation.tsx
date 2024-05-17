@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query'
 import userApi from 'src/apis/user.api'
 import { User } from 'src/types/user.type'
 
-const LIMIT = 10
+const LIMIT = 20
 const PAGE = 1
 
 export default function Conversation() {

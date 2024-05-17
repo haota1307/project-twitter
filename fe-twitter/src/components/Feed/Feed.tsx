@@ -9,7 +9,7 @@ import useDeleteTweetModal from 'src/hooks/useDeleteTweet'
 import { useLocation } from 'react-router-dom'
 import SkeletonLoading from '../SkeletonLoading'
 import usePostModal from 'src/hooks/usePostModal'
-const LIMIT = 5
+const LIMIT = 20
 const PAGE = 1
 
 interface FeedProps {
