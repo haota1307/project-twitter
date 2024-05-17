@@ -210,7 +210,7 @@ export default function Form({ placeholder, isComment, parentId, labelBtn, hidde
             )}
             <hr className='opacity-0 peer-focus:opacity-100 h-[1px] w-full border-neutral-500 transition mb-2' />
             <div className='flex justify-start items-center mt-1'>
-              <p className='text-base text-blue-500 font-semibold p-2 hover:bg-blue-50 hover:cursor-pointer rounded-3xl'>
+              <p className='text-base text-blue-500 font-semibold p-2 hover:bg-blue-50 hover:cursor-not-allowed rounded-3xl'>
                 Every one??
               </p>
             </div>
