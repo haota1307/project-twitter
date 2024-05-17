@@ -8,6 +8,7 @@ import { User } from 'src/types/user.type'
 import useDeleteTweetModal from 'src/hooks/useDeleteTweet'
 import { useLocation } from 'react-router-dom'
 import SkeletonLoading from '../SkeletonLoading'
+import usePostModal from 'src/hooks/usePostModal'
 const LIMIT = 5
 const PAGE = 1
 
@@ -25,6 +26,7 @@ export default function Feed({ user }: FeedProps) {
     total_page: 0
   })
   const deleteTweetModal = useDeleteTweetModal()
+  const createTWeetModal = usePostModal()
   const isMyProfile = location.pathname === '/profile' ? true : false
   useEffect(() => {
     setUserData(user as any)
@@ -93,6 +95,13 @@ export default function Feed({ user }: FeedProps) {
       deleteTweetModal.setFalse()
     }
   }, [deleteTweetModal.isSuccess])
+
+  useEffect(() => {
+    if (createTWeetModal.isRefreshData === true) {
+      fetchData()
+      createTWeetModal.setIsRefreshDataFalse()
+    }
+  }, [createTWeetModal.isRefreshData])
 
   if (data.length === 0)
     return (

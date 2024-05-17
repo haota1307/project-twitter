@@ -11,6 +11,7 @@ import mediaApi from 'src/apis/media.api'
 import tweetApi from 'src/apis/tweet.api'
 import { IoImageOutline, IoVideocamOutline } from 'react-icons/io5'
 import { useDebounce } from 'src/hooks/useDebounce'
+import usePostModal from 'src/hooks/usePostModal'
 
 interface FormProps {
   placeholder: string
@@ -46,6 +47,7 @@ export default function Form({ placeholder, isComment, parentId, labelBtn, hidde
 
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
+  const postModal = usePostModal()
 
   const debouncedContent = useDebounce(body.content)
 
@@ -127,6 +129,8 @@ export default function Form({ placeholder, isComment, parentId, labelBtn, hidde
         if (refreshFeed) {
           refreshFeed()
         }
+        postModal.setIsRefreshDataTrue()
+        postModal.onClose()
       })
       .finally(() => {
         setBody(initialBody)
