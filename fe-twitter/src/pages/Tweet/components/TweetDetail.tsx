@@ -29,7 +29,7 @@ export default function TweetDetail({ data }: PostItemProps) {
         </div>
         <div>
           <div className='flex flex-row items-center gap-2'>
-            <p className='text-black font-semibold cursor-pointer hover:underline'>{profile?.name}</p>
+            <p className='text-black font-semibold cursor-pointer hover:underline'>{data?.user[0]?.name}</p>
             <span className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>@{data?.user_id}</span>
             <span className='text-neutral-500 text-sm'>{formatDate(data?.created_at)}</span>
           </div>

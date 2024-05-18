@@ -44,10 +44,11 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
 
   const videoRef = useRef(null)
 
+  console.log(data)
+
   useEffect(() => {
     const checkIfLikedByUser = async () => {
       if (data?.likes && profile?._id && isAuthenticated) {
-        console.log(data.likes)
         for (const like of data.likes) {
           const userId = location.pathname === '/bookmark' ? await (like as any)?._id : await (like as any)?.user_id
           if (userId === profile._id) {
@@ -202,6 +203,8 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
     editTweetModal.setTweetEdit(data)
   }
 
+  console.log(user?.name)
+
   return (
     <div className='border-b w-full'>
       <div className='px-6 p-2'>
@@ -214,10 +217,10 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
             <div className='flex items-center w-full justify-between'>
               <div className='flex items-center'>
                 <p className='text-black font-semibold cursor-pointer hover:underline'>
-                  {data?.user?.name || user?.name || profile?.name}
+                  {location.pathname === '/profile' && user?.name}
+                  {(isComment === true && data?.user[0]?.name) || data.user?.name}
                 </p>
                 <span className='text-neutral-500 text-sm ml-2'>{formatDate(data?.created_at)}</span>
-                {/* {data?.created_at !== data?.updated_at && <span className='text-neutral-500 text-sm ml-2'>Edited</span>} */}
               </div>
               {option && (
                 <div className='flex justify-center items-center mr-1'>
