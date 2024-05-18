@@ -63,7 +63,7 @@ Tổng hợp chức năng chính
 
 ---
 
-# Giới thiệu về TypeScript
+## Giới thiệu về TypeScript
 
 - TypeScript là một ngôn ngữ lập trình mã nguồn mở, phát triển bởi Microsoft. Nó là một siêu tập hợp (superset) của JavaScript, có nghĩa là nó bổ sung các tính năng mới và mở rộng của JavaScript bằng cách thêm vào các khái niệm từ các ngôn ngữ lập trình khác như Java hoặc C#. Mục tiêu chính của TypeScript là tăng cường tính đúng đắn và quản lý mã nguồn trong quá trình phát triển phần mềm lớn và phức tạp.
 
@@ -77,7 +77,7 @@ Tổng hợp chức năng chính
 
   - Hỗ trợ tiện ích lập trình: TypeScript đi kèm với các công cụ hỗ trợ như TypeScript Compiler (tsc) để biên dịch mã nguồn TypeScript thành mã nguồn JavaScript, cũng như các trình biên tập mã như Visual Studio Code có hỗ trợ tốt cho TypeScript.
 
-# Giới thiệu về React
+## Giới thiệu về React
 
 - React (hay còn được gọi là React.js hoặc ReactJS) là một thư viện JavaScript front-end mã nguồn mở và miễn phí để xây dựng giao diện người dùng dựa trên các thành phần UI riêng lẻ. Nó được phát triển và duy trì bởi Meta (trước đây là Facebook) và cộng đồng các nhà phát triển và công ty cá nhân. React có thể được sử dụng làm cơ sở để phát triển các ứng dụng SPA (Single page application), thiết bị di động hoặc ứng dụng được kết xuất bằng máy chủ với các thư viện khác như Next.js. Tuy nhiên, React chỉ hướng tới việc quản lý trạng thái và hiển thị trạng thái đó cho DOM, vì vậy việc tạo ứng dụng bằng React thường yêu cầu sử dụng thêm các thư viện bổ sung để thực hiện định tuyến trang, cũng như thêm một số chức năng ở phía máy khách.
 
@@ -91,7 +91,7 @@ Tổng hợp chức năng chính
 
   - JSX (JavaScript XML): ReactJS sử dụng JSX, một phần mở rộng của JavaScript, để viết các mẫu giao diện người dùng dưới dạng mã JavaScript. JSX cho phép viết mã HTML bên trong mã JavaScript, giúp tạo ra mã nguồn dễ đọc và dễ hiểu hơn.
 
-# Giới thiệu về Tailwind CSS
+## Giới thiệu về Tailwind CSS
 
 - Tailwind CSS là một thư viện CSS được thiết kế để giúp phát triển giao diện người dùng nhanh chóng và dễ dàng. Nó không phải là một framework CSS truyền thống như Bootstrap hay Foundation, mà là một tập hợp các lớp CSS được đặt tên theo các chức năng cụ thể.
 
@@ -105,7 +105,7 @@ Tổng hợp chức năng chính
 
   - Highly Composable: Với cách tiếp cận utility-first, bạn có thể kết hợp các lớp CSS lại với nhau để tạo ra giao diện phức tạp, mà không cần phải viết CSS tùy chỉnh.
 
-# Giới thiệu về Express.js
+## Giới thiệu về Express.js
 
 - Express.js là một framework web được xây dựng trên nền tảng Node.js, giúp việc phát triển ứng dụng web và API trở nên đơn giản và nhanh chóng. Express.js được thiết kế để làm việc với Node.js một cách linh hoạt, cho phép xử lý các yêu cầu HTTP, quản lý session, xử lý routing, và thực hiện nhiều chức năng khác liên quan đến phía server.
 
@@ -119,7 +119,7 @@ Tổng hợp chức năng chính
 
   - Cấu trúc dự án mở rộng: Express.js không yêu cầu một cấu trúc dự án cụ thể nào và cho phép bạn tự do tổ chức mã nguồn của ứng dụng theo cách bạn muốn. Điều này giúp cho việc phát triển ứng dụng linh hoạt và dễ dàng mở rộng.
 
-# Giới thiệu về Node.JS
+## Giới thiệu về Node.JS
 
 - Node.js là một nền tảng phát triển ứng dụng web được xây dựng trên JavaScript. Nó cho phép viết mã nguồn JavaScript chạy phía server, thay vì chỉ chạy trên trình duyệt như trong môi trường web truyền thống.
 
@@ -132,3 +132,23 @@ Tổng hợp chức năng chính
   - Cộng đồng lớn và Hệ sinh thái phong phú: Node.js có một cộng đồng phát triển lớn và mạnh mẽ, cung cấp nhiều thư viện và framework cho phát triển ứng dụng. Nhiều công cụ và thư viện bổ sung cũng đã được xây dựng để hỗ trợ việc phát triển ứng dụng Node.js.
 
   - Cross-platform: Node.js được hỗ trợ trên nhiều nền tảng hệ điều hành như Windows, macOS và Linux, cho phép viết mã một lần và chạy trên nhiều môi trường khác nhau.
+
+---
+
+# Phân tích chức năng
+
+## Đăng nhập
+
+### Đăng nhập với email và password
+
+- Phía người dùng(Client)
+  - Khi người dùng ấn vào nút **Login** hiện ra một cửa sổ đăng nhập cho người dùng nhập email và password.
+  - Khi này ta sẽ kiểm tra giá trị nhập vào của người dùng có hợp lệ với quy định hay không:
+    - Với email: Người dùng bất buộc phải nhập đúng định dạng email(VD: xxx@gmail.com).
+    - Với password: Người dùng bất buộc nhập đúng định dạng như là đủ kí tự in hoa, in thường ,số, kí tự đặc biệt, độ dài từ 6 - 50 kí tự.
+  - Nếu thỏa mảng việc kiểm tra giá trị thì tiếp theo đó ta sẽ gửi request lên server.
+  - Khi nhận được access token và refresh token thì sẽ thực hiện lưu vào thiết bị người dùng và thông báo cho người dùng đăng nhập thành công.
+- Phía máy chủ(Server)
+  - Khi nhận được request thì thực hiện xác nhận giá trị gửi lên có đúng định dạng hay không, nếu không sẽ gửi về lỗi.
+  - Nếu đúng định dạng thì tiếp tục mã hóa password(vì password được lưu vào database đã được mã hóa) và so sánh password được lưu trong document tương ứng.
+  - Nếu đúng thì trả về access token và refresh token.
