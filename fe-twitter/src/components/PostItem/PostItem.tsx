@@ -40,11 +40,11 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
   const [isBookmarkByUser, setIsBookmarkByUser] = useState(false)
   const [bookmarkCount, setBookmarkCount] = useState(data?.bookmarks?.length || 0)
 
+  const [isCommentByUser, setIsCommentByUser] = useState(false)
+
   const [tweetIdDelete] = useState(data._id)
 
   const videoRef = useRef(null)
-
-  console.log(data)
 
   useEffect(() => {
     const checkIfLikedByUser = async () => {
@@ -74,8 +74,19 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
       setIsBookmarkByUser(false)
     }
 
+    const checkIfCommentedByUser = async () => {
+      if (data?.user_id && profile?._id && isAuthenticated) {
+        if (data.user_id === profile._id) {
+          setIsCommentByUser(true)
+          return
+        }
+      }
+      setIsCommentByUser(false)
+    }
+
     checkIfLikedByUser()
     checkIfBookmarkedByUser()
+    checkIfCommentedByUser()
   }, [data, profile, isAuthenticated])
 
   useEffect(() => {
@@ -145,6 +156,8 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
         })
   }
 
+  console.log(data)
+
   const Media = () => (
     <div className='w-[65%] my-4 mx-16'>
       {data?.medias[0]?.type === MediaType.Image && (
@@ -203,8 +216,6 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
     editTweetModal.setTweetEdit(data)
   }
 
-  console.log(user?.name)
-
   return (
     <div className='border-b w-full'>
       <div className='px-6 p-2'>
@@ -223,6 +234,16 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
                 <span className='text-neutral-500 text-sm ml-2'>{formatDate(data?.created_at)}</span>
               </div>
               {option && (
+                <div className='flex justify-center items-center mr-1'>
+                  <button className='mr-3' onClick={handleEditTweet}>
+                    <IoCreateOutline />
+                  </button>
+                  <button onClick={handleDeleteTweet}>
+                    <IoTrashOutline />
+                  </button>
+                </div>
+              )}
+              {isCommentByUser && location.pathname === `/tweets/${data.parent_id}` && (
                 <div className='flex justify-center items-center mr-1'>
                   <button className='mr-3' onClick={handleEditTweet}>
                     <IoCreateOutline />

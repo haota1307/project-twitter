@@ -92,6 +92,7 @@ export default function Comment({ tweetParent }: CommentItemProps) {
         <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>{"Let's comment it"}</div>
       </>
     )
+
   return (
     <>
       {isLoading ? (
