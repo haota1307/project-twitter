@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import authApi from 'src/apis/auth.api'
@@ -8,6 +9,7 @@ import useLogoutModal from 'src/hooks/useLogoutModal'
 
 export default function LogoutModal() {
   const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const logoutModal = useLogoutModal()
 
@@ -24,6 +26,7 @@ export default function LogoutModal() {
         localStorage.removeItem('access_token')
         localStorage.removeItem('refresh_token')
         localStorage.removeItem('profile')
+        navigate('/')
       })
       .catch((err) => {
         console.log(err)
