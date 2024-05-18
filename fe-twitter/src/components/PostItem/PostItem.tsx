@@ -156,8 +156,6 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
         })
   }
 
-  console.log(data)
-
   const Media = () => (
     <div className='w-[65%] my-4 mx-16'>
       {data?.medias[0]?.type === MediaType.Image && (

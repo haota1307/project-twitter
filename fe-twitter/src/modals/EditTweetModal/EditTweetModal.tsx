@@ -16,7 +16,7 @@ export default function EditTweetModal() {
       <Modal
         isOpen={editTweetModal.isOpen}
         onClose={editTweetModal.onClose}
-        title='Create your tweet'
+        title='Edit your tweet'
         actionLabel='Edit'
         noSubmit={true}
         body={bodyContent}

@@ -14,6 +14,7 @@ import { useDebounce } from 'src/hooks/useDebounce'
 import Avatar from 'src/components/Avatar'
 import InputFile from 'src/components/InputFile'
 import Button from 'src/components/Button'
+import useEditTweetModal from 'src/hooks/useEditTweet'
 
 interface FormProps {
   placeholder: string
@@ -38,6 +39,7 @@ export default function EditForm({ placeholder, data, refreshFeed }: FormProps) 
 
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
+  const editTweetModal = useEditTweetModal()
 
   const debouncedContent = useDebounce(body.content)
 
@@ -139,6 +141,8 @@ export default function EditForm({ placeholder, data, refreshFeed }: FormProps) 
       toast.error('Something went wrong')
     } finally {
       setIsLoading(false)
+      editTweetModal.onClose()
+      editTweetModal.setIsRefreshDataTrue()
     }
   }, [body, file, isLoading])
 
@@ -211,7 +215,7 @@ export default function EditForm({ placeholder, data, refreshFeed }: FormProps) 
                 <InputFile isImageFile onChange={handleChangeFile as any} Icon={IoImageOutline} />
                 <InputFile isVideoFile onChange={handleChangeFile as any} Icon={IoVideocamOutline} />
               </div>
-              <Button disabled={isLoading || body.content === ''} onClick={onSubmit} label='Tweet' secondary />
+              <Button disabled={isLoading || body.content === ''} onClick={onSubmit} label='Edit' secondary />
             </div>
           </div>
         </div>
