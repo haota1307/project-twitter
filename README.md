@@ -59,3 +59,4 @@ Tổng hợp chức năng chính
 
 - Send email xác thực tài khoản
 - Send email reset mật khẩu(Quên mật khẩu)
+- Lưu file aws

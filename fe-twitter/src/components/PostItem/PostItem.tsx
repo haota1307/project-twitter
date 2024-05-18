@@ -15,7 +15,7 @@ import { AppContext } from 'src/contexts/app.context'
 import { MediaType, Tweet } from 'src/types/tweet.type'
 import { formatDate } from 'src/utils/date'
 import interactApi from 'src/apis/interact.api'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import useLoginModal from 'src/hooks/useLoginModal'
 import useDeleteTweetModal from 'src/hooks/useDeleteTweet'
 import useEditTweetModal from 'src/hooks/useEditTweet'
@@ -29,24 +29,53 @@ interface PostItemProps {
 
 export default function PostItem({ data, user, option, isComment }: PostItemProps) {
   const { profile, isAuthenticated } = useContext(AppContext)
+  const location = useLocation()
   const loginModal = useLoginModal()
   const deleteTweetModal = useDeleteTweetModal()
   const editTweetModal = useEditTweetModal()
 
-  const [isLikedByUser, setIsLikedByUser] = useState(
-    data?.likes?.some(async (like: any) => (await like.user_id) === profile?._id && isAuthenticated) || false
-  )
+  const [isLikedByUser, setIsLikedByUser] = useState(false)
   const [likesCount, setLikesCount] = useState(data?.likes?.length || 0)
 
-  const [isBookmarkByUser, setIsBookmarkByUser] = useState(
-    data?.bookmarks?.some(async (bookmark: any) => (await bookmark.user_id) === profile?._id && isAuthenticated) ||
-      false
-  )
+  const [isBookmarkByUser, setIsBookmarkByUser] = useState(false)
   const [bookmarkCount, setBookmarkCount] = useState(data?.bookmarks?.length || 0)
 
   const [tweetIdDelete] = useState(data._id)
 
   const videoRef = useRef(null)
+
+  useEffect(() => {
+    const checkIfLikedByUser = async () => {
+      if (data?.likes && profile?._id && isAuthenticated) {
+        console.log(data.likes)
+        for (const like of data.likes) {
+          const userId = location.pathname === '/bookmark' ? await (like as any)?._id : await (like as any)?.user_id
+          if (userId === profile._id) {
+            setIsLikedByUser(true)
+            return
+          }
+        }
+      }
+      setIsLikedByUser(false)
+    }
+
+    const checkIfBookmarkedByUser = async () => {
+      if (data?.bookmarks && profile?._id && isAuthenticated) {
+        for (const bookmark of data.bookmarks) {
+          const userId =
+            location.pathname === '/bookmark' ? await (bookmark as any)?._id : await (bookmark as any)?.user_id
+          if (userId === profile._id) {
+            setIsBookmarkByUser(true)
+            return
+          }
+        }
+      }
+      setIsBookmarkByUser(false)
+    }
+
+    checkIfLikedByUser()
+    checkIfBookmarkedByUser()
+  }, [data, profile, isAuthenticated])
 
   useEffect(() => {
     if (videoRef.current) {
