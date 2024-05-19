@@ -133,6 +133,24 @@ Tổng hợp chức năng chính
 
   - Cross-platform: Node.js được hỗ trợ trên nhiều nền tảng hệ điều hành như Windows, macOS và Linux, cho phép viết mã một lần và chạy trên nhiều môi trường khác nhau.
 
+## Giới thiệu về Socket.IO
+
+- Socket.IO là một thư viện JavaScript cho các ứng dụng web cho phép truyền thông hai chiều thời gian thực giữa client và server. Nó được xây dựng trên nền tảng Node.js và cung cấp một API đơn giản nhưng mạnh mẽ để tạo các ứng dụng cần giao tiếp thời gian thực như chat, thông báo tức thì, các trò chơi trực tuyến, và nhiều ứng dụng khác.
+
+- Đặc điểm chính:
+
+  - Real-time Communication (Giao tiếp thời gian thực): Cho phép truyền dữ liệu hai chiều giữa client và server ngay lập tức, giúp tạo ra các ứng dụng tương tác mà không cần phải làm mới trang.
+
+  - Bi-directional Event-based Communication (Giao tiếp sự kiện hai chiều): Sử dụng mô hình sự kiện, nơi mà cả client và server có thể gửi và nhận các sự kiện tùy chỉnh. Ví dụ: socket.on('message', callback) để lắng nghe sự kiện 'message' và socket.emit('message', data) để phát sự kiện 'message'.
+
+  - Automatic Reconnection (Kết nối lại tự động): Hỗ trợ tự động kết nối lại nếu kết nối bị mất, giúp đảm bảo tính liên tục của giao tiếp.
+
+  - Multiplexing Support (Hỗ trợ đa kênh): Cho phép tạo nhiều kênh giao tiếp (namespace) trong cùng một kết nối để quản lý các loại dữ liệu khác nhau một cách độc lập.
+
+  - Room Support (Hỗ trợ phòng): Có thể nhóm các kết nối thành các phòng (room), cho phép gửi thông điệp đến tất cả các kết nối trong một phòng cụ thể.
+
+  - Cross-browser Compatibility (Tương thích với nhiều trình duyệt): Hỗ trợ nhiều trình duyệt khác nhau và chuyển đổi giữa các kỹ thuật khác nhau (WebSocket, Long Polling, AJAX Polling, và nhiều kỹ thuật khác) để đảm bảo tính tương thích và hiệu suất.
+
 ## Giới thiệu về MongoDB
 
 - MongoDB là một hệ quản trị cơ sở dữ liệu NoSQL mã nguồn mở, được thiết kế để lưu trữ và quản lý lượng dữ liệu lớn theo cách linh hoạt và có khả năng mở rộng cao. Thay vì sử dụng các bảng và hàng như trong các cơ sở dữ liệu quan hệ thì MongoDB sử dụng các collections và các documents.
