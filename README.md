@@ -171,21 +171,39 @@ Tổng hợp chức năng chính
 
 # Phân tích chức năng
 
-## Đăng nhập
+## Đăng kí tài khoản
+
+- Phía người dùng(Client)
+  - Khi người dùng ấn vào nút "Register" sẽ hiện ra một cửa sổ dùng để đăng ký tài khoản cho phép người dùng nhập email, name, password và confirm password.
+  - Khi này ta sẽ kiểm tra giá trị nhập vào của người dùng có hợp lệ với quy định hay không:
+    - Với email: Người dùng bất buộc phải nhập đúng định dạng email(VD: xxx@gmail.com).
+    - Với name: Người dùng bất buộc nhập ít nhất từ 6 - 50 kí tự.
+    - Với password: Người dùng bất buộc nhập đúng định dạng như là đủ kí tự in hoa, in thường ,số, kí tự đặc biệt, độ dài từ 6 - 50 kí tự.
+    - Với confirm password: Người dùng bất buộc nhập đúng định dạng như là đủ kí tự in hoa, in thường ,số, kí tự đặc biệt, độ dài từ 6 - 50 kí tự, và phải giống với ô password.
+  - Nếu thỏa mảng việc kiểm tra giá trị thì tiếp theo đó ta sẽ gửi request lên server và đợi server trả respone về.
+  - Khi nhận được access token và refresh token thì sẽ thực hiện lưu vào thiết bị người dùng và thông báo cho người dùng đăng nhập thành công.
+- Phía máy chủ(Server)
+  - Khi nhận được request thì thực hiện xác nhận giá trị gửi lên có đúng định dạng hay không, nếu không sẽ gửi về lỗi.
+  - Sau đó kiểm tra email có tồn tại hay chưa nếu có thì báo email đã tồn tại.
+  - Nếu email chưa tồn tại thì chấp nhận đăng ký, lưu các giá trị cơ bản của người dùng và bên cạnh đó mã hóa password của người dùng.
+  - Tạo và trả về access token và refresh token.
+
+## Đăng nhập tài khoản
 
 ### Đăng nhập với email và password
 
 - Phía người dùng(Client)
-  - Khi người dùng ấn vào nút "Login" hiện ra một cửa sổ đăng nhập cho người dùng nhập email và password.
+  - Khi người dùng ấn vào nút "Login" sẽ hiện ra một cửa sổ đăng nhập cho người dùng nhập email và password.
   - Khi này ta sẽ kiểm tra giá trị nhập vào của người dùng có hợp lệ với quy định hay không:
     - Với email: Người dùng bất buộc phải nhập đúng định dạng email(VD: xxx@gmail.com).
     - Với password: Người dùng bất buộc nhập đúng định dạng như là đủ kí tự in hoa, in thường ,số, kí tự đặc biệt, độ dài từ 6 - 50 kí tự.
-  - Nếu thỏa mảng việc kiểm tra giá trị thì tiếp theo đó ta sẽ gửi request lên server.
+  - Nếu thỏa mảng việc kiểm tra giá trị thì tiếp theo đó ta sẽ gửi request lên server và đợi server trả respone về.
   - Khi nhận được access token và refresh token thì sẽ thực hiện lưu vào thiết bị người dùng và thông báo cho người dùng đăng nhập thành công.
 - Phía máy chủ(Server)
   - Khi nhận được request thì thực hiện xác nhận giá trị gửi lên có đúng định dạng hay không, nếu không sẽ gửi về lỗi.
-  - Nếu đúng định dạng thì tiếp tục mã hóa password(vì password được lưu vào database đã được mã hóa) và so sánh password được lưu trong document tương ứng.
-  - Nếu đúng thì trả về access token và refresh token.
+  - Sau đó kiểm tra email có tồn tại hay chưa nếu chưa thì báo email chưa tồn tại.
+  - Nếu đúng định dạng và email tồn tại thì tiếp tục mã hóa password(vì password được lưu vào database đã được mã hóa) và so sánh password được lưu trong document tương ứng.
+  - Nếu đúng thì Tạo và trả về access token và refresh token.
 
 ### Đăng nhập với Google
 
@@ -211,5 +229,37 @@ Tổng hợp chức năng chính
   - Server sẽ lấy được giá trị "code" thông qua query và tiến hành gọi lên Google API để lấy thông tin "id_token" và "access_token".
   - Server sẽ lấy thông tin id_token và access_token để gọi lên Google API 1 lần nữa để lấy thông tin người dùng như email, name, avatar, ...
   - Có được email người dùng rồi thì kiểm tra trong database xem thử email này đã được đăng ký chưa. Nếu chưa thì tạo mới user (mật khẩu có thể cho random, sau này người dùng reset mật khẩu để đổi mật khẩu).
-  - Tạo access_token và refresh_token.
+  - Tạo access_token và refresh_token và trả về client qua query.
   - Server redirect về .../login/oauth?access_token=...&refresh_token=...
+
+## Đổi mật khẩu
+
+- Phía người dùng(Client)
+
+  - Khi người dùng ấn vào "Change password" ở trang "Profile" thì hiện ra cửa sổ cho phép nhập: Old password(mật khẩu cũ), new password(mật khẩu mới), confirm password(xác nhận mật khẩu mới).
+  - Khi này ta sẽ kiểm tra giá trị nhập vào của người dùng có hợp lệ với quy định hay không:
+    - Với old password: Người dùng bất buộc nhập đúng định dạng như là đủ kí tự in hoa, in thường ,số, kí tự đặc biệt, độ dài từ 6 - 50 kí tự.
+    - Với new password: Người dùng bất buộc nhập đúng định dạng như là đủ kí tự in hoa, in thường ,số, kí tự đặc biệt, độ dài từ 6 - 50 kí tự.
+    - Với confirm password: Người dùng bất buộc nhập đúng định dạng như là đủ kí tự in hoa, in thường ,số, kí tự đặc biệt, độ dài từ 6 - 50 kí tự, và phải giống với ô new password.
+  - Nếu thỏa mảng việc kiểm tra giá trị thì tiếp theo đó ta sẽ gửi request lên server kèm thêm access token xác thực người dùng và đợi server trả respone về.
+  - Nếu có lỗi old password không đúng thì thông báo cho người dùng biết và yêu cầu nhập lại, ngược lại thông báo thành công cho người dùng và đóng cửa sổ.
+
+- Phía máy chủ(Server)
+
+  - Khi nhận được request thì thực hiện kiểm tra client có gửi đủ các trường lên không(Old password, new password, confirm password, access token), tài khoản đã được xác thực hay chưa nếu không đủ các trường hoặc chưa xác thực thig báo lỗi.
+  - Nếu đủ thì thực hiện giải mã access token để lấy ra "user_id" của người dùng và lấy ra old password và new password trong request.body.
+  - Sau đó mã hóa old password và dựa vào user_id để tìm đúng document cần cập nhật để so sánh password trong document có đúng không nếu không thì báo lỗi về client.
+  - Nếu đúng thì cập nhật lại new password và báo thành công.
+
+## Đăng xuất
+
+- Phía người dùng(Client)
+
+  - Khi người dùng ấn nút đăng xuất sẽ hiện ra cửa sổ xác nhận người dùng có chắc chắn muốn đăng xuất hay không.
+  - Nếu người dùng xác nhận muốn đăng xuất, thì sẽ gửi 1 request lên server kèm theo đó là access token, refrestoken.
+  - Nếu access token bị sai thì thực hiện refresh token, trong trường hợp nhận được refresh token không tồn tại(do 1 lý do nào đó như: xóa ở database) thì vẫn cho user đăng xuất bằng cách xóa access token và refresh token ở client và xác nhận đăng xuất cho người dùng.
+
+- Phía máy chủ(Server)
+  - Sau khi nhận được request từ client thì sẽ kiểm tra có gửi lên đủ access token và refresh token hay không nếu không báo lỗi.
+  - Sau đó kiểm tra access token và refresh token có đúng định dạng hay không nếu không đúng thì báo lỗi.
+  - Nếu đúng thực hiện tìm và xóa refresh token nếu có và thông báo thành công, nếu không thì báo lỗi.
