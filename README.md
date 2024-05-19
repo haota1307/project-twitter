@@ -142,7 +142,7 @@ Tổng hợp chức năng chính
 ### Đăng nhập với email và password
 
 - Phía người dùng(Client)
-  - Khi người dùng ấn vào nút **Login** hiện ra một cửa sổ đăng nhập cho người dùng nhập email và password.
+  - Khi người dùng ấn vào nút "Login" hiện ra một cửa sổ đăng nhập cho người dùng nhập email và password.
   - Khi này ta sẽ kiểm tra giá trị nhập vào của người dùng có hợp lệ với quy định hay không:
     - Với email: Người dùng bất buộc phải nhập đúng định dạng email(VD: xxx@gmail.com).
     - Với password: Người dùng bất buộc nhập đúng định dạng như là đủ kí tự in hoa, in thường ,số, kí tự đặc biệt, độ dài từ 6 - 50 kí tự.
@@ -154,3 +154,28 @@ Tổng hợp chức năng chính
   - Nếu đúng thì trả về access token và refresh token.
 
 ### Đăng nhập với Google
+
+- Phía người dùng(Client)
+
+  - Khi người dùng ấn vào nút "Login" và sau người dùng ấn vào nút "Sign in with Google" thì redirect người dùng đến trang:
+    https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?
+    client_id=748812675450-ouolfjf59ohvis3m4inkug0jn3rg7lmn.apps.googleusercontent.com&
+    redirect_uri=http%3A%2F%2Flocalhost%3A4000%2Fusers%2Foauth%2Fgoogle&
+    response_type=code&
+    scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapiscom%2Fauth%2Fuserinfo.email&
+    prompt=consent&
+    access_type=offline&
+    service=lso&o2v=2&ddm=0&
+    flowName=GeneralOAuthFlow
+
+  - Người dùng chọn tài khoản Google để đăng nhập, khi đăng nhập thành công sẽ được google cho redirect về
+    .../oauth/google?code=4%2F0AbUR2VPc2mJ0zoSxvWVI2XwyCV-8PwkVpIoUu1SBfV3CSYJ30orHOff_fse9GzsG0UpTtw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=consent. Đây là url api server của chúng ta. Lúc này các query phía sau url như code, scope, đây là những tham số do google tự sinh ra và gửi lại cho chúng ta.
+
+  - Sau khi server trả về access_token và refresh_token qua query và tiến hành lưu vào thiết bị người dùng.
+
+- Phía máy chủ(Server)
+  - Server sẽ lấy được giá trị "code" thông qua query và tiến hành gọi lên Google API để lấy thông tin "id_token" và "access_token".
+  - Server sẽ lấy thông tin id_token và access_token để gọi lên Google API 1 lần nữa để lấy thông tin người dùng như email, name, avatar, ...
+  - Có được email người dùng rồi thì kiểm tra trong database xem thử email này đã được đăng ký chưa. Nếu chưa thì tạo mới user (mật khẩu có thể cho random, sau này người dùng reset mật khẩu để đổi mật khẩu).
+  - Tạo access_token và refresh_token.
+  - Server redirect về .../login/oauth?access_token=...&refresh_token=...
