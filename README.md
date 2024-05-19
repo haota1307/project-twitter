@@ -152,3 +152,5 @@ Tổng hợp chức năng chính
   - Khi nhận được request thì thực hiện xác nhận giá trị gửi lên có đúng định dạng hay không, nếu không sẽ gửi về lỗi.
   - Nếu đúng định dạng thì tiếp tục mã hóa password(vì password được lưu vào database đã được mã hóa) và so sánh password được lưu trong document tương ứng.
   - Nếu đúng thì trả về access token và refresh token.
+
+### Đăng nhập với Google

@@ -27,6 +27,6 @@ export default function Login() {
           console.log(err)
         })
     }
-  }, [params, navigate])
+  }, [params, navigate, isAuthenticated])
   return <div>Login</div>
 }
