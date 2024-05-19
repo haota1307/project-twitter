@@ -133,7 +133,41 @@ Tổng hợp chức năng chính
 
   - Cross-platform: Node.js được hỗ trợ trên nhiều nền tảng hệ điều hành như Windows, macOS và Linux, cho phép viết mã một lần và chạy trên nhiều môi trường khác nhau.
 
----
+## Giới thiệu về MongoDB
+
+- MongoDB là một hệ quản trị cơ sở dữ liệu NoSQL mã nguồn mở, được thiết kế để lưu trữ và quản lý lượng dữ liệu lớn theo cách linh hoạt và có khả năng mở rộng cao. Thay vì sử dụng các bảng và hàng như trong các cơ sở dữ liệu quan hệ thì MongoDB sử dụng các collections và các documents.
+- Các đặc điểm chính của MongoDB bao gồm:
+
+  - Document-Oriented: MongoDB lưu trữ dữ liệu dưới dạng các tài liệu BSON (Binary JSON), cho phép lưu trữ các cấu trúc dữ liệu phức tạp với nhiều cấp độ lồng nhau. Mỗi tài liệu có thể có các trường khác nhau, điều này mang lại sự linh hoạt lớn trong việc lưu trữ và quản lý dữ liệu.
+
+  - Schema-less: MongoDB không yêu cầu một schema cố định, cho phép các tài liệu trong cùng một collection có cấu trúc khác nhau. Điều này rất hữu ích trong các ứng dụng cần sự linh hoạt và thay đổi cấu trúc dữ liệu thường xuyên.
+
+  - Scalability and Performance: MongoDB được thiết kế để có khả năng mở rộng ngang (horizontal scaling) thông qua sharding, cho phép phân phối dữ liệu và tải công việc trên nhiều máy chủ. Điều này giúp tăng cường khả năng xử lý của hệ thống khi lưu trữ và truy xuất lượng dữ liệu lớn.
+
+  - Indexing: MongoDB hỗ trợ nhiều loại chỉ mục (indexes), giúp tăng tốc độ truy vấn dữ liệu. Bạn có thể tạo các chỉ mục đơn giản, phức tạp, và toàn văn bản để tối ưu hóa hiệu suất truy vấn.
+
+  - Aggregation Framework: MongoDB cung cấp một framework mạnh mẽ để xử lý và chuyển đổi dữ liệu, cho phép thực hiện các phép tính tổng hợp phức tạp, nhóm dữ liệu, và xử lý dữ liệu theo pipeline.
+
+## Giới thiệu về xác thực bằng JWT(Json web token), access token, refresh token
+
+- JWT:
+  - JWT (JSON Web Token) là một chuẩn mở dựa trên JSON để tạo ra các token truy cập, thường được sử dụng để chứng thực và ủy quyền trong các ứng dụng web và API.
+  - JWT bao gồm ba phần chính, mỗi phần được mã hóa dưới dạng Base64Url và nối với nhau bằng dấu chấm (.):
+    - Header (Phần đầu): Phần này chứa thông tin về loại token (thường là "JWT") và thuật toán mã hóa được sử dụng để tạo chữ ký (ví dụ: HMAC SHA256 hoặc RSA). Header sau đó được mã hóa dưới dạng chuỗi Base64Url.
+    - Payload: Phần này chứa các thông tin mà người dùng định nghĩa. Payload cũng được mã hóa dưới dạng chuỗi Base64Url.
+    - Signature: Phần này được tạo bằng cách dùng thuật toán HMACSHA256 (cái này có thể thay đổi) với nội dung là Base64 encoded Header + Base64 encoded Payload kết hợp một "secret key" (khóa bí mật). Signature (Chữ ký) giúp đảm bảo tính toàn vẹn và bảo mật của thông tin trong JWT.
+- Access token:
+  - Access Token là một chuỗi mã hóa ngắn hạn được cấp cho người dùng sau khi họ đã xác thực thành công. Nó được sử dụng để truy cập các tài nguyên bảo vệ (protected resources) trên máy chủ trong một khoảng thời gian ngắn.
+  - Đặc điểm:
+    - Thời gian sống ngắn: Thường có thời gian sống (TTL - Time to Live) ngắn, ví dụ từ vài phút đến một giờ. Điều này giúp giảm thiểu rủi ro nếu token bị đánh cắp.
+    - Chứa thông tin người dùng và quyền hạn: Access token thường chứa các thông tin mã hóa về người dùng và quyền truy cập của họ. Thông tin này có thể được mã hóa dưới dạng JWT (JSON Web Token).
+    - Gửi kèm trong mỗi yêu cầu: Access token được gửi kèm trong mỗi yêu cầu HTTP đến API hoặc máy chủ bảo vệ tài nguyên, thường qua tiêu đề(Headers) "Authorization: Bearer <token>."
+- Refresh Token:
+  - Refresh Token là một chuỗi mã hóa dài hạn hơn được cấp cùng với access token sau khi người dùng xác thực thành công. Nó được sử dụng để lấy một access token mới khi access token hiện tại hết hạn mà không cần yêu cầu người dùng xác thực lại.
+  - Đặc điểm chính:
+    - Thời gian sống dài: Có thời gian sống dài hơn so với access token, có thể từ vài ngày đến vài tuần hoặc hơn.
+    - Bảo mật cao: Refresh token thường được lưu trữ an toàn hơn, như trong các cookie bảo mật hoặc lưu trữ bảo mật trên client.
+    - Không gửi kèm trong mỗi yêu cầu: Không giống như access token, refresh token không được gửi kèm trong mỗi yêu cầu tới API.
 
 # Phân tích chức năng
 
