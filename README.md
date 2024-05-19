@@ -226,11 +226,16 @@ Tổng hợp chức năng chính
   - Sau khi server trả về access_token và refresh_token qua query và tiến hành lưu vào thiết bị người dùng.
 
 - Phía máy chủ(Server)
+
   - Server sẽ lấy được giá trị "code" thông qua query và tiến hành gọi lên Google API để lấy thông tin "id_token" và "access_token".
   - Server sẽ lấy thông tin id_token và access_token để gọi lên Google API 1 lần nữa để lấy thông tin người dùng như email, name, avatar, ...
   - Có được email người dùng rồi thì kiểm tra trong database xem thử email này đã được đăng ký chưa. Nếu chưa thì tạo mới user (mật khẩu có thể cho random, sau này người dùng reset mật khẩu để đổi mật khẩu).
   - Tạo access_token và refresh_token và trả về client qua query.
   - Server redirect về .../login/oauth?access_token=...&refresh_token=...
+
+- Ghi chú:
+  - do web đang ở trạng thái demo nên google chỉ cho các tài khoản trong "OAuth user cap" có thể đăng nhập.
+  - Tài khoản google để test: tahtestweb@gmail.com - @Bc123123
 
 ## Đổi mật khẩu
 
