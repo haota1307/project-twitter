@@ -227,6 +227,7 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
               <div className='flex items-center'>
                 <p className='text-black font-semibold cursor-pointer hover:underline'>
                   {location.pathname === '/profile' && user?.name}
+                  {location.pathname === '/bookmark' && user?.name}
                   {(isComment === true && data?.user[0]?.name) || data.user?.name}
                 </p>
                 <span className='text-neutral-500 text-sm ml-2'>{formatDate(data?.created_at)}</span>
