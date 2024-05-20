@@ -214,8 +214,6 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
     editTweetModal.setTweetEdit(data)
   }
 
-  console.log(user)
-
   return (
     <div className='border-b w-full'>
       <div className='px-6 p-2'>

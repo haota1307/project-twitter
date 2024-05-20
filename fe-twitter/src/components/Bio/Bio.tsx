@@ -64,8 +64,6 @@ export default function Bio({ data }: User | any) {
     checkIfFollowByUser()
   }, [data?._id, me])
 
-  console.log(data)
-
   const handleForgotPassword = () => {
     userApi
       .forgotPassword({ email: me?.email || '' })
