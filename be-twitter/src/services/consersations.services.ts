@@ -93,6 +93,16 @@ class ConversationService {
 
     return listConversations
   }
+
+  async deleteConversation(user_id: string, consersation_id: string) {
+    const result = await Promise.all([
+      databaseService.conversations.findOneAndDelete({
+        sender_id: new ObjectId(user_id),
+        _id: new ObjectId(consersation_id)
+      })
+    ])
+    return result
+  }
 }
 
 const conversationService = new ConversationService()

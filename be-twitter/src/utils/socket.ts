@@ -87,6 +87,36 @@ const initSocket = (httpServer: ServerHttp) => {
         })
       }
     })
+
+    socket.on('delete_message', async (data) => {
+      const { message_id } = data.payload
+      const { user_id } = socket.handshake.auth.decoded_authorization as TokenPayload
+
+      try {
+        const deletedMessage = await databaseService.conversations.findOneAndDelete({
+          _id: new ObjectId(message_id),
+          sender_id: new ObjectId(user_id)
+        })
+
+        if (!deletedMessage) {
+          throw new Error('Unauthorized or Message not found')
+        }
+        console.log(deletedMessage)
+        const { receiver_id } = deletedMessage
+        const receiver_socket_id = users[receiver_id as any]?.socket_id
+        if (receiver_socket_id) {
+          socket.to(receiver_socket_id).emit('message_deleted', {
+            payload: { message_id }
+          })
+        }
+      } catch (error) {
+        console.error('Error deleting message:', error)
+        socket.emit('delete_message_error', {
+          error
+        })
+      }
+    })
+
     socket.on('disconnect', () => {
       delete users[user_id]
       console.log(`user ${socket.id} disconnected`)

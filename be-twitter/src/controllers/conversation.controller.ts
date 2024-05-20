@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { GetConversationsParams } from '~/models/requests/Conversation.requests'
+import { TokenPayload } from '~/models/requests/User.requests'
 import conversationService from '~/services/consersations.services'
 
 export const getConversationsController = async (req: Request<GetConversationsParams>, res: Response) => {
@@ -29,6 +30,15 @@ export const getListConversationsController = async (req: Request<GetConversatio
   const result = await conversationService.getListConversations(sender_id)
   return res.json({
     message: 'Get list conversations successfully',
+    result
+  })
+}
+
+export const deleteConversationController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const result = await conversationService.deleteConversation(user_id, req.params.conversation_id)
+  return res.json({
+    message: 'Delete conversation successfully',
     result
   })
 }
