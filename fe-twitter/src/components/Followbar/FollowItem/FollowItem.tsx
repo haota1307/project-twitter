@@ -1,90 +1,40 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import Avatar from 'src/components/Avatar'
-import Button from 'src/components/Button'
-import config from 'src/constants/config'
+
 import { AppContext } from 'src/contexts/app.context'
 import useLoginModal from 'src/hooks/useLoginModal'
 import { User } from 'src/types/user.type'
-import http from 'src/utils/http'
 
 interface FollowItemInterface {
   data: User
-  followingArrId: string[]
 }
 
-export default function FollowItem({ data, followingArrId }: FollowItemInterface) {
+export default function FollowItem({ data }: FollowItemInterface) {
   const { isAuthenticated } = useContext(AppContext)
-  const [isFollow, setIsFollow] = useState(false)
-
-  useEffect(() => {
-    setIsFollow(followingArrId?.some((id) => id === data?._id || false))
-  }, [data])
 
   const loginModal = useLoginModal()
-  const isToggle = useCallback(() => {
-    if (isAuthenticated) {
-      return
-    }
-    loginModal.onOpen()
-  }, [isAuthenticated, loginModal])
 
-  const handleFollowByUser = () => {
-    http
-      .post(
-        'users/follow',
-        { followed_user_id: data._id },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
-          },
-          baseURL: config.baseUrl
-        }
-      )
-      .then(() => {
-        setIsFollow(true)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
-  const handleUnfollowByUser = () => {
-    http
-      .delete(`users/follow/${data._id}`)
-      .then(() => {
-        setIsFollow(false)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-  return (
+  const Body = () => (
     <div className='flex flex-row items-start gap-2 mt-2 hover:bg-slate-200 p-2'>
-      <Link to={`/users/${data.username}`}>
-        <Avatar url={data.avatar} />
-      </Link>
+      <Avatar url={data.avatar} />
       <div className='flex flex-col flex-1 items-start gap-2 truncate'>
-        <Link
-          to={`/users/${data.username}`}
-          className='text-black text-sm font-semibold cursor-pointer hover:underline'
-        >
-          {data.name}
-        </Link>
-        <Link
-          to={`/users/${data.username}`}
-          className='text-neutral-500 cursor-pointer hover:underline hidden md:block'
-        >
-          @{data.username}
-        </Link>
+        <div className='text-black text-sm font-semibold cursor-pointer hover:underline'>{data.name}</div>
+        <div className='text-neutral-500 cursor-pointer hover:underline hidden md:block'>@{data.username}</div>
       </div>
-      <div className='flex flex-row items-end mr-0'>
-        {!isFollow ? (
-          <Button label='Follow' secondary onClick={isAuthenticated ? handleFollowByUser : isToggle} />
-        ) : (
-          <Button label='Following' secondary onClick={isAuthenticated ? handleUnfollowByUser : isToggle} />
-        )}
-      </div>
+    </div>
+  )
+
+  {
+  }
+
+  return isAuthenticated ? (
+    <Link to={`/users/${data.username}`}>
+      <Body />
+    </Link>
+  ) : (
+    <div onClick={loginModal.onOpen} className='cursor-pointer'>
+      <Body />
     </div>
   )
 }

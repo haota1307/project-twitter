@@ -121,6 +121,7 @@ export default function BookmarkList({ userId }: BookmarkProps) {
         </div>
       </>
     )
+
   return (
     <InfiniteScroll
       hasMore={pagination.page < pagination.total_page}
@@ -129,6 +130,8 @@ export default function BookmarkList({ userId }: BookmarkProps) {
       loader={<h4>Loading...</h4>}
     >
       {data?.map((post: Record<string, any>) => {
+        console.log('data?.user?.username', post.user[0])
+
         return (
           <>
             {post.tweet[0] === undefined && <TweetDeleted id={post._id as string} />}

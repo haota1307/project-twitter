@@ -214,11 +214,13 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
     editTweetModal.setTweetEdit(data)
   }
 
+  console.log(user)
+
   return (
     <div className='border-b w-full'>
       <div className='px-6 p-2'>
         <div className='flex'>
-          <Link to={profile?._id === data?.user?._id ? `/profile` : `/users/${data?.user?.username}`}>
+          <Link to={profile?._id === data?.user?._id ? `/profile` : `/users/${user?.username}`}>
             {isComment === true && <Avatar url={data?.user[0]?.avatar || ''} />}
             {!isComment === true && <Avatar url={user?.avatar || data?.user?.avatar || ''} />}
           </Link>

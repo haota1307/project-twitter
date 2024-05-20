@@ -46,15 +46,25 @@ export default function Bio({ data }: User | any) {
     }
   }, [])
 
-  const idFollowArr = me?.following?.map((user: any) => user?._id) as string[]
-
   useEffect(() => {
-    setIsFollow(
-      idFollowArr?.some((id: string) => {
-        return id === data?._id
-      })
-    )
-  }, [data?._id])
+    const checkIfFollowByUser = async () => {
+      if (me?.following && profile?._id && isAuthenticated) {
+        for (const item of me.following) {
+          const userId = await (item as any)?._id
+          console.log(userId)
+          if (userId === data?._id) {
+            setIsFollow(true)
+            return
+          }
+        }
+      }
+      setIsFollow(false)
+    }
+
+    checkIfFollowByUser()
+  }, [data?._id, me])
+
+  console.log(data)
 
   const handleForgotPassword = () => {
     userApi
@@ -75,6 +85,7 @@ export default function Bio({ data }: User | any) {
   }
 
   const handleFollowByUser = () => {
+    setDisabled(true)
     http
       .post(
         'users/follow',
@@ -87,21 +98,36 @@ export default function Bio({ data }: User | any) {
         }
       )
       .then(() => {
+        toast.success('Follow successful!', {
+          autoClose: 2000,
+          closeButton: true
+        })
         setIsFollow(true)
       })
       .catch((err) => {
         console.log(err)
       })
+      .finally(() => {
+        setDisabled(false)
+      })
   }
 
   const handleUnfollowByUser = () => {
+    setDisabled(true)
     http
       .delete(`users/follow/${data._id}`)
       .then(() => {
+        toast.success('Unfollow successful!', {
+          autoClose: 2000,
+          closeButton: true
+        })
         setIsFollow(false)
       })
       .catch((err) => {
         console.log(err)
+      })
+      .finally(() => {
+        setDisabled(false)
       })
   }
 
@@ -145,10 +171,20 @@ export default function Bio({ data }: User | any) {
           </button>
         )}
         {!isMyProfilePage && !isFollow && (
-          <Button label='Follow' secondary onClick={isAuthenticated ? handleFollowByUser : isToggle} />
+          <Button
+            label='Follow'
+            secondary
+            onClick={isAuthenticated ? handleFollowByUser : isToggle}
+            disabled={disabled}
+          />
         )}
         {!isMyProfilePage && isFollow && (
-          <Button label='Following' secondary onClick={isAuthenticated ? handleUnfollowByUser : isToggle} />
+          <Button
+            label='Following'
+            secondary
+            onClick={isAuthenticated ? handleUnfollowByUser : isToggle}
+            disabled={disabled}
+          />
         )}
       </div>
       <div className='mt-4 px-4'>
