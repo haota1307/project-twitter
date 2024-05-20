@@ -67,9 +67,9 @@ export default function Sidebar() {
                 <SidebarItem key={item.href} label={item.label} href={item.href} icon={item.icon} onClick={isToggle} />
               ))}
               {isAuthenticated ? (
-                <SidebarItem label={'logout'} icon={IoLogOutOutline} onClick={isToggle} href='logout' />
+                <SidebarItem label={'Logout'} icon={IoLogOutOutline} onClick={isToggle} href='logout' />
               ) : (
-                <SidebarItem label={'login'} icon={IoLogInOutline} onClick={isToggle} />
+                <SidebarItem label={'Login'} icon={IoLogInOutline} onClick={isToggle} />
               )}
               <SidebarTweetButton />
             </div>

@@ -94,7 +94,7 @@ export default function NewFeed() {
             if (post.type === TweetType.Tweet)
               return (
                 <>
-                  <PostItem key={index} data={post as any} />
+                  <PostItem key={index} data={post as any} user={post.user} />
                 </>
               )
           })}
