@@ -39,9 +39,18 @@ export default function Conversation() {
       const { payload } = data
       setConversations((conversations: any) => [payload, ...conversations])
     })
+
+    socket.on('message_deleted', (data) => {
+      const { payload } = data
+      setConversations((conversations: any) =>
+        conversations.filter((conversation: any) => conversation._id !== payload.message_id)
+      )
+    })
+
     socket.on('connect_error', (err: any) => {
       console.log(err.data)
     })
+
     socket.on('disconnect', (reason) => {
       console.log(reason)
     })
@@ -97,6 +106,7 @@ export default function Conversation() {
   const send = (e: any) => {
     e.preventDefault()
     setValue('')
+    socket.off('message_sent')
     if (value.trim() === '') return
     const conversation = {
       content: value,
@@ -107,19 +117,30 @@ export default function Conversation() {
     socket.emit('send_message', {
       payload: conversation
     })
-    setConversations((conversations: any) => [
-      {
-        ...conversation,
-        _id: new Date().getTime()
-      },
-      ...conversations
-    ])
+
+    // Lắng nghe sự kiện từ server để nhận message_id
+    socket.on('message_sent', (data) => {
+      const message_id = data.message_id
+      setConversations((conversations: any) => [
+        {
+          ...conversation,
+          _id: message_id // Sử dụng message_id từ server
+        },
+        ...conversations
+      ])
+    })
   }
+
+  const handleDeleteMessage = (messageId: string) => {
+    setConversations((conversations: any) =>
+      conversations.filter((conversation: any) => conversation._id !== messageId)
+    )
+  }
+
   return (
     <div>
       <Header label={`Chat with ${dataUser?.name}`} showBackArrow />
       <div id='scrollableDiv' className='h-[570px] w-full flex flex-col-reverse overflow-auto'>
-        {/*Put the scroll bar always on the bottom*/}
         <InfiniteScroll
           dataLength={conversations.length}
           next={fetchMoreConversations}
@@ -130,7 +151,7 @@ export default function Conversation() {
           scrollableTarget='scrollableDiv'
         >
           {conversations.map((conversation: any, index: any) => (
-            <MessageItem user={dataUser} data={conversation} key={index} />
+            <MessageItem user={dataUser} data={conversation} key={index} onDelete={handleDeleteMessage} />
           ))}
         </InfiniteScroll>
       </div>

@@ -80,35 +80,59 @@ const initSocket = (httpServer: ServerHttp) => {
         content: content
       })
       const result = await databaseService.conversations.insertOne(conversation)
-      conversation._id = result.insertedId
+      conversation._id = result.insertedId // Sử dụng _id từ database
       if (receiver_socket_id) {
         socket.to(receiver_socket_id).emit('receive_message', {
           payload: conversation
         })
       }
+      // Gửi message_id về client
+      socket.emit('message_sent', {
+        message_id: conversation._id
+      })
     })
 
     socket.on('delete_message', async (data) => {
       const { message_id } = data.payload
       const { user_id } = socket.handshake.auth.decoded_authorization as TokenPayload
 
+      console.log(data)
       try {
         const deletedMessage = await databaseService.conversations.findOneAndDelete({
           _id: new ObjectId(message_id),
           sender_id: new ObjectId(user_id)
         })
+        console.groupCollapsed('Xóa')
+        console.log('message_id', message_id)
+        console.log('user_id', user_id)
+        console.log('deletedMessage', deletedMessage)
 
         if (!deletedMessage) {
           throw new Error('Unauthorized or Message not found')
         }
-        console.log(deletedMessage)
-        const { receiver_id } = deletedMessage
-        const receiver_socket_id = users[receiver_id as any]?.socket_id
+
+        const { receiver_id } = deletedMessage as any
+        const receiver_socket_id = users[receiver_id]?.socket_id
+        const sender_socket_id = users[user_id]?.socket_id
+
+        // Phát sự kiện 'message_deleted' cho người nhận
         if (receiver_socket_id) {
-          socket.to(receiver_socket_id).emit('message_deleted', {
+          io.to(receiver_socket_id).emit('message_deleted', {
             payload: { message_id }
           })
         }
+
+        // Phát sự kiện 'message_deleted' cho người gửi (nếu người gửi khác socket hiện tại)
+        if (sender_socket_id && sender_socket_id !== socket.id) {
+          io.to(sender_socket_id).emit('message_deleted', {
+            payload: { message_id }
+          })
+        }
+
+        // Đảm bảo socket hiện tại cũng nhận được sự kiện 'message_deleted'
+        socket.emit('message_deleted', {
+          payload: { message_id }
+        })
       } catch (error) {
         console.error('Error deleting message:', error)
         socket.emit('delete_message_error', {

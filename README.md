@@ -286,3 +286,13 @@ Tổng hợp chức năng chính
   - Sau khi nhận được request từ client thì sẽ kiểm tra có gửi lên đủ access token và refresh token hay không nếu không báo lỗi.
   - Sau đó kiểm tra access token và refresh token có đúng định dạng hay không nếu không đúng thì báo lỗi.
   - Nếu đúng thực hiện tìm và xóa refresh token nếu có và thông báo thành công, nếu không thì báo lỗi.
+
+## Xem thông tin người dùng
+
+- Phía người dùng(Client)
+
+  - Khi nguời dùng ấn vào nút "Profile" bên phần "Side bar" bên phải thì kiểm tra xem người dùng đã đăng nhập hay chưa, nếu chưa hiện lên cửa sổ đăng nhập để người dùng có thể đăng nhập.
+  - Nếu người dùng đã đăng nhập thì redirect người dùng đến trang "Profile".
+  - Khi này client sẽ gửi request với access token đến server với
+
+- Phía máy chủ(Server)
