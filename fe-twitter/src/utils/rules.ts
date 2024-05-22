@@ -27,7 +27,7 @@ export const schema = yup.object({
     .max(150, 'Username length from 6 - 150 characters'),
   bio: yup
     .string()
-    .email('Bio invalidate')
+    .required('Name is required')
     .min(1, 'Bio length from 1 - 150 characters')
     .max(150, 'Bio length from 1 - 150 characters'),
   name: yup

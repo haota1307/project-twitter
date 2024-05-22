@@ -5,7 +5,6 @@ import Modal from 'src/components/Modal'
 import { AppContext } from 'src/contexts/app.context'
 import useEditModal from 'src/hooks/useEditModal'
 import { User } from 'src/types/user.type'
-import Datepicker from 'react-tailwindcss-datepicker'
 import userApi from 'src/apis/user.api'
 import { setProfileToLS } from 'src/utils/auth'
 import { toast } from 'react-toastify'
@@ -14,6 +13,7 @@ import { schema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponseApi } from 'src/types/utils.type'
 import { useMutation } from '@tanstack/react-query'
+import { formatDate } from 'src/utils/date'
 
 type FormData = Pick<User, 'name' | 'bio' | 'date_of_birth'>
 
@@ -26,8 +26,9 @@ type DataError = {
 }
 
 type FormDataError = {
-  email: DataError
-  password: DataError
+  name: DataError
+  bio: DataError
+  date_of_birth: DataError
 }
 const editSchema = schema.pick(['name', 'bio', 'date_of_birth'])
 
@@ -38,10 +39,7 @@ export default function EditModal() {
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState(profile?.name)
   const [bio, setBio] = useState(profile?.bio)
-  const [dateOfBirth, setDateOfBirth] = useState<any>({
-    startDate: profile?.date_of_birth as Date,
-    endDate: profile?.date_of_birth as Date
-  })
+  const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date(profile?.date_of_birth as Date))
 
   const {
     register,
@@ -53,43 +51,50 @@ export default function EditModal() {
   })
 
   const editProfileMutation = useMutation({
-    mutationFn: (body: FormData) => userApi.updateUserProfile(body)
+    mutationFn: (body: FormData) =>
+      userApi.updateUserProfile({ ...body, date_of_birth: new Date(dateOfBirth).toISOString().split('T')[0] })
   })
 
   const onSubmit = handleSubmit((data) => {
-    editProfileMutation.mutateAsync(data, {
-      onSuccess: (data) => {
-        setProfile(data.data.result)
-        setProfileToLS(data.data.result)
-        toast.success(data.data.message, {
-          autoClose: 1000,
-          position: 'top-center'
-        })
-        editModal.onClose()
-      },
-      // Show error
-      onError: (error) => {
-        console.log('error', error)
-
-        // Check error 422
-        if (isAxiosUnprocessableEntityError<ErrorResponseApi<FormDataError>>(error)) {
-          const formError = error.response?.data.errors
-          console.log('Login eerr:', error.response?.data)
-          if (formError?.email) {
-            setError('name', {
-              message: formError.email.msg,
-              type: 'Server'
-            })
-          }
-          if (formError?.password) {
-            setError('bio', {
-              message: formError.password.msg,
-              type: 'Server'
-            })
+    setLoading(true)
+    editProfileMutation
+      .mutateAsync(data, {
+        onSuccess: (data) => {
+          setProfile(data.data.result)
+          setProfileToLS(data.data.result)
+          toast.success(data.data.message, {
+            autoClose: 1000,
+            position: 'top-center'
+          })
+          editModal.onClose()
+        },
+        // Show error
+        onError: (error) => {
+          // Check error 422
+          if (isAxiosUnprocessableEntityError<ErrorResponseApi<FormDataError>>(error)) {
+            const formError = error.response?.data.errors
+            if (formError?.name) {
+              setError('name', {
+                message: formError.name.msg,
+                type: 'Server'
+              })
+            }
+            if (formError?.bio) {
+              setError('bio', {
+                message: formError.bio.msg,
+                type: 'Server'
+              })
+            }
+            if (formError?.date_of_birth) {
+              setError('date_of_birth', {
+                message: formError.date_of_birth.msg,
+                type: 'Server'
+              })
+            }
           }
         }
-      }
-    })
+      })
+      .finally(() => setLoading(false))
   })
 
   const bodyContent = (
@@ -110,16 +115,14 @@ export default function EditModal() {
         placeholder='Bio'
         errorMessage={errors.bio?.message}
       />
-      <Datepicker
-        containerClassName='mx-1 relative'
-        inputClassName='h-auto p-1 text-lg border-2 rounded-sm outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition w-full'
-        value={dateOfBirth}
-        useRange={false}
-        asSingle={true}
-        onChange={(newValue) => setDateOfBirth(newValue as any)}
-        displayFormat={'DD/MM/YYYY'}
-        placeholder={'Date of birth'}
-        maxDate={new Date()}
+      <Input
+        onChange={(e) => setDateOfBirth(new Date(e.target.value))}
+        value={dateOfBirth.toISOString().split('T')[0]}
+        register={register}
+        name='date_of_birth'
+        placeholder='Date of birth'
+        errorMessage={errors.date_of_birth?.message}
+        type='date'
       />
     </div>
   )
