@@ -34,6 +34,7 @@ Tổng hợp chức năng chính
 - Theo dõi
 - Hủy theo dõi
 - Nhắn tin
+- xóa tin nhắn
 
 **2.2 Bài viết**
 
@@ -45,6 +46,7 @@ Tổng hợp chức năng chính
   - Hủy like
 
 - Comment bài viết
+-
 - Bookmark bài viết
 
   - Tạo bookmark
@@ -239,7 +241,12 @@ Tổng hợp chức năng chính
     flowName=GeneralOAuthFlow
 
   - Người dùng chọn tài khoản Google để đăng nhập, khi đăng nhập thành công sẽ được google cho redirect về
-    .../oauth/google?code=4%2F0AbUR2VPc2mJ0zoSxvWVI2XwyCV-8PwkVpIoUu1SBfV3CSYJ30orHOff_fse9GzsG0UpTtw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=consent. Đây là url api server của chúng ta. Lúc này các query phía sau url như code, scope, đây là những tham số do google tự sinh ra và gửi lại cho chúng ta.
+    .../oauth/google?code=4%2F0AbUR2VPc2mJ0zoSxvWVI2XwyCV-8PwkVpIoUu1SBfV3CSYJ30orHOff_fse9GzsG0UpTtw&
+    scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.
+    com%2Fauth%2Fuserinfo.email+openid&
+    authuser=0&
+    prompt=consent.
+    Đây là url api server của chúng ta. Lúc này các query phía sau url như code, scope, đây là những tham số do google tự sinh ra và gửi lại cho chúng ta.
 
   - Sau khi server trả về access_token và refresh_token qua query và tiến hành lưu vào thiết bị người dùng.
 

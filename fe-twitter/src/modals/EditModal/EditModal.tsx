@@ -35,7 +35,7 @@ export default function EditModal() {
       .updateUserProfile({
         name,
         bio,
-        dateOfBirth: dateOfBirth.startDate
+        date_of_birth: dateOfBirth.startDate
       })
       .then((data) => {
         setProfile(data.data.result)
@@ -80,7 +80,8 @@ export default function EditModal() {
         asSingle={true}
         onChange={(newValue) => setDateOfBirth(newValue as any)}
         displayFormat={'DD/MM/YYYY'}
-        placeholder={'Date of Birth'}
+        placeholder={'Date of birth'}
+        maxDate={new Date()}
       />
     </div>
   )
