@@ -46,10 +46,10 @@ const nameSchema: ParamSchema = {
   trim: true,
   isLength: {
     options: {
-      min: 1,
-      max: 100
+      min: 6,
+      max: 50
     },
-    errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
+    errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_6_TO_50
   }
 }
 
@@ -447,7 +447,7 @@ export const updateMeValidator = validate(
             min: 1,
             max: 200
           },
-          errorMessage: USERS_MESSAGES.NAME_LENGTH_MUST_BE_FROM_1_TO_100
+          errorMessage: USERS_MESSAGES.BIO_LENGTH
         }
       },
       location: {

@@ -9,8 +9,27 @@ import Datepicker from 'react-tailwindcss-datepicker'
 import userApi from 'src/apis/user.api'
 import { setProfileToLS } from 'src/utils/auth'
 import { toast } from 'react-toastify'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { schema } from 'src/utils/rules'
+import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
+import { ErrorResponseApi } from 'src/types/utils.type'
+import { useMutation } from '@tanstack/react-query'
 
-type FormData = Pick<User, 'name' | 'bio' | 'date_of_birth' | 'avatar' | 'cover_photo'>
+type FormData = Pick<User, 'name' | 'bio' | 'date_of_birth'>
+
+type DataError = {
+  location: string
+  msg: string
+  path: string
+  type: string
+  value: string
+}
+
+type FormDataError = {
+  email: DataError
+  password: DataError
+}
+const editSchema = schema.pick(['name', 'bio', 'date_of_birth'])
 
 export default function EditModal() {
   const { setProfile, profile } = useContext(AppContext)
@@ -26,18 +45,20 @@ export default function EditModal() {
 
   const {
     register,
+    handleSubmit,
+    setError,
     formState: { errors }
-  } = useForm<FormData>()
+  } = useForm<FormData>({
+    resolver: yupResolver(editSchema as any)
+  })
 
-  const onSubmit = () => {
-    setLoading(true)
-    userApi
-      .updateUserProfile({
-        name,
-        bio,
-        date_of_birth: dateOfBirth.startDate
-      })
-      .then((data) => {
+  const editProfileMutation = useMutation({
+    mutationFn: (body: FormData) => userApi.updateUserProfile(body)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    editProfileMutation.mutateAsync(data, {
+      onSuccess: (data) => {
         setProfile(data.data.result)
         setProfileToLS(data.data.result)
         toast.success(data.data.message, {
@@ -45,14 +66,31 @@ export default function EditModal() {
           position: 'top-center'
         })
         editModal.onClose()
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }
+      },
+      // Show error
+      onError: (error) => {
+        console.log('error', error)
+
+        // Check error 422
+        if (isAxiosUnprocessableEntityError<ErrorResponseApi<FormDataError>>(error)) {
+          const formError = error.response?.data.errors
+          console.log('Login eerr:', error.response?.data)
+          if (formError?.email) {
+            setError('name', {
+              message: formError.email.msg,
+              type: 'Server'
+            })
+          }
+          if (formError?.password) {
+            setError('bio', {
+              message: formError.password.msg,
+              type: 'Server'
+            })
+          }
+        }
+      }
+    })
+  })
 
   const bodyContent = (
     <div className='flex flex-col gap-4'>
