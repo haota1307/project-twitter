@@ -1,7 +1,13 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from '../Button'
-import { IoCalendarOutline, IoChatbubbleEllipsesOutline, IoCreateOutline } from 'react-icons/io5'
+import {
+  IoCalendarOutline,
+  IoChatbubbleEllipsesOutline,
+  IoCreateOutline,
+  IoEarthOutline,
+  IoLocationOutline
+} from 'react-icons/io5'
 import { formatDate } from 'src/utils/date'
 import useEditModal from 'src/hooks/useEditModal'
 import { Link, useLocation } from 'react-router-dom'
@@ -20,6 +26,11 @@ export default function Bio({ data }: User | any) {
   const [me, setMe] = useState<User>()
   const [disabled, setDisabled] = useState(false)
   const [isFollow, setIsFollow] = useState(false)
+
+  const websiteUrl = profile?.website || data?.website
+
+  const fullUrl =
+    websiteUrl.startsWith('http://') || websiteUrl.startsWith('https://') ? websiteUrl : `http://${websiteUrl}`
 
   const location = useLocation()
   const isMyProfilePage = location.pathname === '/profile'
@@ -205,20 +216,38 @@ export default function Bio({ data }: User | any) {
             <p className='text-black'>{isMyProfilePage ? profile?.bio : data?.bio}</p>
           </div>
         ) : (
-          <div className='flex flex-col mt-2.5'>
-            <p className='text-black'>Have a nice day 💕💕</p>
-          </div>
+          ''
         )}
-        <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
-          <IoCalendarOutline size={20} />
-          <p>
-            Birthday{' '}
-            {isMyProfilePage ? formatDate(profile?.date_of_birth as any) : formatDate(data?.date_of_birth as any)}
-          </p>
+        <div className='flex items-center'>
+          <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50 mr-4'>
+            <IoCalendarOutline size={20} />
+            <p>
+              Joined {isMyProfilePage ? formatDate(profile?.created_at as any) : formatDate(data?.created_at as any)}
+            </p>
+          </div>
+          <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
+            <IoCalendarOutline size={20} />
+            <p>
+              Birthday{' '}
+              {isMyProfilePage ? formatDate(profile?.date_of_birth as any) : formatDate(data?.date_of_birth as any)}
+            </p>
+          </div>
         </div>
-        <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
-          <IoCalendarOutline size={20} />
-          <p>Joined {isMyProfilePage ? formatDate(profile?.created_at as any) : formatDate(data?.created_at as any)}</p>
+        <div className='flex items-center'>
+          {(profile?.location || data?.location) && (
+            <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50 mr-4'>
+              <IoLocationOutline size={20} />
+              <p className=''>{isMyProfilePage ? profile?.location : data?.location}</p>
+            </div>
+          )}
+          {(profile?.website || data?.website) && (
+            <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
+              <IoEarthOutline size={20} />
+              <a href={fullUrl} target='_blank' rel='noopener noreferrer'>
+                <p className='text-blue-700 underline'>{isMyProfilePage ? profile?.website : data?.website}</p>
+              </a>
+            </div>
+          )}
         </div>
       </div>
       <div className='flex flex-row items-center mt-2.5 gap-6 px-4'>

@@ -21,7 +21,6 @@ export default function Users() {
     <>
       <Helmet>
         <title>Twitter | Info</title>
-        <meta name='discription' content='Trang chủ dự án' />
       </Helmet>
       <Header label={dataUser?.username} showBackArrow />
       <BackGround data={dataUser} />
