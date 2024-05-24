@@ -13,9 +13,8 @@ import { schema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ErrorResponseApi } from 'src/types/utils.type'
 import { useMutation } from '@tanstack/react-query'
-import { formatDate } from 'src/utils/date'
 
-type FormData = Pick<User, 'name' | 'bio' | 'date_of_birth'>
+type FormData = Pick<User, 'name' | 'bio' | 'date_of_birth' | 'location' | 'website'>
 
 type DataError = {
   location: string
@@ -29,8 +28,10 @@ type FormDataError = {
   name: DataError
   bio: DataError
   date_of_birth: DataError
+  location: DataError
+  website: DataError
 }
-const editSchema = schema.pick(['name', 'bio', 'date_of_birth'])
+const editSchema = schema.pick(['name', 'bio', 'date_of_birth', 'location', 'website'])
 
 export default function EditModal() {
   const { setProfile, profile } = useContext(AppContext)
@@ -39,6 +40,8 @@ export default function EditModal() {
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState(profile?.name)
   const [bio, setBio] = useState(profile?.bio)
+  const [location, setLocation] = useState(profile?.location)
+  const [website, setWebsite] = useState(profile?.website)
   const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date(profile?.date_of_birth as Date))
 
   const {
@@ -85,6 +88,18 @@ export default function EditModal() {
                 type: 'Server'
               })
             }
+            if (formError?.website) {
+              setError('website', {
+                message: formError.website.msg,
+                type: 'Server'
+              })
+            }
+            if (formError?.location) {
+              setError('location', {
+                message: formError.location.msg,
+                type: 'Server'
+              })
+            }
             if (formError?.date_of_birth) {
               setError('date_of_birth', {
                 message: formError.date_of_birth.msg,
@@ -102,6 +117,8 @@ export default function EditModal() {
       setName(profile?.name)
       setBio(profile?.bio)
       setDateOfBirth(new Date(profile?.date_of_birth as Date))
+      setLocation(profile?.location)
+      setWebsite(profile?.website)
     }
   }, [profile])
 
@@ -122,6 +139,22 @@ export default function EditModal() {
         name='bio'
         placeholder='Bio'
         errorMessage={errors.bio?.message}
+      />
+      <Input
+        onChange={(e) => setLocation(e.target.value)}
+        value={location}
+        register={register}
+        name='location'
+        placeholder='Location'
+        errorMessage={errors.location?.message}
+      />
+      <Input
+        onChange={(e) => setWebsite(e.target.value)}
+        value={website}
+        register={register}
+        name='website'
+        placeholder='Website'
+        errorMessage={errors.website?.message}
       />
       <Input
         onChange={(e) => setDateOfBirth(new Date(e.target.value))}

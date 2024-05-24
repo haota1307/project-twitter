@@ -235,16 +235,16 @@ export default function Bio({ data }: User | any) {
         </div>
         <div className='flex items-center'>
           {(profile?.location || data?.location) && (
-            <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50 mr-4'>
+            <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50 mr-4 truncate max-w-72'>
               <IoLocationOutline size={20} />
-              <p className=''>{isMyProfilePage ? profile?.location : data?.location}</p>
+              <p className='truncate'>{isMyProfilePage ? profile?.location : data?.location}</p>
             </div>
           )}
           {(profile?.website || data?.website) && (
-            <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50'>
+            <div className='flex flex-row items-center gap-2 mt-2.5 text-black/50 truncate max-w-72'>
               <IoEarthOutline size={20} />
-              <a href={fullUrl} target='_blank' rel='noopener noreferrer'>
-                <p className='text-blue-700 underline'>{isMyProfilePage ? profile?.website : data?.website}</p>
+              <a href={fullUrl} target='_blank' rel='noopener noreferrer' className='truncate'>
+                <p className='text-blue-700 underline truncate'>{isMyProfilePage ? profile?.website : data?.website}</p>
               </a>
             </div>
           )}

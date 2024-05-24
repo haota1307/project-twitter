@@ -46,6 +46,14 @@ export const schema = yup.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
       'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.'
     ),
+  location: yup
+    .string()
+    .min(1, 'location length from 1 - 200 characters')
+    .max(200, 'location length from 1 - 200 characters'),
+  website: yup
+    .string()
+    .min(1, 'Password length from 1 - 200 characters')
+    .max(200, 'Password length from 1 - 200 characters'),
   old_password: yup
     .string()
     .required('Old password required')
