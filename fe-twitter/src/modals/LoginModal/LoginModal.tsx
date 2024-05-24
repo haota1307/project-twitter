@@ -120,7 +120,7 @@ export default function LoginModal() {
   })
 
   const bodyContent = (
-    <div className='flex flex-col gap-4'>
+    <div className='flex flex-col'>
       <Input
         name='email'
         register={register}

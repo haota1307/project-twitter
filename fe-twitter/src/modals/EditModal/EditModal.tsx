@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Input from 'src/components/Input'
 import Modal from 'src/components/Modal'
@@ -97,6 +97,14 @@ export default function EditModal() {
       .finally(() => setLoading(false))
   })
 
+  useEffect(() => {
+    if (profile) {
+      setName(profile?.name)
+      setBio(profile?.bio)
+      setDateOfBirth(new Date(profile?.date_of_birth as Date))
+    }
+  }, [profile])
+
   const bodyContent = (
     <div className='flex flex-col gap-4'>
       <Input
@@ -117,7 +125,7 @@ export default function EditModal() {
       />
       <Input
         onChange={(e) => setDateOfBirth(new Date(e.target.value))}
-        value={dateOfBirth.toISOString().split('T')[0]}
+        value={dateOfBirth instanceof Date && !isNaN(dateOfBirth as any) ? dateOfBirth.toISOString().split('T')[0] : ''}
         register={register}
         name='date_of_birth'
         placeholder='Date of birth'

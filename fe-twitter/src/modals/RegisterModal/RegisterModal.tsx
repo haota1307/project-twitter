@@ -112,7 +112,7 @@ export default function RegisterModal() {
   })
 
   const bodyContent = (
-    <div className='flex flex-col gap-4'>
+    <div className='flex flex-col'>
       <Input
         name='email'
         register={register}
@@ -141,7 +141,6 @@ export default function RegisterModal() {
           disabled={registerMutation.isPending}
           errorMessage={errors.password?.message}
           type='password'
-          classNameEye='absolute bottom-[16px] left-[295px] h-5 w-5 cursor-pointer text-slate-600'
         />
         <Input
           name='confirm_password'

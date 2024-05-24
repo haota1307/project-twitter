@@ -30,7 +30,7 @@ export default function Input<TFieldValues extends FieldValues>({
   onChange,
   errorMessage,
   classNameOptionSearch,
-  classNameEye = 'absolute bottom-[16px] right-[60px] h-5 w-5 cursor-pointer text-slate-600',
+  classNameEye = 'absolute bottom-[12px] right-[16px] h-5 w-5 cursor-pointer text-slate-600',
   ...rest
 }: InputProps<TFieldValues>) {
   const [openEye, setOpenEye] = useState(false)
@@ -46,9 +46,10 @@ export default function Input<TFieldValues extends FieldValues>({
     }
     return type
   }
+
   return (
-    <>
-      <div className={`w-full h-auto px-1 ${hidden && 'hidden'}`}>
+    <div className='flex flex-col justify-center w-full'>
+      <div className={`relative w-full h-auto px-1 ${hidden && 'hidden'} `}>
         <input
           {...rest}
           {...registerResult}
@@ -61,10 +62,8 @@ export default function Input<TFieldValues extends FieldValues>({
             classNameOptionSearch
               ? `peer block w-full p-2.5 ps-10 bg-white border-2 rounded-3xl outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition disabled:bg-blue-200 disabled:cursor-not-allowed`
               : `h-auto lg:p-2 p-1.5 text-lg bg-white border-2 rounded-sm outline-none text-slate-600 focus:bg-blue-50 focus:border-blue-100 transition disabled:bg-blue-200 disabled:cursor-not-allowed w-full`
-          }
-            
-          `}
-        ></input>
+          }`}
+        />
         {type === 'password' && openEye && (
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -100,8 +99,8 @@ export default function Input<TFieldValues extends FieldValues>({
             />
           </svg>
         )}
-        <div className='ml-2 mt-1 text-red-600 text-sm text-left'>{errorMessage}</div>
       </div>
-    </>
+      <p className='ml-1.5 my-2.5 text-red-600 text-sm text-left'>{errorMessage}</p>
+    </div>
   )
 }
