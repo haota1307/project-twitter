@@ -5,6 +5,7 @@ import Feed from 'src/components/Feed/Feed'
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import userApi from 'src/apis/user.api'
+import { Helmet } from 'react-helmet'
 
 export default function Profile() {
   const { isAuthenticated } = useContext(AppContext)
@@ -18,6 +19,10 @@ export default function Profile() {
   }, [])
   return (
     <>
+      <Helmet>
+        <title>Twitter | Profile</title>
+        <meta name='discription' content='Trang chủ dự án' />
+      </Helmet>
       <Header label='Profile' showBackArrow />
       <BackGround edit />
       <Bio />

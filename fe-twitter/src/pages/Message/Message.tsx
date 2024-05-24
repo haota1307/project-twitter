@@ -7,6 +7,7 @@ import { User } from 'src/types/user.type'
 import ListConversation from './Component/ListConversation'
 import conversationApi from 'src/apis/conversation.api'
 import SkeletonLoading from 'src/components/SkeletonLoading'
+import { Helmet } from 'react-helmet'
 
 export default function Message() {
   const [me, setMe] = useState<User>()
@@ -37,6 +38,9 @@ export default function Message() {
 
   return (
     <>
+      <Helmet>
+        <title>Twitter | Message</title>
+      </Helmet>
       <Header label='Message' showBackArrow />
       {isLoading && <SkeletonLoading />}
       {data.length > 0 && !isLoading && <ListConversation data={data} />}

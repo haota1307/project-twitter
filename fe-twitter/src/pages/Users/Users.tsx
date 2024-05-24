@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router-dom'
 import userApi from 'src/apis/user.api'
 import BackGround from 'src/components/BackGround'
@@ -18,6 +19,10 @@ export default function Users() {
 
   return (
     <>
+      <Helmet>
+        <title>Twitter | Info</title>
+        <meta name='discription' content='Trang chủ dự án' />
+      </Helmet>
       <Header label={dataUser?.username} showBackArrow />
       <BackGround data={dataUser} />
       <Bio data={dataUser} />

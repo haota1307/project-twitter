@@ -194,6 +194,7 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
                 className='text-blue-500 font-bold italic hover:opacity-80'
                 onClick={() => handleOnclick(str)}
               >
+                {' '}
                 {str}{' '}
               </button>
             )

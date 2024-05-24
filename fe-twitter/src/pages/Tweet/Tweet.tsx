@@ -7,6 +7,7 @@ import Form from 'src/components/Form'
 import Comment from './components/Comment'
 import { useState } from 'react'
 import SkeletonLoading from 'src/components/SkeletonLoading'
+import { Helmet } from 'react-helmet'
 
 export default function Tweet() {
   const [isLoading, setIsLoading] = useState(true)
@@ -24,6 +25,9 @@ export default function Tweet() {
         </>
       ) : (
         <>
+          <Helmet>
+            <title>Twitter | Tweet Detail </title>
+          </Helmet>
           <Header label='Tweet' showBackArrow />
           <TweetDetail data={tweetDetailData?.data?.result} />
           <Form isComment={true} placeholder='Tweet your reply' parentId={tweet_id} labelBtn='reply' />

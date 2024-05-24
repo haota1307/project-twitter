@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import AlertVerify from 'src/components/AlertVerify'
 import Form from 'src/components/Form'
@@ -85,6 +86,10 @@ export default function Home() {
 
   return (
     <>
+      <Helmet>
+        <title>Twitter | Home</title>
+        <meta name='discription' content='Trang chủ dự án' />
+      </Helmet>
       <Header isHomePage />
       {profile?.verify === 1 || !isAuthenticated ? (
         <Form placeholder="What's happening?!" refreshFeed={handleNewPost} />

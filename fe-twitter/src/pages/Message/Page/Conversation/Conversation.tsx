@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import userApi from 'src/apis/user.api'
 import { User } from 'src/types/user.type'
+import { Helmet } from 'react-helmet'
 
 const LIMIT = 20
 const PAGE = 1
@@ -139,6 +140,10 @@ export default function Conversation() {
 
   return (
     <div>
+      <Helmet>
+        <title>Twitter | Chat</title>
+        <meta name='discription' content='Trang chủ dự án' />
+      </Helmet>
       <Header label={`Chat with ${dataUser?.name}`} showBackArrow />
       <div id='scrollableDiv' className='h-[570px] w-full flex flex-col-reverse overflow-auto'>
         <InfiniteScroll

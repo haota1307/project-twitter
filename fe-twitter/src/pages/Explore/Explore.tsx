@@ -7,6 +7,7 @@ import { useDebounce } from 'src/hooks/useDebounce'
 import SkeletonLoading from 'src/components/SkeletonLoading'
 import Header from 'src/components/Header'
 import { useLocation } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 export default function Explore() {
   const location = useLocation()
@@ -59,6 +60,10 @@ export default function Explore() {
   return (
     <>
       <div className='flex items-center'>
+        <Helmet>
+          <title>Twitter | Explore</title>
+          <meta name='discription' content='Trang chủ dự án' />
+        </Helmet>
         <Header hiddenBorder showBackArrow />
         <div className='w-full mt-2'>
           <div className='max-w-lg mx-auto'>
