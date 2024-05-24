@@ -10,7 +10,7 @@ import { AppContext } from 'src/contexts/app.context'
 import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
 
-const LIMIT = 20
+const LIMIT = 5
 const PAGE = 1
 
 export default function Home() {

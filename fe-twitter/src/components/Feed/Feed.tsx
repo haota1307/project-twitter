@@ -112,7 +112,7 @@ export default function Feed({ user }: FeedProps) {
     }
   }, [editTwetModal.isRefreshData])
 
-  if (data.length === 0)
+  if (data.length === 0 && !isLoading)
     return (
       <>
         <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>The user has no tweet yet</div>

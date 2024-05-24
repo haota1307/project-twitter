@@ -4,6 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { toast } from 'react-toastify'
 import interactApi from 'src/apis/interact.api'
 import PostItem from 'src/components/PostItem'
+import SkeletonLoading from 'src/components/SkeletonLoading'
 import config from 'src/constants/config'
 import { TweetType } from 'src/types/tweet.type'
 import http from 'src/utils/http'
@@ -12,17 +13,19 @@ interface BookmarkProps {
   userId: string
 }
 
-const LIMIT = 20
+const LIMIT = 2
 const PAGE = 1
 
 export default function BookmarkList({ userId }: BookmarkProps) {
   const [data, setData] = useState([])
+  const [isLoading, setIsloading] = useState(false)
   const [pagination, setPagination] = useState({
     page: PAGE,
     total_page: 0
   })
 
   const fetchData = () => {
+    setIsloading(true)
     if (userId)
       http
         .get('bookmarks/my-bookmarks', {
@@ -45,6 +48,9 @@ export default function BookmarkList({ userId }: BookmarkProps) {
         })
         .catch((err) => {
           console.log(err)
+        })
+        .finally(() => {
+          setIsloading(false)
         })
   }
 
@@ -113,7 +119,7 @@ export default function BookmarkList({ userId }: BookmarkProps) {
     )
   }
 
-  if (data.length === 0)
+  if (data.length === 0 && !isLoading)
     return (
       <>
         <div className='flex justify-center items-center text-slate-400 text-lg mt-10'>
@@ -123,24 +129,30 @@ export default function BookmarkList({ userId }: BookmarkProps) {
     )
 
   return (
-    <InfiniteScroll
-      hasMore={pagination.page < pagination.total_page}
-      next={fetchMoreData}
-      dataLength={data.length}
-      loader={<h4>Loading...</h4>}
-    >
-      {data?.map((post: Record<string, any>) => {
-        console.log('data?.user?.username', post.user[0])
+    <>
+      {isLoading ? (
+        <SkeletonLoading />
+      ) : (
+        <InfiniteScroll
+          hasMore={pagination.page < pagination.total_page}
+          next={fetchMoreData}
+          dataLength={data.length}
+          loader={<SkeletonLoading />}
+        >
+          {data?.map((post: Record<string, any>) => {
+            console.log('data?.user?.username', post.user[0])
 
-        return (
-          <>
-            {post.tweet[0] === undefined && <TweetDeleted id={post._id as string} />}
-            {post?.tweet[0]?.type === TweetType?.Tweet && (
-              <PostItem key={post.tweet[0]._id} data={post.tweet[0] as any} user={post.user[0]} />
-            )}
-          </>
-        )
-      })}
-    </InfiniteScroll>
+            return (
+              <>
+                {post.tweet[0] === undefined && <TweetDeleted id={post._id as string} />}
+                {post?.tweet[0]?.type === TweetType?.Tweet && (
+                  <PostItem key={post.tweet[0]._id} data={post.tweet[0] as any} user={post.user[0]} />
+                )}
+              </>
+            )
+          })}
+        </InfiniteScroll>
+      )}
+    </>
   )
 }
