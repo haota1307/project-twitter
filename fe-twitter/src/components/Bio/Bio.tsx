@@ -30,7 +30,7 @@ export default function Bio({ data }: User | any) {
   const websiteUrl = profile?.website || data?.website
 
   const fullUrl =
-    websiteUrl.startsWith('http://') || websiteUrl.startsWith('https://') ? websiteUrl : `http://${websiteUrl}`
+    websiteUrl?.startsWith('http://') || websiteUrl?.startsWith('https://') ? websiteUrl : `http://${websiteUrl}`
 
   const location = useLocation()
   const isMyProfilePage = location.pathname === '/profile'

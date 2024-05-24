@@ -48,7 +48,7 @@ export default function Input<TFieldValues extends FieldValues>({
   }
 
   return (
-    <div className='flex flex-col justify-center w-full'>
+    <div className='flex flex-col justify-center w-full my-1.5'>
       <div className={`relative w-full h-auto px-1 ${hidden && 'hidden'} `}>
         <input
           {...rest}
@@ -100,7 +100,7 @@ export default function Input<TFieldValues extends FieldValues>({
           </svg>
         )}
       </div>
-      <p className='ml-1.5 my-2.5 text-red-600 text-sm text-left'>{errorMessage}</p>
+      <p className='ml-1.5 mt-1 text-red-600 text-sm text-left'>{errorMessage}</p>
     </div>
   )
 }

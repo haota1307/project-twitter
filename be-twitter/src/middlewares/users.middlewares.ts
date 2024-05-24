@@ -458,7 +458,7 @@ export const updateMeValidator = validate(
         trim: true,
         isLength: {
           options: {
-            min: 1,
+            min: 0,
             max: 200
           },
           errorMessage: USERS_MESSAGES.LOCATION_LENGTH
@@ -472,7 +472,7 @@ export const updateMeValidator = validate(
         trim: true,
         isLength: {
           options: {
-            min: 1,
+            min: 0,
             max: 200
           },
           errorMessage: USERS_MESSAGES.WEBSITE_LENGTH
