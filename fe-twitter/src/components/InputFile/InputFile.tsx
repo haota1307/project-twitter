@@ -22,7 +22,7 @@ export default function InputFile({ onChange, isImageFile, isVideoFile, Icon, ic
       fileFromLocal &&
       (fileFromLocal.size >= config.maxSizeUploadImage || !fileFromLocal.type.includes('image'))
     ) {
-      toast.error('The image file is malformed or too large(size < 300kb)', {
+      toast.error('The image file is malformed or too large(size < 1MB)', {
         autoClose: 1000,
         position: 'top-center'
       })

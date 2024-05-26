@@ -35,10 +35,10 @@ export const handleUploadImage = async (req: Request) => {
     maxFiles: 4,
     // Lấy luôn đuôi mở rộng
     keepExtensions: true,
-    // Size 300kb mỗi file
-    maxFileSize: 300 * 1024,
+    // Size 1mb mỗi file
+    maxFileSize: 1000 * 1024,
     // Tổng size của tất cả các file, mặc định === maxFileSize
-    maxTotalFileSize: 300 * 1024 * 4,
+    maxTotalFileSize: 1000 * 1024 * 4,
     // lọc chỉ cho up file là image
     filter: function ({ name, mimetype }) {
       const valid = name === 'image' && Boolean(mimetype?.includes('image/'))

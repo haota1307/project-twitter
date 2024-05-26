@@ -124,7 +124,6 @@ export class Http {
         setRefreshTokenToLS(refresh_token)
         this.accessToken = access_token
         this.refreshToken = refresh_token
-        console.log(res)
         return access_token
       })
       .catch((error) => {

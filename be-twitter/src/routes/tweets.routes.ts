@@ -18,7 +18,7 @@ import {
   tweetIdValidator
 } from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, isUserLoggedInValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
-import { TweetRequestBody, UpdateTweetRequestBody } from '~/models/requests/Tweet.requests'
+import { UpdateTweetRequestBody } from '~/models/requests/Tweet.requests'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const tweetsRouter = Router()
