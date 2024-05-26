@@ -205,16 +205,8 @@ export default function EditForm({ placeholder, data, refreshFeed }: FormProps) 
               </div>
             )}
             <hr className='opacity-0 peer-focus:opacity-100 h-[1px] w-full border-neutral-500 transition mb-2' />
-            <div className='flex justify-start items-center mt-1'>
-              <p className='text-base text-blue-500 font-semibold p-2 hover:bg-blue-50 hover:cursor-pointer rounded-3xl'>
-                Every one??
-              </p>
-            </div>
-            <div className='my-1.5 flex flex-row justify-between'>
-              <div className='flex justify-center items-center'>
-                <InputFile isImageFile onChange={handleChangeFile as any} Icon={IoImageOutline} />
-                <InputFile isVideoFile onChange={handleChangeFile as any} Icon={IoVideocamOutline} />
-              </div>
+            <div className='my-1.5 flex flex-row justify-between items-center'>
+              <p className='text-slate-400'>You cannot change img or video</p>
               <Button disabled={isLoading || body.content === ''} onClick={onSubmit} label='Edit' secondary />
             </div>
           </div>

@@ -189,14 +189,13 @@ export default function PostItem({ data, user, option, isComment }: PostItemProp
         {data.content.split(' ').map((str, index) => {
           if (str.startsWith('#')) {
             return (
-              <button
+              <span
                 key={index}
                 className='text-blue-500 font-bold italic hover:opacity-80'
                 onClick={() => handleOnclick(str)}
               >
-                {' '}
                 {str}{' '}
-              </button>
+              </span>
             )
           }
           return str + ' '

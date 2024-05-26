@@ -51,17 +51,6 @@ export default function Form({ placeholder, isComment, parentId, labelBtn, hidde
 
   const debouncedContent = useDebounce(body.content)
 
-  useEffect(() => {
-    const isWhitespace = /^\s*$/.test(debouncedContent)
-    if (!debouncedContent || debouncedContent.trim() === '') return
-    if (isWhitespace) return
-    const uniqueHashtags = new Set<string>()
-    const matches = body.content.match(/#[^\s#]+/g) || []
-    matches.forEach((tag) => uniqueHashtags.add(tag.substring(1)))
-
-    setHashtags(Array.from(uniqueHashtags))
-  }, [debouncedContent])
-
   const previewFile = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
@@ -183,6 +172,19 @@ export default function Form({ placeholder, isComment, parentId, labelBtn, hidde
     ))
   }
 
+  useEffect(() => {
+    const isWhitespace = /^\s*$/.test(debouncedContent)
+    if (!debouncedContent || debouncedContent.trim() === '') return
+    if (isWhitespace) return
+    const uniqueHashtags = new Set<string>()
+    const matches = body.content.match(/#[^\s#]+(?!\S)/g) || []
+    matches.forEach((tag) => uniqueHashtags.add(tag.substring(1)))
+
+    setHashtags(Array.from(uniqueHashtags))
+  }, [debouncedContent])
+
+  console.log('body', file)
+
   return (
     <div className='border-b px-5 p-2'>
       {isAuthenticated ? (
@@ -197,6 +199,7 @@ export default function Form({ placeholder, isComment, parentId, labelBtn, hidde
               className='disabled:opacity-80 peer mt-3 w-full right-0 resize-none outline-none text-lg placeholder-neutral-400 text-black'
             ></textarea>
             {hashtags.length > 0 && <p className='ml-1'>Hashtag: {handleHashtag(body.content)}</p>}
+
             {file?.type.startsWith('image/') && (
               <div className='w-full pt-[100%] relative'>
                 <img alt='' src={previewFile} className='absolute top-0 left-0 bg-white w-full h-full object-cover' />
