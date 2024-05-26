@@ -142,7 +142,6 @@ export default function Conversation() {
     <div>
       <Helmet>
         <title>Twitter | Chat</title>
-        <meta name='discription' content='Trang chủ dự án' />
       </Helmet>
       <Header label={`Chat with ${dataUser?.name}`} showBackArrow />
       <div id='scrollableDiv' className='h-[570px] w-full flex flex-col-reverse overflow-auto'>

@@ -156,9 +156,6 @@ class MediasService {
           filepath: file.filepath,
           ContentType: mime.getType(file.filepath) as string
         })
-
-        // await Promise.all([
-        // ])
         await fsPromise.unlink(file.filepath) // Xóa file trong /temp sau khi chuyển đổi
         await fsPromise.rmdir(newPath) // Xóa file
 
@@ -166,12 +163,6 @@ class MediasService {
           url: (s3Result as CompleteMultipartUploadCommandOutput).Location as string,
           type: MediaType.Video
         }
-        // return {
-        //   url: isProduction
-        //     ? `${envConfig.host}/static/video-stream/${file.newFilename}`
-        //     : `http://localhost:${envConfig.port}/static/video-stream/${file.newFilename}`,
-        //   type: MediaType.Video
-        // }
       })
     )
     return result
