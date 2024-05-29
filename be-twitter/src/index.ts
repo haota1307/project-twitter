@@ -40,7 +40,7 @@ databaseService.connect().then(() => {
   // Khi connect xong thực hiện thêm index
   databaseService.indexUsers()
   databaseService.indexRefreshToken()
-  // databaseService.indexVideoStatus()
+  databaseService.indexVideoStatus()
   databaseService.indexFollowers()
   databaseService.indexTweets()
   databaseService.indexBookmark()

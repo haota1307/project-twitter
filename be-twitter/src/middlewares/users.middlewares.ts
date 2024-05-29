@@ -339,6 +339,7 @@ export const forgotPasswordValidator = validate(
         trim: true,
         custom: {
           options: async (value, { req }) => {
+            // =>> Check Email có tồn tại trong db hay không =>> nếu có tạo access token và refresh token
             const user = await databaseService.users.findOne({
               email: value
             })
