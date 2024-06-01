@@ -131,28 +131,26 @@ export default function RegisterModal() {
         disabled={registerMutation.isPending}
         errorMessage={errors.name?.message}
       />
-      <div className={`flex w-full`}>
-        <Input
-          name='password'
-          register={register}
-          placeholder='Password'
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          disabled={registerMutation.isPending}
-          errorMessage={errors.password?.message}
-          type='password'
-        />
-        <Input
-          name='confirm_password'
-          register={register}
-          placeholder='Confirm password'
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          value={confirmPassword}
-          disabled={registerMutation.isPending}
-          errorMessage={errors.confirm_password?.message}
-          type='password'
-        />
-      </div>
+      <Input
+        name='password'
+        register={register}
+        placeholder='Password'
+        onChange={(e) => setPassword(e.target.value)}
+        value={password}
+        disabled={registerMutation.isPending}
+        errorMessage={errors.password?.message}
+        type='password'
+      />
+      <Input
+        name='confirm_password'
+        register={register}
+        placeholder='Confirm password'
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        value={confirmPassword}
+        disabled={registerMutation.isPending}
+        errorMessage={errors.confirm_password?.message}
+        type='password'
+      />
     </div>
   )
 

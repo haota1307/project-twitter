@@ -141,7 +141,7 @@ tweetsRouter.patch(
   '/update/:tweet_id',
   accessTokenValidator,
   verifiedUserValidator,
-  filterMiddlewares<UpdateTweetRequestBody>(['content', 'audience', 'hashtags', 'medias']),
+  filterMiddlewares<UpdateTweetRequestBody>(['content', 'audience', 'hashtags']),
   wrapRequestHandler(updateTweetController)
 )
 

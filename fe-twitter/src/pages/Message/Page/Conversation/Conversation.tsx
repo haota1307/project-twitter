@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query'
 import userApi from 'src/apis/user.api'
 import { User } from 'src/types/user.type'
 import { Helmet } from 'react-helmet'
+import { toast } from 'react-toastify'
 
 const LIMIT = 20
 const PAGE = 1

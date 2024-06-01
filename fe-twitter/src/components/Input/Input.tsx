@@ -49,7 +49,7 @@ export default function Input<TFieldValues extends FieldValues>({
 
   return (
     <div className='flex flex-col justify-center w-full my-1.5'>
-      <div className={`relative w-full h-auto px-1 ${hidden && 'hidden'} `}>
+      <div className={`relative w-fulll px-1 ${hidden && 'hidden'} `}>
         <input
           {...rest}
           {...registerResult}

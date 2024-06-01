@@ -13,7 +13,7 @@ interface BookmarkProps {
   userId: string
 }
 
-const LIMIT = 2
+const LIMIT = 3
 const PAGE = 1
 
 export default function BookmarkList({ userId }: BookmarkProps) {
