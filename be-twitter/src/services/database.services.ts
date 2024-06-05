@@ -49,13 +49,6 @@ class DatabaseService {
     }
   }
 
-  async indexVideoStatus() {
-    const exists = await this.videoStatus.indexExists(['name_1'])
-    if (!exists) {
-      this.videoStatus.createIndex({ name: 1 })
-    }
-  }
-
   async indexFollowers() {
     const exists = await this.followers.indexExists(['user_id_1_followed_user_id_1'])
     if (!exists) {
@@ -97,11 +90,6 @@ class DatabaseService {
   // Collection follow
   get followers(): Collection<Follower> {
     return this.db.collection(envConfig.dbFollowersCollection)
-  }
-
-  // Collection VideoStatus
-  get videoStatus(): Collection<VideoStatus> {
-    return this.db.collection(envConfig.dbVideoStatusCollection)
   }
 
   // Collection Tweet

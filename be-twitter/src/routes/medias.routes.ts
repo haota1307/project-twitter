@@ -1,10 +1,5 @@
 import { Router } from 'express'
-import {
-  uploadImageController,
-  uploadVideoController,
-  uploadVideoHLSController,
-  videoStatusController
-} from '~/controllers/medias.controller'
+import { uploadImageController, uploadVideoController, uploadVideoHLSController } from '~/controllers/medias.controller'
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -29,12 +24,5 @@ mediasRouter.post(
   accessTokenValidator,
   verifiedUserValidator,
   wrapRequestHandler(uploadVideoHLSController)
-)
-
-mediasRouter.get(
-  '/video-status/:id',
-  accessTokenValidator,
-  verifiedUserValidator,
-  wrapRequestHandler(videoStatusController)
 )
 export default mediasRouter

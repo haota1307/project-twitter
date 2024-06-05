@@ -33,16 +33,6 @@ export const uploadVideoHLSController = async (req: Request, res: Response) => {
   })
 }
 
-// Status video upload
-export const videoStatusController = async (req: Request, res: Response) => {
-  const { id } = req.params
-  const result = await mediasService.getVideoStatus(id as string)
-  return res.json({
-    message: USERS_MESSAGES.GET_VIDEO_STATUS_SUCCESS,
-    result: result
-  })
-}
-
 // Hiển thị ảnh
 export const serveImageController = (req: Request, res: Response) => {
   const { name } = req.params
