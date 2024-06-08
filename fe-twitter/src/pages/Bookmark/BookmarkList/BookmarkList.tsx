@@ -82,11 +82,13 @@ export default function BookmarkList({ userId }: BookmarkProps) {
   }, [userId])
 
   const TweetDeleted = ({ id }: any) => {
+    const [isUnbookmark, setIsUnbookmark] = useState(false)
     const handleUnBookmarkByUser = async (tweetId: string) => {
       await interactApi
         .unbookmarkTweetDeleted(tweetId)
         .then(() => {
           toast.success('unbookmark successfully')
+          setIsUnbookmark(true)
         })
         .catch((err) => {
           console.log(err)
@@ -98,12 +100,19 @@ export default function BookmarkList({ userId }: BookmarkProps) {
           <div className='flex items-center'>
             <h1 className='mx-6'>The tweet has been deleted</h1>
             <span className='mr-2'>Unbookmark now</span>
-            <div
-              onClick={() => handleUnBookmarkByUser(id as string)}
-              className='flex flex-row items-center text-yellow-400 gap-2 cursor-pointer hover:text-yellow-400 hover:bg-yellow-50 rounded-full p-2 transform active:scale-50 transition-transform'
-            >
-              <IoBookmarkSharp size={20} />
-            </div>
+            {isUnbookmark && (
+              <div className='flex flex-row items-center fill-none gap-2 cursor-pointer hover:text-yellow-400 hover:bg-yellow-50 rounded-full p-2 transform active:scale-50 transition-transform'>
+                <IoBookmarkSharp size={20} />
+              </div>
+            )}
+            {!isUnbookmark && (
+              <div
+                onClick={() => handleUnBookmarkByUser(id as string)}
+                className='flex flex-row items-center text-yellow-400 gap-2 cursor-pointer hover:text-yellow-400 hover:bg-yellow-50 rounded-full p-2 transform active:scale-50 transition-transform'
+              >
+                <IoBookmarkSharp size={20} />
+              </div>
+            )}
           </div>
           <div className='w-full mt-1 p-6 space-y-4 divide-y divide-gray-200 rounded animate-pulse'>
             <div className='flex items-center justify-between'>

@@ -44,7 +44,7 @@ export default function Message() {
       <Header label='Message' showBackArrow />
       {isLoading && <SkeletonLoading />}
       {data.length > 0 && !isLoading && <ListConversation data={data} />}
-      {data.length === 0 && isLoading && <MessageContainer data={me as User} />}
+      {data.length === 0 && !isLoading && <MessageContainer data={me as User} />}
     </>
   )
 }
