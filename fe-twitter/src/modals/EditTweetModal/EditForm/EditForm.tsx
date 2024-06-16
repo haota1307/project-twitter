@@ -9,10 +9,8 @@ import { Tweet } from 'src/types/tweet.type'
 
 import mediaApi from 'src/apis/media.api'
 import tweetApi from 'src/apis/tweet.api'
-import { IoImageOutline, IoVideocamOutline } from 'react-icons/io5'
 import { useDebounce } from 'src/hooks/useDebounce'
 import Avatar from 'src/components/Avatar'
-import InputFile from 'src/components/InputFile'
 import Button from 'src/components/Button'
 import useEditTweetModal from 'src/hooks/useEditTweet'
 
@@ -146,9 +144,9 @@ export default function EditForm({ placeholder, data, refreshFeed }: FormProps) 
     }
   }, [body, file, isLoading])
 
-  const handleChangeFile = (file?: File) => {
-    setFile(file)
-  }
+  // const handleChangeFile = (file?: File) => {
+  //   setFile(file)
+  // }
 
   useEffect(() => {
     if (videoRef.current) {

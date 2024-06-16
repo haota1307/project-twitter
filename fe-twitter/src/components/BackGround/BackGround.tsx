@@ -8,6 +8,9 @@ import { toast } from 'react-toastify'
 import userApi from 'src/apis/user.api'
 import mediaApi from 'src/apis/media.api'
 
+const defBackGround =
+  'https://images.pexels.com/photos/733852/pexels-photo-733852.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+
 export default function BackGround({ data, edit }: any) {
   const { profile, setProfile } = useContext(AppContext)
 
@@ -78,13 +81,11 @@ export default function BackGround({ data, edit }: any) {
     <div className='relative'>
       {isMyProfilePage ? (
         <div className='bg-slate-200 h-52 relative'>
-          {profile?.cover_photo && (
-            <img
-              src={fileTmp ? previewFile : profile?.cover_photo}
-              alt='Back ground cover'
-              className='object-cover h-full w-full'
-            />
-          )}
+          <img
+            src={fileTmp ? previewFile : profile?.cover_photo || defBackGround}
+            alt='Back ground cover'
+            className='object-cover h-full w-full'
+          />
           <div className='absolute -bottom-16 left-4'>
             <Avatar isLarge hasBorder url={profile?.avatar} isMyProfile edit={edit} />
           </div>

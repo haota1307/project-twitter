@@ -30,7 +30,7 @@ export class Http {
       baseURL: config.baseUrl,
       headers: {
         'Content-Type': 'application/json',
-        'expire-access-token': 60 * 5, // 5 phut
+        'expire-access-token': 60 * 60, // 60p
         'expire-refresh-token': 60 * 60 * 24 * 100 //100 ngay
       },
       signal: controller.signal
