@@ -116,9 +116,6 @@ export default function EditForm({ placeholder, data, refreshFeed }: FormProps) 
       .editTweet({ ...body, id: body._id })
       .then(() => {
         toast.success('Create success', { autoClose: 1000 })
-        if (refreshFeed) {
-          refreshFeed()
-        }
       })
       .finally(() => {
         setBody(initialBody)

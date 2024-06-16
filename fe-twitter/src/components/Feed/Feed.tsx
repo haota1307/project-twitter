@@ -100,14 +100,18 @@ export default function Feed({ user }: FeedProps) {
 
   useEffect(() => {
     if (createTweetModal.isRefreshData === true) {
-      fetchData()
+      setTimeout(() => {
+        fetchData()
+      }, 1000)
       createTweetModal.setIsRefreshDataFalse()
     }
   }, [createTweetModal.isRefreshData])
 
   useEffect(() => {
     if (editTwetModal.isRefreshData === true) {
-      fetchData()
+      setTimeout(() => {
+        fetchData()
+      }, 1000)
       editTwetModal.setIsRefreshDataFalse()
     }
   }, [editTwetModal.isRefreshData])
