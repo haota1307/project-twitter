@@ -102,7 +102,7 @@ export default function Feed({ user }: FeedProps) {
     if (createTweetModal.isRefreshData === true) {
       setTimeout(() => {
         fetchData()
-      }, 1000)
+      }, 500)
       createTweetModal.setIsRefreshDataFalse()
     }
   }, [createTweetModal.isRefreshData])
@@ -111,7 +111,7 @@ export default function Feed({ user }: FeedProps) {
     if (editTwetModal.isRefreshData === true) {
       setTimeout(() => {
         fetchData()
-      }, 1000)
+      }, 500)
       editTwetModal.setIsRefreshDataFalse()
     }
   }, [editTwetModal.isRefreshData])
