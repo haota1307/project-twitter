@@ -12,7 +12,7 @@ function AdminLayoutInner({ children }: Props) {
         <div className='lg:container h-full'>
           <div className='grid grid-cols-4'>
             <AdminBar />
-            <div className='col-span-3 lg:col-span-3 border-l'>
+            <div className='col-span-3 border-l'>
               {children}
               <Outlet />
             </div>

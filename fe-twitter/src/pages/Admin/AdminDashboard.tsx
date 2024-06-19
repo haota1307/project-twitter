@@ -4,7 +4,7 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 const ChartItem = ({ children }: { children: React.ReactElement }) => {
   return (
     <div className='flex flex-col items-center justify-center p-4 border border-slate-900 bg-blue-50 rounded-xl h-[90%] w-[90%] mt-10 ml-4'>
-      <h3 className='text-2xl font-semibold text-white mb-4'>Chart in year</h3>
+      <h3 className='text-2xl font-semibold text-black mb-4'>Chart in year</h3>
       {children}
     </div>
   )

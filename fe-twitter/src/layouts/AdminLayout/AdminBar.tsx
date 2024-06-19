@@ -28,8 +28,8 @@ export default function AdminBar() {
   return (
     <>
       <div className='col-span-1 h-screen pr-4 md:pr-6 top-0 sticky'>
-        <div className='top-0 sticky'>
-          <div className='flex flex-col items-end'>
+        <div className=''>
+          <div className='flex flex-row items-end'>
             <div className='space-y-2 lg:w-[230px] pt-4'>
               <SidebarLogo />
               {items.map((item) => (
