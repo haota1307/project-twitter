@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { adminTweetsController, adminUsersController } from '~/controllers/admin.controller'
+import { adminTweetsController, adminUsersController, banUserController } from '~/controllers/admin.controller'
 import { paginationValidator } from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
@@ -22,5 +22,13 @@ adminRouter.get(
   verifiedUserValidator,
   paginationValidator,
   wrapRequestHandler(adminTweetsController)
+)
+
+//Ban user
+adminRouter.patch(
+  '/users/:userId/ban',
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(banUserController)
 )
 export default adminRouter

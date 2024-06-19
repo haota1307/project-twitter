@@ -36,3 +36,20 @@ export const adminTweetsController = async (req: Request, res: Response) => {
     message: 'Get list tweet successfull'
   })
 }
+
+export const banUserController = async (req: Request, res: Response) => {
+  const { userId } = req.params
+  const { body } = req
+
+  try {
+    const user = await adminService.BanUsers(userId, body)
+
+    return res.json({
+      message: 'Ban user success',
+      result: user
+    })
+  } catch (error) {
+    console.error('Error banning user:', error)
+    return res.status(500).json({ error: 'Failed to ban user' })
+  }
+}
