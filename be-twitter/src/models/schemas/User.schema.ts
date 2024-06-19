@@ -19,13 +19,26 @@ interface UserType {
   username?: string
   avatar?: string
   cover_photo?: string
+  ban_info?: BanInfoType
+  role: UserRole // Vai trò người dùng
+}
+
+export enum UserRole {
+  User = 'user',
+  Admin = 'admin'
+}
+
+interface BanInfoType {
+  ban_start_date: Date
+  ban_end_date: Date
+  ban_reason?: string
 }
 
 export default class User {
   _id?: ObjectId
-  name?: string
+  name: string
   email: string
-  date_of_birth?: Date
+  date_of_birth: Date
   password: string
   created_at: Date
   updated_at: Date
@@ -39,6 +52,8 @@ export default class User {
   username: string // optional
   avatar: string // optional
   cover_photo: string // optional
+  ban_info?: BanInfoType // thông tin lệnh cấm
+  role: UserRole // Vai trò người dùng
 
   constructor(user: UserType) {
     const date = new Date()
@@ -59,5 +74,7 @@ export default class User {
     this.username = user.username || ''
     this.avatar = user.avatar || ''
     this.cover_photo = user.cover_photo || ''
+    this.ban_info = user.ban_info || undefined // Thông tin lệnh cấm
+    this.role = user.role || UserRole.User
   }
 }

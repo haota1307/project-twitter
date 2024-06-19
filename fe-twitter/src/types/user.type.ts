@@ -4,6 +4,17 @@ export enum UserVerifyStatus {
   Banned // bị khóa
 }
 
+export enum UserRole {
+  User = 'user',
+  Admin = 'admin'
+}
+
+interface BanInfoType {
+  ban_start_date: Date
+  ban_end_date: Date
+  ban_reason?: string
+}
+
 export interface User {
   _id?: string
   name: string
@@ -26,4 +37,6 @@ export interface User {
   followed?: string[]
   followed_count?: number
   following_count?: number
+  ban_info?: BanInfoType // thông tin lệnh cấm
+  role: UserRole // Vai trò người dùng
 }

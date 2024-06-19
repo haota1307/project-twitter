@@ -5,7 +5,7 @@ import databaseService from './database.services'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import { ObjectId } from 'mongodb'
 import { RegisterReqBody, UpdateProfileReqBody } from '~/models/requests/User.requests'
-import User from '~/models/schemas/User.schema'
+import User, { UserRole } from '~/models/schemas/User.schema'
 import { hashPassword } from '~/utils/crypto'
 import { sendForgotPasswordEmail, sendVerifyRegisterEmail } from '~/utils/email'
 import { USERS_MESSAGES } from '~/constants/messages'
@@ -17,12 +17,13 @@ import { config } from 'dotenv'
 config()
 class UsersService {
   // Tạo access token
-  private signAccessToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+  private signAccessToken({ user_id, verify, role }: { user_id: string; verify: UserVerifyStatus; role: UserRole }) {
     return signToken({
       payload: {
         user_id,
         token_type: TokenType.AccessToken,
-        verify
+        verify,
+        role
       },
       privateKey: envConfig.jwtSecretAccessToken,
       options: {
@@ -59,9 +60,17 @@ class UsersService {
   }
 
   // Tạo access token và refresh token
-  private signAccessAndRefreshToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+  private signAccessAndRefreshToken({
+    user_id,
+    verify,
+    role
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    role: UserRole
+  }) {
     // chạy song song 2 func =>> tối ưu performance
-    return Promise.all([this.signAccessToken({ user_id, verify }), this.signRefreshToken({ user_id, verify })])
+    return Promise.all([this.signAccessToken({ user_id, verify, role }), this.signRefreshToken({ user_id, verify })])
   }
 
   // Tạo email verify token
@@ -166,12 +175,14 @@ class UsersService {
         username: `user${user_id.toString()}`,
         email_verify_token,
         date_of_birth: new Date(), // chuyển isoString ->> date
-        password: hashPassword(payload.password)
+        password: hashPassword(payload.password),
+        role: UserRole.User
       })
     )
     const [access_token, refresh_token] = await this.signAccessAndRefreshToken({
       user_id: user_id.toString(),
-      verify: UserVerifyStatus.Unverified
+      verify: UserVerifyStatus.Unverified,
+      role: UserRole.User
     })
     const { iat, exp } = await this.decodeRefreshToken(refresh_token)
     await databaseService.refreshTokens.insertOne(
@@ -191,8 +202,8 @@ class UsersService {
   }
 
   // Login - tạo access token và refresh token
-  async login({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
-    const [access_token, refresh_token] = await this.signAccessAndRefreshToken({ user_id, verify })
+  async login({ user_id, verify, role }: { user_id: string; verify: UserVerifyStatus; role: UserRole }) {
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken({ user_id, verify, role })
     const { iat, exp } = await this.decodeRefreshToken(refresh_token)
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({
@@ -224,7 +235,8 @@ class UsersService {
     if (user) {
       const [access_token, refresh_token] = await this.signAccessAndRefreshToken({
         user_id: user._id.toString(),
-        verify: user.verify
+        verify: user.verify,
+        role: UserRole.User
       })
       const { iat, exp } = await this.decodeRefreshToken(refresh_token)
       // chèn refresh token vào database
@@ -255,17 +267,19 @@ class UsersService {
   async refreshToken({
     user_id,
     verify,
+    role,
     refresh_token,
     exp
   }: {
     user_id: string
     verify: UserVerifyStatus
+    role: UserRole
     refresh_token: string
     exp: number
   }) {
     // Tạo mới access token và refresh token, xóa refresh token cũ
     const [new_access_token, new_refresh_token] = await Promise.all([
-      this.signAccessToken({ user_id, verify }),
+      this.signAccessToken({ user_id, verify, role }),
       this.signRefreshToken({ user_id, verify, exp }),
       databaseService.refreshTokens.deleteOne({ token: refresh_token })
     ])
@@ -290,7 +304,7 @@ class UsersService {
     // Tạo giá trị cập nhật
     // MongoDB cập nhật giá trị
     const [token] = await Promise.all([
-      this.signAccessAndRefreshToken({ user_id, verify: UserVerifyStatus.Verified }),
+      this.signAccessAndRefreshToken({ user_id, verify: UserVerifyStatus.Verified, role: UserRole.User }),
       databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
         {
           $set: {
