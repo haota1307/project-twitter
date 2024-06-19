@@ -5,6 +5,10 @@ import { AppContext } from './contexts/app.context'
 import Login from './pages/Login'
 import { IoLogoTwitter } from 'react-icons/io5'
 import AdminRoute from 'src/pages/Admin/Admin'
+import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
+import UserManagement from 'src/pages/Admin/UserManagement'
+import TweetsManagement from 'src/pages/Admin/TweetsManagement'
+import ConversationManagement from 'src/pages/Admin/ConversationManagement'
 
 const Home = lazy(() => import('./pages/Home'))
 const Explore = lazy(() => import('./pages/Explore'))
@@ -185,10 +189,42 @@ export default function useRouteElement() {
       element: <AdminRoute />,
       children: [
         {
-          path: '',
+          path: '/admin/home',
           element: (
             <Suspense fallback={LoadingPage}>
-              <AdminDashboard />
+              <AdminLayout>
+                <AdminDashboard />
+              </AdminLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: '/admin/users',
+          element: (
+            <Suspense fallback={LoadingPage}>
+              <AdminLayout>
+                <UserManagement />
+              </AdminLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: '/admin/tweets',
+          element: (
+            <Suspense fallback={LoadingPage}>
+              <AdminLayout>
+                <TweetsManagement />
+              </AdminLayout>
+            </Suspense>
+          )
+        },
+        {
+          path: '/admin/conversations',
+          element: (
+            <Suspense fallback={LoadingPage}>
+              <AdminLayout>
+                <ConversationManagement />
+              </AdminLayout>
             </Suspense>
           )
         }
