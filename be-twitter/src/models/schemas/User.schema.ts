@@ -52,7 +52,7 @@ export default class User {
   username: string // optional
   avatar: string // optional
   cover_photo: string // optional
-  ban_info?: BanInfoType // thông tin lệnh cấm
+  ban_info?: BanInfoType | null // thông tin lệnh cấm
   role: UserRole // Vai trò người dùng
 
   constructor(user: UserType) {

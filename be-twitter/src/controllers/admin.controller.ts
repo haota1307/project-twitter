@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { TokenPayload } from '~/models/requests/User.requests'
 import adminService from '~/services/admin.services'
 
 export const adminUsersController = async (req: Request, res: Response) => {
@@ -31,7 +32,7 @@ export const adminTweetsController = async (req: Request, res: Response) => {
       limit,
       page,
       total_page: Math.ceil(result.total / limit),
-      users: result.users
+      users: result.tweets
     },
     message: 'Get list tweet successfull'
   })
@@ -46,6 +47,21 @@ export const banUserController = async (req: Request, res: Response) => {
 
     return res.json({
       message: 'Ban user success',
+      result: user
+    })
+  } catch (error) {
+    console.error('Error banning user:', error)
+    return res.status(500).json({ error: 'Failed to ban user' })
+  }
+}
+
+export const unbannUser = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  try {
+    const user = await adminService.processBanEnd(user_id)
+
+    return res.json({
+      message: 'Unban user success',
       result: user
     })
   } catch (error) {

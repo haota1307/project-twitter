@@ -1,6 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import { envConfig, isProduction } from './constants/config'
+import { envConfig } from './constants/config'
 import usersRouter from './routes/users.routes'
 import databaseService from './services/database.services'
 import { defaultErrorHandler } from './middlewares/error.middlewares'

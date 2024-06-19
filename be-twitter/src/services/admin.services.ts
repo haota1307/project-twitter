@@ -1,72 +1,81 @@
 import { ObjectId } from 'mongodb'
-import { UpdateProfileReqBody } from '~/models/requests/User.requests'
-import databaseService from '~/services/database.services'
+import databaseService from '~/services/database.services' // Đây là service để kết nối và thao tác với MongoDB
 
 class AdminService {
   async getListUsers({ limit, page }: { limit: number; page: number }) {
-    const [users, total] = await Promise.all([
-      databaseService.users
-        .aggregate([
-          {
-            $match: {
-              role: 'user'
+    try {
+      const [users, total] = await Promise.all([
+        databaseService.users
+          .aggregate([
+            {
+              $match: {
+                role: 'user'
+              }
+            },
+            {
+              $skip: limit * (page - 1)
+            },
+            {
+              $limit: limit
+            },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                username: 1,
+                email: 1,
+                verify: 1
+              }
             }
-          },
-          {
-            $skip: limit * (page - 1)
-          },
-          {
-            $limit: limit
-          },
-          {
-            $project: {
-              _id: 1,
-              name: 1,
-              username: 1,
-              email: 1,
-              verify: 1
-            }
-          }
-        ])
-        .toArray(),
-      databaseService.users.countDocuments({
-        role: 'user'
-      })
-    ])
+          ])
+          .toArray(),
+        databaseService.users.countDocuments({
+          role: 'user'
+        })
+      ])
 
-    return {
-      users,
-      total
+      return {
+        users,
+        total
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error)
+      throw new Error('Failed to fetch users')
     }
   }
 
   async getListTweets({ limit, page }: { limit: number; page: number }) {
-    const [users, total] = await Promise.all([
-      databaseService.tweets
-        .aggregate([
-          {
-            $skip: limit * (page - 1)
-          },
-          {
-            $limit: limit
-          },
-          {
-            $project: {
-              _id: 1,
-              user_id: 1,
-              content: 1,
-              type: 1,
-              parent_id: 1
+    try {
+      const [tweets, total] = await Promise.all([
+        databaseService.tweets
+          .aggregate([
+            {
+              $skip: limit * (page - 1)
+            },
+            {
+              $limit: limit
+            },
+            {
+              $project: {
+                _id: 1,
+                user_id: 1,
+                content: 1,
+                type: 1,
+                parent_id: 1
+              }
             }
-          }
-        ])
-        .toArray(),
-      databaseService.tweets.countDocuments()
-    ])
+          ])
+          .toArray(),
+        databaseService.tweets.countDocuments()
+      ])
 
-    return {
-      users,
-      total
+      return {
+        tweets,
+        total
+      }
+    } catch (error) {
+      console.error('Error fetching tweets:', error)
+      throw new Error('Failed to fetch tweets')
     }
   }
 
@@ -74,22 +83,27 @@ class AdminService {
     try {
       // Kiểm tra nếu có date_of_birth thì chuyển nó sang kiểu date
       const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
+
+      // Tạo object để cập nhật
+      const updateObject: any = {
+        ...(_payload as any), // Ép kiểu _payload thành any để tránh lỗi khi sử dụng với $set
+        verify: 2, // Cập nhật trạng thái verify
+        $currentDate: { updated_at: true } // Cập nhật thời gian updated_at
+      }
+
+      // Nếu có ban_info thì thêm vào updateObject
+      if (payload.ban_info) {
+        updateObject.ban_info = {
+          ban_start_date: new Date(), // Ngày bắt đầu ban
+          ban_end_date: payload.ban_info.ban_end_date ? new Date(payload.ban_info.ban_end_date) : undefined, // Ngày kết thúc ban
+          ban_reason: payload.ban_info.ban_reason || '' // Lý do ban
+        }
+      }
+
       // Tìm người dùng và cập nhật thông tin
       const user = await databaseService.users.findOneAndUpdate(
         { _id: new ObjectId(userId) },
-        {
-          $set: {
-            ...(_payload as any), // Ép kiểu _payload thành any để tránh lỗi khi sử dụng với $set
-            ban_info: {
-              // Tạo mới ban_info nếu chưa tồn tại
-              ban_start_date: new Date(),
-              ban_end_date: payload.ban_info.ban_end_date ? new Date(payload.ban_info.ban_end_date) : undefined,
-              ban_reason: payload.ban_info.ban_reason || ''
-            },
-            verify: 2
-          },
-          $currentDate: { updated_at: true }
-        },
+        { $set: updateObject },
         {
           returnDocument: 'after',
           projection: { password: 0, email_verify: 0, forgot_password_token: 0 }
@@ -100,6 +114,34 @@ class AdminService {
     } catch (error) {
       console.error('Error banning user:', error)
       throw new Error('Failed to ban user')
+    }
+  }
+
+  async processBanEnd(userId: string) {
+    try {
+      const objectId = new ObjectId(userId) // Chuyển đổi userId sang ObjectId để sử dụng trong truy vấn
+
+      const updatedUser = await databaseService.users.findOneAndUpdate(
+        { _id: objectId },
+        {
+          $set: {
+            ban_info: null, // Đặt ban_info thành null để mở khóa người dùng
+            updated_at: new Date() // Cập nhật thời gian updated_at
+          }
+        },
+        { returnDocument: 'after' }
+      )
+
+      if (updatedUser) {
+        console.log(`User ${userId} has been unbanned.`)
+        // Ở đây bạn có thể thực hiện các hành động khác sau khi mở khóa, ví dụ gửi email thông báo, log sự kiện, ...
+      } else {
+        console.log(`User ${userId} not found or already unbanned.`)
+        // Xử lý trường hợp không tìm thấy người dùng hoặc người dùng đã được mở khóa trước đó
+      }
+    } catch (error) {
+      console.error('Error processing ban end:', error)
+      // Xử lý lỗi khi có lỗi xảy ra trong quá trình cập nhật người dùng
     }
   }
 }
