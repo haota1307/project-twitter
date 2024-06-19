@@ -20,7 +20,7 @@ export default function UserManagement() {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`
           },
           params: {
-            limit: 1,
+            limit: 5,
             page: param.page || 1
           },
           baseURL: config.baseUrl
