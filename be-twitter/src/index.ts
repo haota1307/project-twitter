@@ -16,6 +16,7 @@ import searchRouter from './routes/search.routes'
 import randomRouter from './routes/randoms.routes'
 import { createServer } from 'http'
 import initSocket from './utils/socket'
+import adminRouter from '~/routes/admins.routes'
 
 dotenv.config()
 
@@ -56,6 +57,7 @@ app.use('/likes', likeRouter)
 app.use('/conversations', conversationsRouter)
 app.use('/search', searchRouter)
 app.use('/random', randomRouter)
+app.use('/admin', adminRouter)
 
 // Dùng middlewares để xử lý lỗi - Khi app lỗi sẽ nhãy vào đây  <<Default handler>>
 app.use(defaultErrorHandler)
