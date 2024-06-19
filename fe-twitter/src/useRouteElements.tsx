@@ -4,6 +4,7 @@ import { Suspense, lazy, useContext } from 'react'
 import { AppContext } from './contexts/app.context'
 import Login from './pages/Login'
 import { IoLogoTwitter } from 'react-icons/io5'
+import AdminRoute from 'src/pages/Admin/Admin'
 
 const Home = lazy(() => import('./pages/Home'))
 const Explore = lazy(() => import('./pages/Explore'))
@@ -17,8 +18,9 @@ const VerifyEmail = lazy(() => import('./pages/VerifyEmail'))
 const VerifyForgotPasswordToken = lazy(() => import('./pages/VerifyForgotPasswordToken'))
 const ResetPassword = lazy(() => import('./pages/ResetPassword'))
 const Conversation = lazy(() => import('./pages/Message/Page/Conversation'))
+const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'))
 
-//redirect
+// Redirect
 function RedirectRoute() {
   const { isAuthenticated } = useContext(AppContext) // Check login: đã đăng nhập(true)
   // Chưa đăng nhập thì chuyển sang trang home
@@ -27,7 +29,7 @@ function RedirectRoute() {
 
 export default function useRouteElement() {
   const LoadingPage = (
-    <div className='w-full h-screen flex justify-center items-center  bg-gradient-to-r from-blue-200 to-cyan-200'>
+    <div className='w-full h-screen flex justify-center items-center bg-gradient-to-r from-blue-200 to-cyan-200'>
       <div className='animate-pulse flex justify-center items-center'>
         <IoLogoTwitter size={80} color='#fff' />
       </div>
@@ -57,7 +59,7 @@ export default function useRouteElement() {
         {
           path: ':tweet_id',
           element: (
-            <Suspense>
+            <Suspense fallback={LoadingPage}>
               <Tweet />
             </Suspense>
           )
@@ -71,7 +73,7 @@ export default function useRouteElement() {
         {
           path: ':user_name',
           element: (
-            <Suspense>
+            <Suspense fallback={LoadingPage}>
               <Users />
             </Suspense>
           )
@@ -83,60 +85,60 @@ export default function useRouteElement() {
       element: <RedirectRoute />,
       children: [
         {
-          path: '/Explore',
+          path: '/explore',
           element: (
             <MainLayout>
-              <Suspense>
+              <Suspense fallback={LoadingPage}>
                 <Explore />
               </Suspense>
             </MainLayout>
           )
         },
         {
-          path: '/Messages',
+          path: '/messages',
           element: (
             <MainLayout>
-              <Suspense>
+              <Suspense fallback={LoadingPage}>
                 <Message />
               </Suspense>
             </MainLayout>
           )
         },
         {
-          path: '/Messages/:user_name',
+          path: '/messages/:user_name',
           element: (
             <MainLayout>
-              <Suspense>
+              <Suspense fallback={LoadingPage}>
                 <Conversation />
               </Suspense>
             </MainLayout>
           )
         },
         {
-          path: '/Profile',
+          path: '/profile',
           element: (
             <MainLayout>
-              <Suspense>
+              <Suspense fallback={LoadingPage}>
                 <Profile />
               </Suspense>
             </MainLayout>
           )
         },
         {
-          path: '/Bookmark',
+          path: '/bookmark',
           element: (
             <MainLayout>
-              <Suspense>
+              <Suspense fallback={LoadingPage}>
                 <Bookmark />
               </Suspense>
             </MainLayout>
           )
         },
         {
-          path: '/Following',
+          path: '/following',
           element: (
             <MainLayout>
-              <Suspense>
+              <Suspense fallback={LoadingPage}>
                 <HomeFollowing />
               </Suspense>
             </MainLayout>
@@ -146,7 +148,7 @@ export default function useRouteElement() {
           path: '/email-verifications',
           element: (
             <MainLayout>
-              <Suspense>
+              <Suspense fallback={LoadingPage}>
                 <VerifyEmail />
               </Suspense>
             </MainLayout>
@@ -157,7 +159,7 @@ export default function useRouteElement() {
     {
       path: '/login/oauth',
       element: (
-        <Suspense>
+        <Suspense fallback={LoadingPage}>
           <Login />
         </Suspense>
       )
@@ -165,7 +167,7 @@ export default function useRouteElement() {
     {
       path: '/forgot-password',
       element: (
-        <Suspense>
+        <Suspense fallback={LoadingPage}>
           <VerifyForgotPasswordToken />
         </Suspense>
       )
@@ -173,10 +175,24 @@ export default function useRouteElement() {
     {
       path: '/reset-password',
       element: (
-        <Suspense>
+        <Suspense fallback={LoadingPage}>
           <ResetPassword />
         </Suspense>
       )
+    },
+    {
+      path: '/admin',
+      element: <AdminRoute />,
+      children: [
+        {
+          path: '',
+          element: (
+            <Suspense fallback={LoadingPage}>
+              <AdminDashboard />
+            </Suspense>
+          )
+        }
+      ]
     }
   ])
   return routeElements
