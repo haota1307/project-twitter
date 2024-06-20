@@ -33,14 +33,25 @@ class UsersService {
   }
 
   // tạo refresh token
-  private signRefreshToken({ user_id, verify, exp }: { user_id: string; verify: UserVerifyStatus; exp?: number }) {
+  private signRefreshToken({
+    user_id,
+    verify,
+    exp,
+    role
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    exp?: number
+    role: UserRole
+  }) {
     if (exp) {
       return signToken({
         payload: {
           user_id,
           token_type: TokenType.RefreshToken,
           verify,
-          exp // Thời gian hết hạn token
+          exp, // Thời gian hết hạn token
+          role
         },
         privateKey: envConfig.jwtSecretRefreshToken
       })
@@ -49,7 +60,8 @@ class UsersService {
       payload: {
         user_id,
         token_type: TokenType.RefreshToken,
-        verify
+        verify,
+        role
       },
       privateKey: envConfig.jwtSecretRefreshToken,
 
@@ -70,7 +82,10 @@ class UsersService {
     role: UserRole
   }) {
     // chạy song song 2 func =>> tối ưu performance
-    return Promise.all([this.signAccessToken({ user_id, verify, role }), this.signRefreshToken({ user_id, verify })])
+    return Promise.all([
+      this.signAccessToken({ user_id, verify, role }),
+      this.signRefreshToken({ user_id, verify, role })
+    ])
   }
 
   // Tạo email verify token
@@ -280,7 +295,7 @@ class UsersService {
     // Tạo mới access token và refresh token, xóa refresh token cũ
     const [new_access_token, new_refresh_token] = await Promise.all([
       this.signAccessToken({ user_id, verify, role }),
-      this.signRefreshToken({ user_id, verify, exp }),
+      this.signRefreshToken({ user_id, verify, exp, role }),
       databaseService.refreshTokens.deleteOne({ token: refresh_token })
     ])
     const decoded_refresh_token = await this.decodeRefreshToken(new_refresh_token)

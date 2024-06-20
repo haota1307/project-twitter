@@ -8,7 +8,6 @@ import {
 } from '~/controllers/admin.controller'
 import { paginationValidator } from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
-import adminService from '~/services/admin.services'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const adminRouter = Router()
