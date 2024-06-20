@@ -86,9 +86,8 @@ class AdminService {
 
       // Tạo object để cập nhật
       const updateObject: any = {
-        ...(_payload as any), // Ép kiểu _payload thành any để tránh lỗi khi sử dụng với $set
-        verify: 2, // Cập nhật trạng thái verify
-        $currentDate: { updated_at: true } // Cập nhật thời gian updated_at
+        ..._payload, // Ép kiểu _payload thành any để tránh lỗi khi sử dụng với $set
+        verify: 2 // Cập nhật trạng thái verify
       }
 
       // Nếu có ban_info thì thêm vào updateObject
@@ -100,15 +99,17 @@ class AdminService {
         }
       }
 
+      // Sử dụng đối tượng $set để cập nhật các trường cần thiết và $currentDate cho updated_at
+      const updateQuery = {
+        $set: updateObject,
+        $currentDate: { updated_at: true }
+      }
+
       // Tìm người dùng và cập nhật thông tin
-      const user = await databaseService.users.findOneAndUpdate(
-        { _id: new ObjectId(userId) },
-        { $set: updateObject },
-        {
-          returnDocument: 'after',
-          projection: { password: 0, email_verify: 0, forgot_password_token: 0 }
-        }
-      )
+      const user = await databaseService.users.findOneAndUpdate({ _id: new ObjectId(userId) }, updateQuery as any, {
+        returnDocument: 'after',
+        projection: { password: 0, email_verify: 0, forgot_password_token: 0 }
+      })
 
       return user
     } catch (error) {
