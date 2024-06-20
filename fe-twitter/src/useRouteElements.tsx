@@ -9,6 +9,8 @@ import AdminLayout from 'src/layouts/AdminLayout/AdminLayout'
 import UserManagement from 'src/pages/Admin/UserManagement'
 import TweetsManagement from 'src/pages/Admin/TweetsManagement'
 import ConversationManagement from 'src/pages/Admin/ConversationManagement'
+import CheckBannedStatus from 'src/pages/Page404/CheckBannedStatus/CheckBannedStatus'
+import Page404 from 'src/pages/Page404'
 
 const Home = lazy(() => import('./pages/Home'))
 const Explore = lazy(() => import('./pages/Explore'))
@@ -41,6 +43,10 @@ export default function useRouteElement() {
   )
   const routeElements = useRoutes([
     {
+      path: '/ban',
+      element: <Page404 />
+    },
+    {
       path: '',
       children: [
         {
@@ -48,9 +54,11 @@ export default function useRouteElement() {
           path: '/',
           element: (
             <Suspense fallback={LoadingPage}>
-              <MainLayout>
-                <Home />
-              </MainLayout>
+              <CheckBannedStatus>
+                <MainLayout>
+                  <Home />
+                </MainLayout>
+              </CheckBannedStatus>
             </Suspense>
           )
         }
@@ -93,7 +101,9 @@ export default function useRouteElement() {
           element: (
             <MainLayout>
               <Suspense fallback={LoadingPage}>
-                <Explore />
+                <CheckBannedStatus>
+                  <Explore />
+                </CheckBannedStatus>
               </Suspense>
             </MainLayout>
           )
@@ -103,7 +113,9 @@ export default function useRouteElement() {
           element: (
             <MainLayout>
               <Suspense fallback={LoadingPage}>
-                <Message />
+                <CheckBannedStatus>
+                  <Message />
+                </CheckBannedStatus>
               </Suspense>
             </MainLayout>
           )
@@ -113,7 +125,9 @@ export default function useRouteElement() {
           element: (
             <MainLayout>
               <Suspense fallback={LoadingPage}>
-                <Conversation />
+                <CheckBannedStatus>
+                  <Conversation />
+                </CheckBannedStatus>
               </Suspense>
             </MainLayout>
           )
@@ -123,7 +137,9 @@ export default function useRouteElement() {
           element: (
             <MainLayout>
               <Suspense fallback={LoadingPage}>
-                <Profile />
+                <CheckBannedStatus>
+                  <Profile />
+                </CheckBannedStatus>
               </Suspense>
             </MainLayout>
           )
@@ -133,7 +149,9 @@ export default function useRouteElement() {
           element: (
             <MainLayout>
               <Suspense fallback={LoadingPage}>
-                <Bookmark />
+                <CheckBannedStatus>
+                  <Bookmark />
+                </CheckBannedStatus>
               </Suspense>
             </MainLayout>
           )
@@ -143,7 +161,9 @@ export default function useRouteElement() {
           element: (
             <MainLayout>
               <Suspense fallback={LoadingPage}>
-                <HomeFollowing />
+                <CheckBannedStatus>
+                  <HomeFollowing />
+                </CheckBannedStatus>
               </Suspense>
             </MainLayout>
           )
@@ -153,7 +173,9 @@ export default function useRouteElement() {
           element: (
             <MainLayout>
               <Suspense fallback={LoadingPage}>
-                <VerifyEmail />
+                <CheckBannedStatus>
+                  <VerifyEmail />
+                </CheckBannedStatus>
               </Suspense>
             </MainLayout>
           )
@@ -192,9 +214,11 @@ export default function useRouteElement() {
           path: '/admin/home',
           element: (
             <Suspense fallback={LoadingPage}>
-              <AdminLayout>
-                <AdminDashboard />
-              </AdminLayout>
+              <CheckBannedStatus>
+                <AdminLayout>
+                  <AdminDashboard />
+                </AdminLayout>
+              </CheckBannedStatus>
             </Suspense>
           )
         },
@@ -202,9 +226,11 @@ export default function useRouteElement() {
           path: '/admin/users',
           element: (
             <Suspense fallback={LoadingPage}>
-              <AdminLayout>
-                <UserManagement />
-              </AdminLayout>
+              <CheckBannedStatus>
+                <AdminLayout>
+                  <UserManagement />
+                </AdminLayout>
+              </CheckBannedStatus>
             </Suspense>
           )
         },
@@ -212,9 +238,11 @@ export default function useRouteElement() {
           path: '/admin/tweets',
           element: (
             <Suspense fallback={LoadingPage}>
-              <AdminLayout>
-                <TweetsManagement />
-              </AdminLayout>
+              <CheckBannedStatus>
+                <AdminLayout>
+                  <TweetsManagement />
+                </AdminLayout>
+              </CheckBannedStatus>
             </Suspense>
           )
         },
@@ -222,9 +250,11 @@ export default function useRouteElement() {
           path: '/admin/conversations',
           element: (
             <Suspense fallback={LoadingPage}>
-              <AdminLayout>
-                <ConversationManagement />
-              </AdminLayout>
+              <CheckBannedStatus>
+                <AdminLayout>
+                  <ConversationManagement />
+                </AdminLayout>
+              </CheckBannedStatus>
             </Suspense>
           )
         }

@@ -37,6 +37,6 @@ export interface User {
   followed?: string[]
   followed_count?: number
   following_count?: number
-  ban_info?: BanInfoType // thông tin lệnh cấm
+  ban_info?: BanInfoType | null // thông tin lệnh cấm
   role: UserRole // Vai trò người dùng
 }
