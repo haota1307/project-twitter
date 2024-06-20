@@ -3,7 +3,8 @@ import {
   adminTweetsController,
   adminUsersController,
   banUserController,
-  unbannUser
+  unbannUser,
+  unbannUserByAdmin
 } from '~/controllers/admin.controller'
 import { paginationValidator } from '~/middlewares/tweets.middlewares'
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
@@ -38,5 +39,9 @@ adminRouter.patch(
   wrapRequestHandler(banUserController)
 )
 
+// unban by user
 adminRouter.post('/process-ban-end', accessTokenValidator, wrapRequestHandler(unbannUser))
+
+// unban by admin
+adminRouter.post('/users/:userId/unban', accessTokenValidator, wrapRequestHandler(unbannUserByAdmin))
 export default adminRouter

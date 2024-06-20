@@ -69,3 +69,18 @@ export const unbannUser = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Failed to ban user' })
   }
 }
+
+export const unbannUserByAdmin = async (req: Request, res: Response) => {
+  const { userId } = req.params
+  try {
+    const user = await adminService.processBanEnd(userId)
+
+    return res.json({
+      message: 'Unban user success',
+      result: user
+    })
+  } catch (error) {
+    console.error('Error banning user:', error)
+    return res.status(500).json({ error: 'Failed to ban user' })
+  }
+}

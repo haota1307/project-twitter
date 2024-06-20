@@ -126,7 +126,8 @@ class AdminService {
         { _id: objectId },
         {
           $set: {
-            ban_info: null, // Đặt ban_info thành null để mở khóa người dùng
+            ban_info: null,
+            verify: 0, // Đặt ban_info thành null để mở khóa người dùng
             updated_at: new Date() // Cập nhật thời gian updated_at
           }
         },
