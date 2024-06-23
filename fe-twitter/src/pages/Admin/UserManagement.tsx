@@ -44,7 +44,7 @@ export default function UserManagement() {
   return (
     <div className='flex flex-col items-center justify-center my-10'>
       <TableUsers dataTable={users as any} />
-      <Pagination limit={limit || 10} pageSize={totalPage || 1} page={page || 1} />
+      <Pagination limit={limit || 10} pageSize={totalPage || 1} page={page || 1} pathname='users' />
     </div>
   )
 }

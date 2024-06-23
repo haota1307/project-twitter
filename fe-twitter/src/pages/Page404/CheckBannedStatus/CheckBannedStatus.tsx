@@ -1,18 +1,38 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import { useNavigate } from 'react-router-dom'
 import Page404 from 'src/pages/Page404/Page404'
 import http from 'src/utils/http'
 import config from 'src/constants/config'
 import { toast } from 'react-toastify'
+import { getAccessTokenFromLs } from 'src/utils/auth'
+import { UserRole, UserVerifyStatus } from 'src/types/user.type'
+import { jwtDecode } from 'jwt-decode'
+
+interface DecodedToken {
+  exp: number
+  iat: number
+  role: UserRole
+  token_type: number
+  user_id: string
+  verify: UserVerifyStatus
+}
 
 const CheckBannedStatus = ({ children }: { children: React.ReactElement | any }) => {
   const { profile, isAuthenticated, setProfile } = useContext(AppContext)
+  const [isBanned, setIsBanned] = useState(false)
+  const access_token = getAccessTokenFromLs()
   const navigate = useNavigate()
-  const isBanned = profile?.verify === 2
 
-  console.log(isBanned)
-  console.log(profile)
+  useEffect(() => {
+    if (access_token !== '') {
+      const decodedToken = jwtDecode<DecodedToken>(access_token)
+      if (decodedToken.verify === 2 || profile?.ban_info !== null) {
+        setIsBanned(true)
+      }
+    }
+  }, [access_token])
+
   useEffect(() => {
     const checkAndUnlockUser = async () => {
       if (profile?.ban_info?.ban_end_date) {
@@ -21,23 +41,22 @@ const CheckBannedStatus = ({ children }: { children: React.ReactElement | any })
 
         if (banEndDate <= currentDate) {
           try {
-            // Gọi API để mở khóa người dùng
-            await http
-              .post('admin/process-ban-end', {
+            await http.post(
+              'admin/process-ban-end',
+              {},
+              {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem('access_token')}`
                 },
                 baseURL: config.baseUrl
-              })
-              .then(() => {
-                setProfile({
-                  ...profile,
-                  ban_info: null // Giả sử API trả về thông tin này sau khi mở khóa
-                })
-                toast.success('You have been unblocked')
-                navigate('/')
-              })
-            // Cập nhật lại profile sau khi mở khóa
+              }
+            )
+            setProfile({
+              ...profile,
+              ban_info: null
+            })
+            toast.success('You have been unblocked')
+            navigate('/')
           } catch (error) {
             console.error('Failed to unlock user:', error)
           }
@@ -52,7 +71,7 @@ const CheckBannedStatus = ({ children }: { children: React.ReactElement | any })
     if (isBanned && isAuthenticated) {
       navigate('/ban')
     }
-  }, [profile, navigate, isBanned, isAuthenticated, setProfile])
+  }, [isAuthenticated, isBanned, profile, setProfile, navigate])
 
   return isBanned ? <Page404 /> : children
 }

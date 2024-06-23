@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import axios from 'axios' // Make sure to install axios via npm or yarn
+import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import http from 'src/utils/http'
 
 interface Data {
@@ -8,16 +8,22 @@ interface Data {
   username: string
   name: string
   verify: UserVerifyStatus
+  ban_info?: { ban_end_date: string } // Assuming this is the structure of ban_info
 }
 
-enum UserVerifyStatus {}
-// Define your UserVerifyStatus enum here based on your application
+enum UserVerifyStatus {
+  UNVERIFIED = 0,
+  VERIFIED = 1,
+  BANNED = 2
+}
 
 interface Props {
   dataTable: Data[]
 }
 
 const TableUsers: React.FC<Props> = ({ dataTable }) => {
+  const [users, setUsers] = useState(dataTable)
+
   const handleBanUser = async (userId: string, duration: '1d' | '1mth' | 'forever') => {
     try {
       let banEndDate: string
@@ -45,15 +51,35 @@ const TableUsers: React.FC<Props> = ({ dataTable }) => {
         ban_reason: ''
       }
 
-      const response = await http.patch(`/admin/users/${userId}/ban`, { ban_info: banInfo })
-      console.log('Ban user response:', response.data) // Handle response as needed
+      await http.patch(`/admin/users/${userId}/ban`, { ban_info: banInfo })
+      toast('Ban user success')
 
-      // Optionally, update the UI to reflect the user's ban status
+      // Update the state to reflect the ban
+      setUsers((prevUsers) =>
+        prevUsers.map((user) => (user._id === userId ? { ...user, verify: UserVerifyStatus.BANNED } : user))
+      )
     } catch (error) {
       console.error('Error banning user:', error)
-      // Handle error states or display an error message to the user
     }
   }
+
+  const handleUnbanUser = async (userId: string) => {
+    try {
+      await http.post(`/admin/users/${userId}/unban`)
+      toast('Unban user success')
+
+      // Update the state to reflect the unban
+      setUsers((prevUsers) =>
+        prevUsers.map((user) => (user._id === userId ? { ...user, verify: UserVerifyStatus.VERIFIED } : user))
+      )
+    } catch (error) {
+      console.error('Error unbanning user:', error)
+    }
+  }
+
+  useEffect(() => {
+    setUsers(dataTable)
+  }, [dataTable])
 
   return (
     <div className='overflow-x-auto shadow-md sm:rounded-lg'>
@@ -76,12 +102,12 @@ const TableUsers: React.FC<Props> = ({ dataTable }) => {
               Status
             </th>
             <th scope='col' className='px-4 py-3 text-center'>
-              Ban
+              Action
             </th>
           </tr>
         </thead>
         <tbody>
-          {dataTable.map((data: Data) => (
+          {users.map((data: Data) => (
             <tr key={data._id} className='bg-white even:bg-gray-50 border-b hover:opacity-80 cursor-pointer'>
               <td scope='row' className='px-4 py-4 text-center'>
                 {data._id}
@@ -89,26 +115,37 @@ const TableUsers: React.FC<Props> = ({ dataTable }) => {
               <td className='px-4 py-4 text-center max-w-48 truncate'>{data.email}</td>
               <td className='px-4 py-4 text-center max-w-48 truncate'>{data.username}</td>
               <td className='px-4 py-4 text-center max-w-40 truncate'>{data.name}</td>
-              <td className='px-4 py-4 text-center'>{data.verify}</td>
+              <td className='px-4 py-4 text-center'>{data.verify === UserVerifyStatus.BANNED ? 'Banned' : 'Active'}</td>
               <td className='px-4 py-4 flex flex-row justify-center items-center'>
-                <button
-                  className='font-medium text-blue-600 hover:underline mr-1'
-                  onClick={() => handleBanUser(data._id, '1d')}
-                >
-                  1d
-                </button>
-                <button
-                  className='font-medium text-blue-600 hover:underline mr-1 border-x px-1'
-                  onClick={() => handleBanUser(data._id, '1mth')}
-                >
-                  1mth
-                </button>
-                <button
-                  className='font-medium text-blue-600 hover:underline'
-                  onClick={() => handleBanUser(data._id, 'forever')}
-                >
-                  forever
-                </button>
+                {data.verify === UserVerifyStatus.BANNED ? (
+                  <button
+                    className='font-medium text-blue-600 hover:underline'
+                    onClick={() => handleUnbanUser(data._id)}
+                  >
+                    Unban
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      className='font-medium text-blue-600 hover:underline mr-1'
+                      onClick={() => handleBanUser(data._id, '1d')}
+                    >
+                      1d
+                    </button>
+                    <button
+                      className='font-medium text-blue-600 hover:underline mr-1 border-x px-1'
+                      onClick={() => handleBanUser(data._id, '1mth')}
+                    >
+                      1mth
+                    </button>
+                    <button
+                      className='font-medium text-blue-600 hover:underline'
+                      onClick={() => handleBanUser(data._id, 'forever')}
+                    >
+                      forever
+                    </button>
+                  </>
+                )}
               </td>
             </tr>
           ))}

@@ -5,11 +5,12 @@ interface Props {
   page: number
   limit: number
   pageSize: number
+  pathname: string
 }
 
 const RANGE = 2
 
-const Pagination = ({ page, limit, pageSize }: Props) => {
+const Pagination = ({ page, limit, pageSize, pathname }: Props) => {
   const renderPagination = () => {
     let dotAfter = false
     let dotBefore = false
@@ -60,7 +61,7 @@ const Pagination = ({ page, limit, pageSize }: Props) => {
           <Link
             key={index}
             to={{
-              pathname: '/admin/users',
+              pathname: `/admin/${pathname}`,
               search: `?page=${pageNumber}`
             }}
             className={classNames('mx-2 cursor-pointer rounded border bg-white px-3 py-2 shadow-sm', {
@@ -81,7 +82,7 @@ const Pagination = ({ page, limit, pageSize }: Props) => {
       ) : (
         <Link
           to={{
-            pathname: '/admin/users',
+            pathname: `/admin/${pathname}`,
             search: `?page=${page - 1}`
           }}
           className='mx-2 cursor-pointer rounded border bg-white px-3 py-2  shadow-sm'
@@ -97,7 +98,7 @@ const Pagination = ({ page, limit, pageSize }: Props) => {
       ) : (
         <Link
           to={{
-            pathname: '/admin/users',
+            pathname: `/admin/${pathname}`,
             search: `?page=${page + 1}`
           }}
           className='mx-2 cursor-pointer rounded border bg-white px-3 py-2  shadow-sm'
