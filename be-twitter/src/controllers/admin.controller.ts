@@ -38,6 +38,20 @@ export const adminTweetsController = async (req: Request, res: Response) => {
   })
 }
 
+export const statisticalController = async (req: Request, res: Response) => {
+  try {
+    const result = await adminService.statistical()
+
+    return res.json({
+      message: 'Get statistical success',
+      result
+    })
+  } catch (error) {
+    console.error('Error in statistical service:', error)
+    throw new Error('Failed to retrieve statistical data')
+  }
+}
+
 export const banUserController = async (req: Request, res: Response) => {
   const { userId } = req.params
   const { body } = req

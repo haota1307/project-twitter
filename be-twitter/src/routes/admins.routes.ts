@@ -3,6 +3,7 @@ import {
   adminTweetsController,
   adminUsersController,
   banUserController,
+  statisticalController,
   unbannUser,
   unbannUserByAdmin
 } from '~/controllers/admin.controller'
@@ -29,6 +30,8 @@ adminRouter.get(
   paginationValidator,
   wrapRequestHandler(adminTweetsController)
 )
+
+adminRouter.get('/statistical', wrapRequestHandler(statisticalController))
 
 //Ban user
 adminRouter.patch(

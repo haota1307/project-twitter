@@ -146,6 +146,101 @@ class AdminService {
       // Xử lý lỗi khi có lỗi xảy ra trong quá trình cập nhật người dùng
     }
   }
+
+  async statistical() {
+    try {
+      const usersPipeline = [
+        {
+          $project: {
+            month: { $month: '$created_at' },
+            year: { $year: '$created_at' }
+          }
+        },
+        {
+          $group: {
+            _id: {
+              month: '$month',
+              year: '$year'
+            },
+            Users: { $sum: 1 }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            month: {
+              $concat: [
+                { $cond: { if: { $lte: ['$_id.month', 9] }, then: '0', else: '' } },
+                { $toString: '$_id.month' }
+              ]
+            },
+            Users: 1
+          }
+        },
+        {
+          $sort: { month: 1 }
+        }
+      ]
+
+      const tweetsPipeline = [
+        {
+          $match: {
+            created_at: { $exists: true }
+          }
+        },
+        {
+          $group: {
+            _id: {
+              year: { $year: '$created_at' },
+              month: { $month: '$created_at' }
+            },
+            Tweets: { $sum: 1 }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            month: {
+              $concat: [
+                { $cond: { if: { $lte: ['$_id.month', 9] }, then: '0', else: '' } },
+                { $toString: '$_id.month' }
+              ]
+            },
+            Tweets: 1
+          }
+        },
+        {
+          $sort: { month: 1 }
+        }
+      ]
+
+      const [usersResult, tweetsResult] = await Promise.all([
+        databaseService.users.aggregate(usersPipeline).toArray(),
+        databaseService.tweets.aggregate(tweetsPipeline).toArray()
+      ])
+
+      const mergedData: any[] = []
+      const allMonths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+
+      // Merge usersResult and tweetsResult into mergedData
+      allMonths.forEach((month) => {
+        const usersData = usersResult.find((data) => data.month === month) || { Users: 0 }
+        const tweetsData = tweetsResult.find((data) => data.month === month) || { Tweets: 0 }
+
+        mergedData.push({
+          name: month,
+          Users: usersData.Users,
+          Tweets: tweetsData.Tweets
+        })
+      })
+
+      // Return the mergedData
+      return mergedData
+    } catch (error) {
+      console.error('Error in statistical service:', error)
+      throw error // Throwing the error to be caught by the caller
+    }
+  }
 }
 
 const adminService = new AdminService()

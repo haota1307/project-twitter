@@ -1,66 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import config from 'src/constants/config'
+import http from 'src/utils/http'
 
 const ChartItem = ({ children }: { children: React.ReactElement }) => {
   return (
     <div className='flex flex-col items-center justify-center p-4 border border-slate-900 bg-blue-50 rounded-xl h-[90%] w-[90%] mt-10 ml-4'>
-      <h3 className='text-2xl font-semibold text-black mb-4'>Chart in year</h3>
+      <h3 className='text-2xl font-semibold text-black mb-4'>Chart Created(user, tweet) in year</h3>
       {children}
     </div>
   )
 }
 
 export default function AdminDashboard() {
-  const data = [
-    {
-      name: 'January',
-      Users: 0,
-      Tweets: 0,
-      Conversation: 0
-    },
-    {
-      name: 'February',
-      Users: 0,
-      Tweets: 0,
-      Conversation: 0
-    },
-    {
-      name: 'March',
-      Users: 0,
-      Tweets: 0,
-      Conversation: 0
-    },
-    {
-      name: 'April',
-      Users: 0,
-      Tweets: 0,
-      Conversation: 0
-    },
-    {
-      name: 'May',
-      Users: 10,
-      Tweets: 30,
-      Conversation: 100
-    },
-    {
-      name: 'June',
-      Users: 100,
-      Tweets: 200,
-      Conversation: 1000
-    },
-    {
-      name: 'July',
-      Users: 100,
-      Tweets: 200,
-      Conversation: 1000
-    },
-    {
-      name: 'August',
-      Users: 100,
-      Tweets: 200,
-      Conversation: 1000
-    }
-  ]
+  const [data, setData] = useState()
+  useEffect(() => {
+    http
+      .get('/admin/statistical', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        },
+        baseURL: config.baseUrl
+      })
+      .then((res) => setData(res.data.result))
+  }, [])
+
   return (
     <ChartItem>
       <ResponsiveContainer width='100%' height='100%'>
