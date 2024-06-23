@@ -3,6 +3,7 @@ import {
   adminTweetsController,
   adminUsersController,
   banUserController,
+  getConversationSensitivesController,
   statisticalController,
   unbannUser,
   unbannUserByAdmin
@@ -32,6 +33,7 @@ adminRouter.get(
 )
 
 adminRouter.get('/statistical', wrapRequestHandler(statisticalController))
+adminRouter.get('/conversation', wrapRequestHandler(getConversationSensitivesController))
 
 //Ban user
 adminRouter.patch(

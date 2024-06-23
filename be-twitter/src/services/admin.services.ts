@@ -241,6 +241,47 @@ class AdminService {
       throw error // Throwing the error to be caught by the caller
     }
   }
+
+  async sensitiveWords({ limit, page }: { limit: number; page: number }) {
+    try {
+      const sensitiveWords = ['bad', 'offensive', 'inappropriate', 'hate', 'Hack']
+
+      // Kết hợp các từ nhạy cảm thành biểu thức chính quy
+      const sensitiveRegex = new RegExp(sensitiveWords.join('|'), 'i')
+
+      // Tính chỉ số bắt đầu của kết quả dựa trên trang hiện tại và kích thước trang
+      const startIndex = (page - 1) * limit
+
+      // Sử dụng Promise.all để thực hiện hai truy vấn MongoDB cùng một lúc
+      const [messagesContainingSensitiveWords, totalCount] = await Promise.all([
+        // Truy vấn để lấy các tin nhắn có chứa từ nhạy cảm, với phân trang và giới hạn
+        databaseService.conversations
+          .find({ content: { $regex: sensitiveRegex } })
+          .skip(startIndex)
+          .limit(limit)
+          .toArray(),
+
+        // Truy vấn để đếm tổng số tin nhắn có từ nhạy cảm (cho phân trang)
+        databaseService.conversations.find({ content: { $regex: sensitiveRegex } }).count()
+      ])
+
+      // Tính số trang dựa trên tổng số lượng và kích thước trang
+      const totalPages = Math.ceil(totalCount / limit)
+
+      // Trả về kết quả kèm thông tin phân trang
+      return {
+        messagesContainingSensitiveWords,
+        pagination: {
+          totalItems: totalCount,
+          totalPages,
+          currentPage: page
+        }
+      }
+    } catch (error) {
+      console.error('Error retrieving sensitive messages:', error)
+      throw error // Ném lỗi để xử lý bên ngoài
+    }
+  }
 }
 
 const adminService = new AdminService()

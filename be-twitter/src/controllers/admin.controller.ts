@@ -98,3 +98,22 @@ export const unbannUserByAdmin = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Failed to ban user' })
   }
 }
+export const getConversationSensitivesController = async (req: Request, res: Response) => {
+  try {
+    const limit = Number(req.query.limit)
+    const page = Number(req.query.page)
+
+    const result = await adminService.sensitiveWords({ limit, page })
+
+    return res.json({
+      message: 'Get sensitives conversation success',
+      result
+    })
+  } catch (error) {
+    console.error('Error in sensitives conversation:', error)
+    // Nếu có lỗi, trả về lỗi và thông báo lỗi cho client
+    return res.status(500).json({
+      error: 'Failed to sensitives conversation'
+    })
+  }
+}
