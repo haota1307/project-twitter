@@ -25,13 +25,13 @@ const CheckBannedStatus = ({ children }: { children: React.ReactElement | any })
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (access_token !== '') {
+    if (access_token !== '' && isAuthenticated) {
       const decodedToken = jwtDecode<DecodedToken>(access_token)
-      if (decodedToken.verify === 2 || profile?.ban_info !== null) {
+      if (decodedToken.verify === 2 && profile?.ban_info !== null) {
         setIsBanned(true)
       }
     }
-  }, [access_token])
+  }, [access_token, isAuthenticated])
 
   useEffect(() => {
     const checkAndUnlockUser = async () => {
@@ -72,6 +72,8 @@ const CheckBannedStatus = ({ children }: { children: React.ReactElement | any })
       navigate('/ban')
     }
   }, [isAuthenticated, isBanned, profile, setProfile, navigate])
+
+  console.log('isBanned', isBanned)
 
   return isBanned ? <Page404 /> : children
 }

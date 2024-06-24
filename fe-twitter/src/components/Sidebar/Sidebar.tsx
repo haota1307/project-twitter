@@ -5,7 +5,8 @@ import {
   IoLogInOutline,
   IoLogOutOutline,
   IoPersonOutline,
-  IoSearchOutline
+  IoSearchOutline,
+  IoShieldOutline
 } from 'react-icons/io5'
 import { useCallback, useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
@@ -17,7 +18,7 @@ import useLoginModal from 'src/hooks/useLoginModal'
 import useLogoutModal from 'src/hooks/useLogoutModal'
 
 export default function Sidebar() {
-  const { isAuthenticated } = useContext(AppContext)
+  const { isAuthenticated, profile } = useContext(AppContext)
   const items = [
     {
       label: 'Home',
@@ -70,6 +71,9 @@ export default function Sidebar() {
                 <SidebarItem label={'Logout'} icon={IoLogOutOutline} onClick={isToggle} href='logout' />
               ) : (
                 <SidebarItem label={'Login'} icon={IoLogInOutline} onClick={isToggle} />
+              )}
+              {isAuthenticated && profile?.role === 'admin' && (
+                <SidebarItem label={'Admin page'} href={'/admin/home'} icon={IoShieldOutline} />
               )}
               <SidebarTweetButton />
             </div>

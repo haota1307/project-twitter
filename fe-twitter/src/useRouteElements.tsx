@@ -43,10 +43,6 @@ export default function useRouteElement() {
   )
   const routeElements = useRoutes([
     {
-      path: '/ban',
-      element: <Page404 />
-    },
-    {
       path: '',
       children: [
         {
@@ -259,6 +255,10 @@ export default function useRouteElement() {
           )
         }
       ]
+    },
+    {
+      path: '/ban',
+      element: <Page404 />
     }
   ])
   return routeElements

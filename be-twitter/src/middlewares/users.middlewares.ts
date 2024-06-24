@@ -10,6 +10,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import { REGEX_USERNAME } from '~/constants/regex'
 import { ErrorWithStatus } from '~/models/Errors'
 import { FollowReqBody, TokenPayload } from '~/models/requests/User.requests'
+import { UserRole } from '~/models/schemas/User.schema'
 import databaseService from '~/services/database.services'
 import usersService from '~/services/users.services'
 import { validate } from '~/utils/Validation'
@@ -385,6 +386,20 @@ export const verifiedUserValidator = (req: Request, res: Response, next: NextFun
     return next(
       new ErrorWithStatus({
         message: USERS_MESSAGES.USER_NOT_VERIFIED,
+        status: HTTP_STATUS.FORBIDDEN
+      })
+    )
+  }
+  next()
+}
+
+// Check tài khoản user đã Verìy hay chưa
+export const verifiedAdminValidator = (req: Request, res: Response, next: NextFunction) => {
+  const { role } = req.decoded_authorization as TokenPayload
+  if (role !== UserRole.Admin) {
+    return next(
+      new ErrorWithStatus({
+        message: 'User is not Admin',
         status: HTTP_STATUS.FORBIDDEN
       })
     )

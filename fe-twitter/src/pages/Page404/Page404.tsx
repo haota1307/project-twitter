@@ -8,7 +8,6 @@ import { formatDate, formatTime } from 'src/utils/date'
 export default function Page404() {
   const { profile, setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
-  console.log(profile)
 
   const onSubmitLogout = () => {
     authApi

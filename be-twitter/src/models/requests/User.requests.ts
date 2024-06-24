@@ -2,6 +2,7 @@
 import { ParamsDictionary } from 'express-serve-static-core'
 import { JwtPayload } from 'jsonwebtoken'
 import { TokenType, UserVerifyStatus } from '~/constants/enums'
+import { UserRole } from '~/models/schemas/User.schema'
 
 export interface UpdateProfileReqBody {
   name?: string
@@ -66,6 +67,7 @@ export interface ResetPasswordReqBody {
 export interface TokenPayload extends JwtPayload {
   user_id: string
   token_type: TokenType
+  role: UserRole
   verify: UserVerifyStatus
   exp: number
   iat: number
